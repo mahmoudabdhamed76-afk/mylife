@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0E3B45">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Life">
+<title>My Life — متابعة صحتك اليومية</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zain:wght@400;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E2A33;
+  --deep:#0E2A33;
+  --ink-2:#1B3F49;
+  --on-deep:#FFFFFF;
+  --paper:#EEF2F1;
+  --surface:#FFFFFF;
+  --line:#DDE5E4;
+  --muted:#6C8189;
+  --teal:#0E7C7B;
+  --teal-d:#0A5C5B;
+  --teal-l:#E3F2F1;
+  /* مقياس شريط التحليل */
+  --s-low:#2B7FB8;
+  --s-good:#3E9E52;
+  --s-mid:#E4A11B;
+  --s-high:#C0392B;
+  --r-s:10px; --r-m:16px; --r-l:22px; --r-xl:28px;
+  --sp:16px;
+  --shadow:0 1px 2px rgba(14,42,51,.05), 0 8px 24px -12px rgba(14,42,51,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"IBM Plex Sans Arabic",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  background:var(--paper); color:var(--ink);
+  font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+h1,h2,h3,h4,.display,.num{font-family:"Zain","IBM Plex Sans Arabic",sans-serif;font-weight:800;letter-spacing:0}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:var(--teal);text-decoration:none}
+::-webkit-scrollbar{width:0;height:0}
+
+#app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--paper);position:relative;padding-bottom:96px}
+@media(min-width:560px){
+  body{background:#DCE4E3}
+  #app{box-shadow:0 0 60px rgba(14,42,51,.12);min-height:100dvh}
+}
+
+/* ============ الهيدر ============ */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:var(--deep);color:var(--on-deep);
+  padding:calc(env(safe-area-inset-top) + 14px) 18px 16px;
+  border-radius:0 0 var(--r-xl) var(--r-xl);
+}
+.topbar-row{display:flex;align-items:center;gap:12px}
+.avatar{
+  width:44px;height:44px;border-radius:14px;flex:none;
+  background:linear-gradient(145deg,var(--teal),#12A19F);
+  display:grid;place-items:center;font-family:"Zain";font-size:20px;font-weight:800;color:#fff;
+}
+.hello{flex:1;min-width:0}
+.hello small{display:block;color:#8FB0B6;font-size:12px;line-height:1.3}
+.hello strong{display:block;font-family:"Zain";font-size:21px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{
+  width:40px;height:40px;border-radius:12px;flex:none;
+  background:rgba(255,255,255,.09);display:grid;place-items:center;color:#fff;
+  transition:background .18s;
+}
+.icon-btn:active{background:rgba(255,255,255,.2)}
+.icon-btn svg{width:20px;height:20px}
+
+/* ============ الشريط — العنصر المميز ============ */
+.strip-card{
+  margin:-14px 14px 0;background:var(--surface);border-radius:var(--r-l);
+  padding:18px 18px 14px;box-shadow:var(--shadow);position:relative;z-index:41;
+}
+.strip-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:2px}
+.strip-label{font-size:12.5px;color:var(--muted);font-weight:600}
+.strip-tag{
+  font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:99px;
+  background:var(--teal-l);color:var(--teal-d);
+}
+.strip-value{display:flex;align-items:baseline;gap:8px;margin:2px 0 4px}
+.strip-value b{font-family:"Zain";font-size:52px;font-weight:900;line-height:1;letter-spacing:-1px}
+.strip-value span{font-size:13px;color:var(--muted);font-weight:600}
+.strip-meta{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+
+.strip{position:relative;height:14px;border-radius:99px;overflow:visible;margin-bottom:8px;
+  background:linear-gradient(90deg,var(--s-high) 0%,var(--s-mid) 22%,var(--s-good) 44%,var(--s-good) 62%,var(--s-mid) 80%,var(--s-high) 100%);
+}
+.strip-ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.marker{
+  position:absolute;top:-5px;width:8px;height:24px;border-radius:99px;
+  background:var(--ink);border:3px solid var(--surface);box-shadow:0 2px 6px rgba(0,0,0,.35);
+  transform:translateX(50%);transition:right .8s cubic-bezier(.2,.9,.25,1);
+}
+.strip-empty{
+  height:14px;border-radius:99px;background:repeating-linear-gradient(45deg,#E7EDEC,#E7EDEC 6px,#F2F6F5 6px,#F2F6F5 12px);
+}
+
+/* ============ الحلقات ============ */
+.rings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 14px 0}
+.ring-card{background:var(--surface);border-radius:var(--r-m);padding:12px 8px;text-align:center;box-shadow:var(--shadow)}
+.ring{position:relative;width:62px;height:62px;margin:0 auto 6px}
+.ring svg{transform:rotate(-90deg)}
+.ring .rv{position:absolute;inset:0;display:grid;place-items:center;font-family:"Zain";font-size:17px;font-weight:800}
+.ring-card small{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+.ring-card b{display:block;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:1px}
+
+/* ============ الأقسام ============ */
+.section{padding:22px 14px 0}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 4px}
+.sec-head h2{font-size:19px;margin:0;font-weight:700}
+.sec-head button{font-size:12.5px;color:var(--teal);font-weight:600}
+
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.q{
+  background:var(--surface);border-radius:var(--r-m);padding:12px 4px 10px;text-align:center;
+  box-shadow:var(--shadow);transition:transform .12s;
+}
+.q:active{transform:scale(.94)}
+.q i{display:block;width:34px;height:34px;margin:0 auto 6px;border-radius:11px;display:grid;place-items:center;background:var(--teal-l)}
+.q i svg{width:19px;height:19px;color:var(--teal-d)}
+.q span{font-size:11.5px;font-weight:600;display:block;line-height:1.3}
+
+/* ============ الكروت والقوايم ============ */
+.card{background:var(--surface);border-radius:var(--r-m);box-shadow:var(--shadow);overflow:hidden}
+.card+.card{margin-top:10px}
+.pad{padding:16px}
+.row{display:flex;align-items:center;gap:12px;padding:13px 16px}
+.row+.row{border-top:1px solid var(--line)}
+.row .ic{width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;background:var(--paper)}
+.row .ic svg{width:18px;height:18px;color:var(--ink-2)}
+.row .tx{flex:1;min-width:0}
+.row .tx b{display:block;font-size:14.5px;font-weight:600;line-height:1.35}
+.row .tx small{display:block;font-size:12px;color:var(--muted)}
+.row .vl{text-align:left;flex:none}
+.row .vl b{font-family:"Zain";font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.row .vl small{font-size:11px;color:var(--muted);display:block}
+
+.dot{width:9px;height:9px;border-radius:99px;flex:none}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;display:inline-block}
+.p-low{background:#E4F0F8;color:var(--s-low)}
+.p-good{background:#E4F3E7;color:#2E7D3B}
+.p-mid{background:#FBF0DA;color:#9A6B08}
+.p-high{background:#F9E3E1;color:var(--s-high)}
+
+.empty{text-align:center;padding:34px 20px;color:var(--muted)}
+.empty svg{width:42px;height:42px;opacity:.35;margin-bottom:10px}
+.empty b{display:block;font-family:"Zain";font-size:18px;color:var(--ink);margin-bottom:4px;font-weight:700}
+.empty p{margin:0 0 14px;font-size:13px}
+
+/* ============ الأزرار ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--teal);color:#fff;font-weight:700;font-size:15px;
+  padding:14px 20px;border-radius:14px;width:100%;transition:transform .12s,background .18s;
+}
+.btn:active{transform:scale(.97);background:var(--teal-d)}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.btn.dark{background:var(--deep);color:var(--on-deep)}
+.btn.danger{background:#F9E3E1;color:var(--s-high)}
+.btn.sm{padding:10px 14px;font-size:13.5px;width:auto;border-radius:11px}
+
+/* ============ الفورمات ============ */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.input,select.input,textarea.input{
+  width:100%;background:var(--paper);border:1.5px solid transparent;border-radius:13px;
+  padding:13px 14px;font-size:15px;outline:none;transition:border-color .18s,background .18s;
+}
+.input:focus{border-color:var(--teal);background:#fff}
+textarea.input{resize:none;min-height:74px}
+select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236C8189' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:left 14px center;background-size:16px}
+.big-input{
+  font-family:"Zain";font-size:44px;font-weight:900;text-align:center;
+  background:var(--paper);border:none;border-radius:16px;padding:18px 10px;width:100%;outline:none;
+  font-variant-numeric:tabular-nums;
+}
+.big-input:focus{background:var(--teal-l)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:9px 14px;border-radius:12px;background:var(--paper);font-size:13px;font-weight:600;
+  border:1.5px solid transparent;transition:.15s;
+}
+.chip.on{background:var(--deep);color:var(--on-deep);border-color:var(--deep)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+
+/* ============ الشيت ============ */
+.scrim{position:fixed;inset:0;background:rgba(14,42,51,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:90;backdrop-filter:blur(2px)}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:91;max-width:520px;margin:0 auto;
+  background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;
+  transform:translateY(101%);transition:transform .32s cubic-bezier(.25,.9,.3,1);
+  max-height:92dvh;display:flex;flex-direction:column;
+}
+.sheet.on{transform:translateY(0)}
+.sheet-head{padding:16px 18px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);flex:none}
+.sheet-head h3{flex:1;margin:0;font-size:20px;font-weight:700}
+.sheet-body{padding:18px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(env(safe-area-inset-bottom) + 22px)}
+.grab{width:38px;height:4px;border-radius:99px;background:var(--line);margin:8px auto 0}
+
+/* ============ النافيجيشن ============ */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:60;max-width:520px;margin:0 auto;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);
+}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);padding:6px 0;position:relative}
+.nav button svg{width:22px;height:22px}
+.nav button span{font-size:10.5px;font-weight:600}
+.nav button.on{color:var(--teal-d)}
+.nav button.on::before{content:"";position:absolute;top:-8px;width:26px;height:3px;border-radius:99px;background:var(--teal)}
+
+.fab{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 76px);left:50%;transform:translateX(-50%);
+  z-index:59;background:var(--deep);color:var(--on-deep);border-radius:99px;padding:13px 22px;
+  display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;
+  box-shadow:0 10px 26px -8px rgba(14,42,51,.55);transition:transform .15s;
+}
+.fab:active{transform:translateX(-50%) scale(.94)}
+.fab svg{width:19px;height:19px}
+@media(min-width:560px){.fab{left:auto;right:calc(50% - 260px + 16px);transform:none}.fab:active{transform:scale(.94)}}
+
+/* ============ التبويبات ============ */
+.tabs{display:flex;gap:7px;overflow-x:auto;padding:0 14px 2px;margin-bottom:2px}
+.tab{padding:8px 14px;border-radius:11px;background:var(--surface);font-size:13px;font-weight:600;white-space:nowrap;flex:none;box-shadow:var(--shadow)}
+.tab.on{background:var(--deep);color:var(--on-deep)}
+
+/* ============ الشارت ============ */
+.chart-wrap{padding:8px 4px 0}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);padding:8px 6px 0}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-left:5px;vertical-align:-1px}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface);border-radius:var(--r-m);padding:14px;box-shadow:var(--shadow)}
+.stat small{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.stat b{font-family:"Zain";font-size:27px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.15;display:block}
+.stat u{text-decoration:none;font-size:11.5px;color:var(--muted)}
+
+.toast{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 140px);left:50%;transform:translate(-50%,14px);
+  background:var(--deep);color:var(--on-deep);padding:12px 20px;border-radius:14px;font-size:13.5px;font-weight:600;
+  z-index:120;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;max-width:88vw;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.alert{background:#F9E3E1;border-radius:14px;padding:13px 15px;font-size:13px;line-height:1.6;color:#8B2A20;margin-bottom:14px}
+.alert b{display:block;font-family:"Zain";font-size:16px;margin-bottom:3px}
+.note{background:var(--teal-l);border-radius:14px;padding:13px 15px;font-size:12.5px;line-height:1.65;color:var(--teal-d)}
+
+.swipe-del{margin-right:auto;color:var(--s-high);padding:6px;opacity:.55}
+.swipe-del svg{width:17px;height:17px}
+
+.fade{animation:fade .45s cubic-bezier(.2,.8,.3,1) both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+/* ============ الوضع الليلي ============ */
+:root[data-theme="dark"]{
+  --ink:#E4EDEB;
+  --deep:#123339;
+  --on-deep:#FFFFFF;
+  --ink-2:#BCD2CF;
+  --paper:#091519;
+  --surface:#101F24;
+  --line:#22383E;
+  --muted:#8AA3A8;
+  --teal:#25A9A4;
+  --teal-d:#7FD9D3;
+  --teal-l:#123338;
+  --s-low:#5AB0E0;
+  --s-good:#4CBD65;
+  --s-mid:#EEB13C;
+  --s-high:#F0655B;
+  --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px -14px rgba(0,0,0,.7);
+}
+:root[data-theme="dark"] body{background:var(--paper)}
+:root[data-theme="dark"] .p-low{background:#12313F;color:#7CC6EC}
+:root[data-theme="dark"] .p-good{background:#12321D;color:#74D188}
+:root[data-theme="dark"] .p-mid{background:#332711;color:#F2C061}
+:root[data-theme="dark"] .p-high{background:#3A1A17;color:#F5837A}
+:root[data-theme="dark"] .nav{background:rgba(16,31,36,.92)}
+:root[data-theme="dark"] .alert{background:#3A1A17;color:#F5A79F}
+:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#16272C,#16272C 6px,#1B2E34 6px,#1B2E34 12px)}
+:root[data-theme="dark"] select.input{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238AA3A8' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>")}
+:root[data-theme="dark"] .icon-btn{background:rgba(255,255,255,.1)}
+@media(min-width:560px){:root[data-theme="dark"] body{background:#050D10}}
+
+/* ============ حركات التنقل ============ */
+@keyframes slideNext{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
+@keyframes slidePrev{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+#screen.anim-next{animation:slideNext .34s cubic-bezier(.22,.92,.28,1) both}
+#screen.anim-prev{animation:slidePrev .34s cubic-bezier(.22,.92,.28,1) both}
+.nav button.on svg{animation:pop .38s cubic-bezier(.3,1.45,.5,1)}
+@keyframes pop{0%{transform:scale(.78)}58%{transform:scale(1.18)}100%{transform:scale(1)}}
+.nav button.on::before{animation:grow .3s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes grow{from{width:0;opacity:0}to{width:26px;opacity:1}}
+.rings .ring-card:nth-child(2){animation-delay:.06s}
+.rings .ring-card:nth-child(3){animation-delay:.12s}
+.quick .q{animation:fade .4s cubic-bezier(.2,.8,.3,1) both}
+.quick .q:nth-child(2){animation-delay:.03s}.quick .q:nth-child(3){animation-delay:.06s}
+.quick .q:nth-child(4){animation-delay:.09s}.quick .q:nth-child(5){animation-delay:.12s}
+.quick .q:nth-child(6){animation-delay:.15s}.quick .q:nth-child(7){animation-delay:.18s}
+.quick .q:nth-child(8){animation-delay:.21s}
+.row{transition:background .16s}
+.card .row:active{background:var(--paper)}
+
+/* ============ الرؤى والسلسلة ============ */
+.streak{
+  margin:14px 14px 0;background:var(--deep);color:var(--on-deep);border-radius:var(--r-m);
+  padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);
+}
+.streak .fl{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.12);display:grid;place-items:center;flex:none}
+.streak .fl svg{width:21px;height:21px;color:#FFB86B}
+.streak b{font-family:"Zain";font-size:23px;font-weight:800;line-height:1.1;display:block}
+.streak small{font-size:12px;opacity:.72;display:block}
+.streak .days{display:flex;gap:5px;margin-right:auto;flex:none}
+.streak .days i{width:9px;height:22px;border-radius:99px;background:rgba(255,255,255,.16)}
+.streak .days i.hit{background:#7FD9D3}
+
+.insight{display:flex;gap:12px;padding:13px 16px;align-items:flex-start}
+.insight+.insight{border-top:1px solid var(--line)}
+.insight .ib{width:32px;height:32px;border-radius:10px;flex:none;display:grid;place-items:center;background:var(--teal-l);color:var(--teal-d)}
+.insight .ib svg{width:16px;height:16px}
+.insight p{margin:0;font-size:13.5px;line-height:1.6}
+.insight p b{font-weight:700}
+
+/* ============ قفل الكود ============ */
+.lock{
+  position:fixed;inset:0;z-index:200;background:var(--paper);
+  display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;
+}
+.lock.on{display:flex}
+.lock h2{font-size:26px;margin:0 0 4px}
+.lock p{color:var(--muted);font-size:13.5px;margin:0 0 26px}
+.dots{display:flex;gap:14px;margin-bottom:30px}
+.dots i{width:14px;height:14px;border-radius:99px;border:2px solid var(--line);transition:.2s}
+.dots i.f{background:var(--teal);border-color:var(--teal);transform:scale(1.12)}
+.keys{display:grid;grid-template-columns:repeat(3,72px);gap:14px}
+.keys button{
+  height:64px;border-radius:20px;background:var(--surface);box-shadow:var(--shadow);
+  font-family:"Zain";font-size:26px;font-weight:800;transition:transform .1s;
+}
+.keys button:active{transform:scale(.9);background:var(--teal-l)}
+.keys button.wide{font-size:14px;font-family:"IBM Plex Sans Arabic";font-weight:600;background:transparent;box-shadow:none;color:var(--muted)}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+@media print{
+  .nav,.fab,.topbar .icon-btn,.quick,.sheet,.scrim{display:none!important}
+  #app{max-width:none;padding:0;box-shadow:none}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="screen"></div>
+</div>
+
+<nav class="nav" id="nav"></nav>
+<button class="fab" id="fab">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  تسجيل جديد
+</button>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <div class="sheet-head">
+    <h3 id="sheetTitle"></h3>
+    <button class="icon-btn" style="background:var(--paper);color:var(--ink)" onclick="closeSheet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div class="lock" id="lock">
+  <h2 id="lockTitle">My Life</h2>
+  <p id="lockMsg">اكتب الكود بتاعك</p>
+  <div class="dots" id="lockDots"></div>
+  <div class="keys" id="lockKeys"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+/* ==========================================================
+   My Life — برنامج متابعة صحية متكامل
+   ملف واحد • بدون أي مكتبات خارجية • يشتغل أوفلاين
+   ========================================================== */
+
+/* ---------- الأيقونات ---------- */
+const I = {
+  glucose:'<path d="M12 3s6 6.4 6 10a6 6 0 1 1-12 0c0-3.6 6-10 6-10z"/>',
+  a1c:'<path d="M3 17a9 9 0 0 1 18 0"/><path d="M12 17l4-5"/><circle cx="12" cy="17" r="1.4"/>',
+  weight:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 11a4 4 0 0 1 8 0"/><path d="M12 11V9"/>',
+  meal:'<path d="M6 3v8a2 2 0 0 0 4 0V3"/><path d="M8 11v10"/><path d="M17 3c-1.4 1.6-2 3.4-2 5.5 0 1.6.7 2.5 2 2.5v10"/>',
+  water:'<path d="M6 4h12l-1.4 15a2 2 0 0 1-2 1.8H9.4a2 2 0 0 1-2-1.8z"/><path d="M6.6 11h10.8"/>',
+  run:'<circle cx="15" cy="4.5" r="1.8"/><path d="M9 21l2.5-5 3-2-1-4.5"/><path d="M8 10l3.5-2.5 3 1.5 3 1"/><path d="M13.5 14l2.5 3 1 4"/>',
+  bp:'<circle cx="12" cy="13" r="6"/><path d="M12 13l2.5-2.5"/><path d="M9 4h6"/><path d="M12 4v3"/>',
+  pill:'<rect x="3" y="9" width="18" height="6.5" rx="3.25" transform="rotate(-45 12 12)"/><path d="M9 9l6 6"/>',
+  home:'<path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/>',
+  bell:'<path d="M18 9a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a2 2 0 0 0 3 0"/>',
+  trash:'<path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/>',
+  edit:'<path d="M4 20h4L20 8l-4-4L4 16z"/>',
+  check:'<path d="M4 12.5l5 5L20 6.5"/>',
+  print:'<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/>',
+  down:'<path d="M12 4v12M6 11l6 6 6-6M4 20h16"/>',
+  up:'<path d="M12 20V8M6 13l6-6 6 6M4 4h16"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  flame:'<path d="M12 3c3 4 6 5.5 6 9a6 6 0 0 1-12 0c0-2 1-3.4 2-4.5.4 1.5 1.2 2 2 2 .6-2.5.8-4.5 2-6.5z"/>'
+};
+const svg = (k,w=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${I[k]||''}</svg>`;
+
+/* ---------- التخزين (يشتغل داخل التطبيق أو كملف محلي) ---------- */
+const KEY = 'mylife.health.v1';
+const Store = {
+  async load(){
+    try{ if(window.storage){ const r = await window.storage.get(KEY); if(r && r.value) return JSON.parse(r.value); } }catch(e){}
+    try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
+    return null;
+  },
+  async save(d){
+    const s = JSON.stringify(d);
+    try{ if(window.storage) await window.storage.set(KEY, s); }catch(e){}
+    try{ localStorage.setItem(KEY, s); }catch(e){}
+  }
+};
+
+/* ---------- الحالة ---------- */
+const blank = ()=>({
+  profile:{ name:'', gender:'male', birthYear:1990, height:170, targetWeight:0, startWeight:0, unit:'mg',
+    theme:'auto', notify:false, pin:'',
+    targets:{ fasting:[80,130], post:[80,180], a1c:7, calories:2000, carbs:200, water:2500, steps:30 } },
+  glucose:[], a1c:[], weight:[], bp:[], meals:[], water:[], activity:[], meds:[], medLog:[],
+  created: Date.now()
+});
+let S = blank();
+let view = 'home';
+let recTab = 'glucose';
+let repRange = 30;
+
+const save = ()=>Store.save(S);
+const uid  = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ---------- أدوات ---------- */
+const pad = n=>String(n).padStart(2,'0');
+const dayKey = ts=>{const d=new Date(ts);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
+const today  = ()=>dayKey(Date.now());
+const AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const AR_DAYS=['الأحد','الإتنين','التلات','الأربع','الخميس','الجمعة','السبت'];
+
+function fmtTime(ts){const d=new Date(ts);let h=d.getHours();const m=pad(d.getMinutes());const ap=h<12?'ص':'م';h=h%12||12;return `${h}:${m} ${ap}`}
+function fmtDate(ts){const d=new Date(ts);return `${d.getDate()} ${AR_MONTHS[d.getMonth()]}`}
+function fmtFull(ts){const d=new Date(ts);return `${AR_DAYS[d.getDay()]} ${d.getDate()} ${AR_MONTHS[d.getMonth()]}`}
+function relDay(ts){
+  const k=dayKey(ts);
+  if(k===today()) return 'النهارده';
+  if(k===dayKey(Date.now()-864e5)) return 'إمبارح';
+  return fmtFull(ts);
+}
+function localInput(ts){const d=new Date(ts);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function greet(){const h=new Date().getHours();return h<12?'صباح الخير':h<17?'نهارك سعيد':'مساء الخير'}
+const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sum = a=>a.reduce((x,y)=>x+y,0);
+const avg = a=>a.length? sum(a)/a.length : 0;
+const r1  = n=>Math.round(n*10)/10;
+
+/* تحويل الوحدات */
+const toMg   = v => S.profile.unit==='mmol' ? v*18 : v;
+const fromMg = v => S.profile.unit==='mmol' ? r1(v/18) : Math.round(v);
+const gUnit  = ()=> S.profile.unit==='mmol' ? 'mmol/L' : 'mg/dL';
+
+/* أوقات قياس السكر */
+const TAGS = {
+  fasting:{ ar:'صايم', range:[80,130] },
+  pre:    { ar:'قبل الأكل', range:[80,130] },
+  post:   { ar:'بعد الأكل بساعتين', range:[80,180] },
+  random: { ar:'عشوائي', range:[80,180] },
+  bed:    { ar:'قبل النوم', range:[90,150] },
+  night:  { ar:'أثناء الليل', range:[80,140] }
+};
+
+/* تقييم قراءة السكر (بالـ mg/dL) */
+function tagRange(tag){
+  const T = S.profile.targets;
+  if(tag==='fasting'||tag==='pre') return T.fasting;
+  if(tag==='bed') return [90,150];
+  return T.post;
+}
+function gStatus(mg, tag){
+  const [lo,hi] = tagRange(tag);
+  if(mg < 54)  return {k:'low',  cls:'p-low',  col:'var(--s-low)',  ar:'هبوط شديد', pos:0.04};
+  if(mg < lo)  return {k:'low',  cls:'p-low',  col:'var(--s-low)',  ar:'أقل من المستهدف', pos:0.16};
+  if(mg <= hi) return {k:'good', cls:'p-good', col:'var(--s-good)', ar:'في النطاق المستهدف', pos:0.5};
+  if(mg <= hi+70) return {k:'mid', cls:'p-mid', col:'var(--s-mid)', ar:'أعلى من المستهدف', pos:0.82};
+  return {k:'high', cls:'p-high', col:'var(--s-high)', ar:'مرتفع', pos:0.95};
+}
+
+/* ضغط الدم */
+function bpStatus(sys,dia){
+  if(sys<90||dia<60) return {cls:'p-low', ar:'منخفض'};
+  if(sys<120&&dia<80) return {cls:'p-good', ar:'طبيعي'};
+  if(sys<130&&dia<80) return {cls:'p-good', ar:'مقبول'};
+  if(sys<140||dia<90) return {cls:'p-mid', ar:'مرتفع قليلاً'};
+  if(sys<180&&dia<120) return {cls:'p-high', ar:'مرتفع'};
+  return {cls:'p-high', ar:'مرتفع جداً'};
+}
+
+/* مؤشر كتلة الجسم */
+function bmiInfo(kg){
+  const h = S.profile.height/100; if(!h||!kg) return null;
+  const v = kg/(h*h);
+  let ar='طبيعي', cls='p-good';
+  if(v<18.5){ar='أقل من الطبيعي';cls='p-mid'}
+  else if(v<25){ar='وزن طبيعي';cls='p-good'}
+  else if(v<30){ar='زيادة في الوزن';cls='p-mid'}
+  else {ar='سِمنة';cls='p-high'}
+  return {v:r1(v), ar, cls};
+}
+
+/* السكر التراكمي → متوسط تقديري */
+const a1cToAvg = a => 28.7*a - 46.7;
+const avgToA1c = m => (m + 46.7)/28.7;
+function a1cStatus(v){
+  if(v < 5.7) return {cls:'p-good', ar:'ضمن الطبيعي'};
+  if(v < 6.5) return {cls:'p-mid',  ar:'حدّي'};
+  if(v <= S.profile.targets.a1c) return {cls:'p-good', ar:'ضمن هدفك'};
+  if(v < 8)   return {cls:'p-mid',  ar:'أعلى من هدفك'};
+  return {cls:'p-high', ar:'مرتفع'};
+}
+
+/* السعرات المقدَّرة للحفاظ على الوزن */
+function maintenanceCals(){
+  const w = lastVal('weight'); const h = S.profile.height;
+  const age = new Date().getFullYear() - (S.profile.birthYear||1990);
+  if(!w||!h) return null;
+  const bmr = S.profile.gender==='male' ? 10*w + 6.25*h - 5*age + 5 : 10*w + 6.25*h - 5*age - 161;
+  return Math.round(bmr*1.4);
+}
+
+/* آخر قيمة */
+function lastRec(k){ const a=S[k]; return a && a.length ? [...a].sort((x,y)=>y.ts-x.ts)[0] : null }
+function lastVal(k){ const r=lastRec(k); return r ? r.value : null }
+function ofDay(k, day){ return (S[k]||[]).filter(r=>dayKey(r.ts)===day) }
+function inDays(k, n){ const t=Date.now()-n*864e5; return (S[k]||[]).filter(r=>r.ts>=t).sort((a,b)=>a.ts-b.ts) }
+
+/* ---------- قاعدة بيانات الأكل المصري ---------- */
+/* [الاسم, الوحدة, سعرات, كارب جم, بروتين جم] */
+const FOODS = [
+ ['عيش بلدي','رغيف',210,44,7],['عيش فينو','قطعة',150,30,5],['عيش شامي','رغيف',170,34,6],
+ ['خبز أسمر','شريحتين',160,30,6],['توست أبيض','شريحتين',140,26,4],
+ ['رز أبيض','كوب مطبوخ',205,45,4],['رز بسمتي','كوب',190,42,4],['مكرونة مسلوقة','كوب',220,43,8],
+ ['مكرونة بشاميل','طبق',480,50,20],['كشري','طبق وسط',550,95,17],
+ ['فول مدمس','طبق',220,32,13],['طعمية','قطعة',60,6,3],['بيض مسلوق','بيضة',78,1,6],
+ ['بيض مقلي','بيضة',110,1,6],['أومليت','بيضتين',220,3,13],
+ ['جبنة بيضاء','30 جم',80,1,5],['جبنة قريش','100 جم',98,3,17],['جبنة رومي','30 جم',110,1,7],
+ ['لبنة','ملعقتين',80,2,4],['لبن كامل الدسم','كوب',150,12,8],['لبن خالي الدسم','كوب',85,12,8],
+ ['زبادي','علبة',100,12,6],['زبادي يوناني','علبة',130,6,15],
+ ['صدور فراخ مشوية','150 جم',250,0,46],['فراخ مقلية','قطعة',320,12,25],['فراخ بانيه','قطعة',350,20,26],
+ ['لحمة مشوية','150 جم',290,0,40],['كفتة مشوية','3 أصابع',300,4,22],['سجق','100 جم',300,5,15],
+ ['بسطرمة','50 جم',130,2,15],['كبدة إسكندراني','طبق',280,10,25],
+ ['سمك بلطي مشوي','200 جم',260,0,44],['سمك مقلي','200 جم',380,12,38],['تونة بالزيت','علبة',190,0,26],
+ ['جمبري مشوي','150 جم',150,1,30],
+ ['بطاطس محمرة','طبق',320,40,4],['بطاطس مسلوقة','150 جم',130,30,3],['بطاطا مشوية','150 جم',135,31,2],
+ ['ملوخية','طبق',120,8,5],['بامية بالصلصة','طبق',180,16,8],['فاصوليا بيضا','طبق',210,28,11],
+ ['محشي كرنب','5 قطع',250,38,6],['محشي ورق عنب','10 قطع',280,40,7],['مسقعة','طبق',300,20,7],
+ ['صينية بطاطس باللحمة','طبق',400,35,22],
+ ['شوربة عدس','كوب',180,30,11],['شوربة خضار','كوب',90,14,3],['شوربة فراخ','كوب',110,8,9],
+ ['سلطة خضراء','طبق',60,8,2],['سلطة طحينة','ملعقتين',120,5,3],['بابا غنوج','طبق صغير',150,10,3],
+ ['حمص بالطحينة','طبق صغير',200,20,8],
+ ['شاورما فراخ','سندوتش',450,45,28],['برجر','سندوتش',500,40,25],['بيتزا','شريحة',285,36,12],
+ ['تفاح','حبة',95,25,0],['موز','حبة',105,27,1],['برتقال','حبة',62,15,1],['عنب','كوب',104,27,1],
+ ['مانجو','حبة وسط',200,50,1],['بطيخ','شريحة',85,21,1],['كانتلوب','شريحة',60,15,1],
+ ['جوافة','حبة',45,10,1],['فراولة','كوب',50,12,1],['تمر','3 حبات',60,16,0],['تين','حبة',40,10,0],
+ ['لوز','30 جم',170,6,6],['عين جمل','30 جم',190,4,4],['فول سوداني','30 جم',170,5,7],
+ ['عصير مانجو','كوب',130,33,0],['عصير برتقال طبيعي','كوب',110,26,2],['عصير قصب','كوب',190,45,0],
+ ['كوكاكولا','علبة',139,35,0],['دايت كولا','علبة',1,0,0],
+ ['شاي بسكر','كوب',40,10,0],['شاي بدون سكر','كوب',2,0,0],['قهوة سادة','كوب',5,0,0],
+ ['نسكافيه بلبن وسكر','كوب',100,16,2],
+ ['كنافة','قطعة',350,45,5],['بسبوسة','قطعة',300,42,4],['أم علي','طبق',400,50,8],
+ ['رز بلبن','طبق',250,40,7],['شوكولاتة','لوح 40 جم',220,25,3],['بسكويت','4 قطع',180,26,2],
+ ['كورن فليكس بلبن','كوب',250,44,9],['شوفان بلبن','نص كوب',220,35,10],
+ ['عسل نحل','ملعقة',64,17,0],['زيت زيتون','ملعقة',119,0,0],['زبدة/سمنة','ملعقة',100,0,0],
+ ['مياه','كوب',0,0,0]
+];
+const MEAL_TYPES = {breakfast:'فطار', lunch:'غدا', dinner:'عشا', snack:'سناك'};
+</script>
+<script>
+/* ==========================================================
+   الشاشات
+   ========================================================== */
+const $ = id=>document.getElementById(id);
+
+const ORDER = ['home','records','journey','reports','meds','profile'];
+function render(dir){
+  const el = $('screen');
+  el.innerHTML = ({home:renderHome, records:renderRecords, journey:renderJourney, reports:renderReports, meds:renderMeds, profile:renderProfile}[view])();
+  renderNav();
+  if(dir){
+    el.classList.remove('anim-next','anim-prev');
+    void el.offsetWidth;
+    el.classList.add(dir==='prev' ? 'anim-prev' : 'anim-next');
+  }
+  try{ window.scrollTo({top:0}); }catch(e){}
+  if(view==='home') requestAnimationFrame(placeMarker);
+}
+
+function renderNav(){
+  const items = [
+    ['home','الرئيسية','home'], ['records','السجلات','list'], ['reports','التقارير','chart'],
+    ['meds','الأدوية','pill'], ['profile','حسابي','user']
+  ];
+  const act = view==='journey' ? 'records' : view;
+  $('nav').innerHTML = items.map(([k,ar,ic])=>
+    `<button class="${act===k?'on':''}" onclick="go('${k}')">${svg(ic,1.9)}<span>${ar}</span></button>`).join('');
+}
+function go(v){
+  if(v===view) return;
+  const dir = ORDER.indexOf(v) > ORDER.indexOf(view) ? 'next' : 'prev';
+  view = v; closeSheet(); render(dir);
+}
+
+/* ---------------- الهيدر ---------------- */
+function topbar(){
+  const n = S.profile.name || 'صاحب الحساب';
+  const initial = n.trim().charAt(0) || 'م';
+  const due = medsDueToday().filter(m=>!m.taken).length;
+  return `<div class="topbar">
+    <div class="topbar-row">
+      <div class="avatar">${esc(initial)}</div>
+      <div class="hello"><small>${greet()}</small><strong>${esc(n)}</strong></div>
+      <button class="icon-btn" onclick="toggleTheme()" title="الوضع الليلي">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${effTheme()==='dark'?ICON_SUN:ICON_MOON}</svg>
+      </button>
+      <button class="icon-btn" onclick="go('meds')" style="position:relative">
+        ${svg('bell',1.9)}
+        ${due?`<i style="position:absolute;top:6px;left:6px;width:8px;height:8px;border-radius:99px;background:#FF7A45"></i>`:''}
+      </button>
+    </div>
+  </div>`;
+}
+
+/* ---------------- الرئيسية ---------------- */
+function renderHome(){
+  const g = lastRec('glucose');
+  let strip;
+  if(g){
+    const st = gStatus(g.mg, g.tag);
+    const [lo,hi] = tagRange(g.tag);
+    strip = `<div class="strip-card fade">
+      <div class="strip-head">
+        <div>
+          <div class="strip-label">آخر قراءة سكر — ${TAGS[g.tag].ar}</div>
+          <div class="strip-value"><b class="num" style="color:${st.col}">${fromMg(g.mg)}</b><span>${gUnit()}</span></div>
+        </div>
+        <div class="strip-tag ${st.cls}" style="background:none">${st.ar}</div>
+      </div>
+      <div class="strip-meta">${relDay(g.ts)} • ${fmtTime(g.ts)}</div>
+      <div class="strip" id="strip"><div class="marker" id="marker" style="right:50%"></div></div>
+      <div class="strip-ticks"><span class="num">${fromMg(lo-60)}</span><span>نطاقك ${fromMg(lo)}–${fromMg(hi)}</span><span class="num">${fromMg(hi+70)}</span></div>
+      <input type="hidden" id="markerPos" value="${st.pos}">
+    </div>`;
+  }else{
+    strip = `<div class="strip-card fade">
+      <div class="strip-label">سكر الدم</div>
+      <div class="strip-value"><b class="num" style="color:var(--muted)">—</b><span>${gUnit()}</span></div>
+      <div class="strip-meta">مفيش قراءات لسه. سجّل أول قراءة وهتشوف مكانها على الشريط.</div>
+      <div class="strip-empty"></div>
+      <div style="margin-top:12px"><button class="btn sm" onclick="openLog('glucose')">سجّل قراءة سكر</button></div>
+    </div>`;
+  }
+
+  /* حلقات النهارده */
+  const d = today();
+  const cals = sum(ofDay('meals',d).map(m=>m.cal));
+  const wat  = sum(ofDay('water',d).map(w=>w.ml));
+  const act  = sum(ofDay('activity',d).map(a=>a.min));
+  const T = S.profile.targets;
+  const rings = `<div class="rings">
+    ${ring(cals, T.calories, 'سعرات', `${cals} / ${T.calories}`, 'var(--s-mid)')}
+    ${ring(wat, T.water, 'مياه', `${(wat/1000).toFixed(1)} / ${(T.water/1000).toFixed(1)} ل`, 'var(--s-low)')}
+    ${ring(act, T.steps, 'حركة', `${act} / ${T.steps} د`, 'var(--s-good)')}
+  </div>`;
+
+  /* تسجيل سريع */
+  const quick = `<div class="section">
+    <div class="sec-head"><h2>تسجيل سريع</h2></div>
+    <div class="quick">
+      ${qBtn('glucose','سكر الدم','glucose')}
+      ${qBtn('a1c','التراكمي','a1c')}
+      ${qBtn('meal','أكل','meal')}
+      ${qBtn('weight','وزن','weight')}
+      ${qBtn('water','مياه','water')}
+      ${qBtn('activity','رياضة','run')}
+      ${qBtn('bp','الضغط','bp')}
+      ${qBtn('med','دوا','pill')}
+    </div>
+  </div>`;
+
+  /* تحذير الطوارئ */
+  let warn = '';
+  if(g && (g.mg < 54 || g.mg >= 300)){
+    warn = `<div class="section"><div class="alert">
+      <b>القراءة دي محتاجة انتباه</b>
+      ${g.mg<54 ? 'السكر نازل أوي. لو حاسس بدوخة أو رعشة أو عرق، تناول سكريات سريعة حالاً وكلّم دكتورك.' :
+        'السكر عالي جداً في القراءة دي. راجع دكتورك، ولو معاك أعراض زي القيء أو صعوبة التنفس روح الطوارئ فوراً.'}
+    </div></div>`;
+  }
+
+  /* آخر التسجيلات */
+  const feed = latestFeed(6);
+  const recent = `<div class="section">
+    <div class="sec-head"><h2>آخر التسجيلات</h2><button onclick="go('records')">شوف الكل</button></div>
+    ${feed.length ? `<div class="card">${feed.map(rowOf).join('')}</div>` : emptyBox('لسه مفيش حاجة اتسجلت','ابدأ بأول قراءة سكر أو وجبة، والبرنامج هيبني لك التقارير لوحده.')}
+  </div>`;
+
+  /* نظرة سريعة */
+  const w = lastRec('weight'); const a = lastRec('a1c');
+  const bmi = w ? bmiInfo(w.value) : null;
+  const glance = `<div class="section">
+    <div class="sec-head"><h2>نظرة سريعة</h2></div>
+    <div class="stat-grid">
+      <div class="stat" onclick="go('journey')" style="cursor:pointer"><small>الوزن الحالي</small><b class="num">${w? r1(w.value):'—'}<u> كجم</u></b>
+        ${bmi?`<span class="pill ${bmi.cls}" style="margin-top:6px">BMI ${bmi.v} • ${bmi.ar}</span>`:'<u>سجّل وزنك عشان نحسب الـ BMI</u>'}
+        <u style="display:block;margin-top:6px;color:var(--teal)">رحلة الوزن ←</u></div>
+      <div class="stat"><small>السكر التراكمي</small><b class="num">${a? r1(a.value):'—'}<u> %</u></b>
+        ${a?`<span class="pill ${a1cStatus(a.value).cls}" style="margin-top:6px">${a1cStatus(a.value).ar}</span>`:'<u>آخر تحليل HbA1c</u>'}</div>
+    </div>
+  </div>`;
+
+  return topbar() + strip + streakCard() + rings + warn + quick + glance + journeyBanner() + insightsCard() + recent;
+}
+
+function qBtn(kind,label,icon){
+  return `<button class="q" onclick="openLog('${kind}')"><i>${svg(icon,2)}</i><span>${label}</span></button>`;
+}
+
+function ring(val,target,label,sub,col){
+  const p = target? Math.min(val/target,1) : 0;
+  const R=26, C=2*Math.PI*R;
+  return `<div class="ring-card fade">
+    <div class="ring">
+      <svg width="62" height="62" viewBox="0 0 62 62">
+        <circle cx="31" cy="31" r="${R}" fill="none" stroke="var(--paper)" stroke-width="7"/>
+        <circle cx="31" cy="31" r="${R}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round"
+          stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p)}"/>
+      </svg>
+      <div class="rv num">${Math.round(p*100)}<span style="font-size:10px">%</span></div>
+    </div>
+    <small>${label}</small><b class="num">${sub}</b>
+  </div>`;
+}
+
+function placeMarker(){
+  const m = $('marker'), p = $('markerPos');
+  if(m && p){ requestAnimationFrame(()=>{ m.style.right = (parseFloat(p.value)*100)+'%'; }); }
+}
+
+/* ---------------- عناصر الفييد ---------------- */
+function latestFeed(n){
+  const out=[];
+  const push=(k,arr)=>arr.forEach(r=>out.push({k,r}));
+  push('glucose',S.glucose); push('a1c',S.a1c); push('weight',S.weight);
+  push('bp',S.bp); push('meals',S.meals); push('water',S.water); push('activity',S.activity);
+  return out.sort((a,b)=>b.r.ts-a.r.ts).slice(0,n);
+}
+
+function rowOf(item){
+  const {k,r} = item;
+  let icon='glucose', title='', sub=relDay(r.ts)+' • '+fmtTime(r.ts), val='', unit='', pill='';
+  if(k==='glucose'){ const st=gStatus(r.mg,r.tag); icon='glucose'; title='سكر الدم — '+TAGS[r.tag].ar;
+    val=fromMg(r.mg); unit=gUnit(); pill=`<span class="pill ${st.cls}">${st.ar}</span>`; }
+  else if(k==='a1c'){ icon='a1c'; title='السكر التراكمي'; val=r1(r.value); unit='%';
+    pill=`<span class="pill ${a1cStatus(r.value).cls}">${a1cStatus(r.value).ar}</span>`; }
+  else if(k==='weight'){ icon='weight'; title='الوزن'; val=r1(r.value); unit='كجم'; }
+  else if(k==='bp'){ const st=bpStatus(r.sys,r.dia); icon='bp'; title='ضغط الدم'; val=`${r.sys}/${r.dia}`; unit='mmHg';
+    pill=`<span class="pill ${st.cls}">${st.ar}</span>`; }
+  else if(k==='meals'){ icon='meal'; title=r.name; sub=`${MEAL_TYPES[r.type]} • ${relDay(r.ts)} ${fmtTime(r.ts)}`;
+    val=r.cal; unit=`سعرة • ${r.carbs} كارب`; }
+  else if(k==='water'){ icon='water'; title='مياه'; val=r.ml; unit='مل'; }
+  else if(k==='activity'){ icon='run'; title=r.name||'نشاط'; val=r.min; unit='دقيقة'; }
+  return `<div class="row">
+    <div class="ic">${svg(icon,1.9)}</div>
+    <div class="tx"><b>${esc(title)}</b><small>${sub}</small>${pill?'<div style="margin-top:4px">'+pill+'</div>':''}</div>
+    <div class="vl"><b class="num">${val}</b><small>${unit}</small></div>
+  </div>`;
+}
+
+function emptyBox(t,p,btn){
+  return `<div class="card"><div class="empty">${svg('list',1.6)}<b>${t}</b><p>${p}</p>${btn||''}</div></div>`;
+}
+</script>
+<script>
+/* ==========================================================
+   السجلات
+   ========================================================== */
+const REC_TABS = [
+  ['glucose','سكر الدم'],['a1c','التراكمي'],['meals','الأكل'],['weight','الوزن'],
+  ['bp','الضغط'],['water','المياه'],['activity','الرياضة']
+];
+
+function renderRecords(){
+  const tabs = `<div class="section" style="padding-bottom:0"><div class="sec-head"><h2>السجلات</h2>
+    <button onclick="exportPrint()">${svg('print',1.9)}</button></div></div>
+    <div class="tabs">${REC_TABS.map(([k,ar])=>`<button class="tab ${recTab===k?'on':''}" onclick="setTab('${k}')">${ar}</button>`).join('')}</div>`
+    + (recTab==='weight' ? `<div class="section" style="padding-top:12px;padding-bottom:0">
+        <button class="btn ghost" onclick="go('journey')">افتح رحلة الوزن — التقدم والمعدل الأسبوعي</button></div>` : '');
+
+  const arr = [...(S[recTab]||[])].sort((a,b)=>b.ts-a.ts);
+  if(!arr.length){
+    return topbar()+tabs+`<div class="section">${emptyBox('السجل فاضي','أول ما تسجّل حاجة هنا هتلاقيها مرتبة بالتاريخ مع إمكانية التعديل والحذف.',
+      `<button class="btn sm" onclick="openLog('${recTab==='meals'?'meal':recTab}')">سجّل دلوقتي</button>`)}</div>`;
+  }
+
+  /* تجميع حسب اليوم */
+  const groups = {};
+  arr.forEach(r=>{ const k=dayKey(r.ts); (groups[k]=groups[k]||[]).push(r); });
+
+  let body = '';
+  for(const k in groups){
+    const list = groups[k];
+    let head = relDay(list[0].ts);
+    let extra = '';
+    if(recTab==='meals'){
+      const c=sum(list.map(m=>m.cal)), cb=sum(list.map(m=>m.carbs));
+      extra = `<span style="color:var(--muted);font-weight:600">${c} سعرة • ${cb} كارب</span>`;
+    }else if(recTab==='glucose'){
+      const a = Math.round(avg(list.map(g=>g.mg)));
+      extra = `<span style="color:var(--muted);font-weight:600">متوسط ${fromMg(a)}</span>`;
+    }else if(recTab==='water'){
+      extra = `<span style="color:var(--muted);font-weight:600">${sum(list.map(w=>w.ml))} مل</span>`;
+    }
+    body += `<div class="section" style="padding-top:16px">
+      <div class="sec-head"><h2 style="font-size:16px">${head}</h2>${extra}</div>
+      <div class="card">${list.map(r=>recRow(recTab,r)).join('')}</div>
+    </div>`;
+  }
+  return topbar()+tabs+body+`<div style="height:8px"></div>`;
+}
+function setTab(k){ recTab=k; render(); }
+
+function recRow(kind, r){
+  const base = rowOf({k:kind, r});
+  const actions = `<button class="swipe-del" onclick="delRec('${kind}','${r.id}')">${svg('trash',1.9)}</button>`;
+  return base.replace('<div class="vl">', actions+'<div class="vl">');
+}
+
+function delRec(kind,id){
+  if(!confirm('تحذف التسجيل ده؟')) return;
+  S[kind] = S[kind].filter(r=>r.id!==id);
+  save(); render(); toast('اتحذف');
+}
+
+/* ==========================================================
+   التقارير
+   ========================================================== */
+function renderReports(){
+  const n = repRange;
+  const gl = inDays('glucose', n);
+  const mgs = gl.map(g=>g.mg);
+  const inRange = gl.filter(g=>gStatus(g.mg,g.tag).k==='good').length;
+  const lows = gl.filter(g=>g.mg < tagRange(g.tag)[0]).length;
+  const highs = gl.length - inRange - lows;
+  const est = mgs.length? avgToA1c(avg(mgs)) : null;
+  const a1cLast = lastRec('a1c');
+
+  const ranges = `<div class="tabs" style="padding-top:4px">
+    ${[[7,'٧ أيام'],[30,'٣٠ يوم'],[90,'٣ شهور'],[365,'سنة']].map(([v,ar])=>
+      `<button class="tab ${repRange===v?'on':''}" onclick="setRange(${v})">${ar}</button>`).join('')}</div>`;
+
+  const stats = `<div class="section" style="padding-top:14px"><div class="stat-grid">
+    <div class="stat"><small>متوسط السكر</small><b class="num">${mgs.length? fromMg(avg(mgs)) : '—'}<u> ${gUnit()}</u></b><u>${gl.length} قراءة</u></div>
+    <div class="stat"><small>الوقت في النطاق</small><b class="num">${gl.length? Math.round(inRange/gl.length*100):'—'}<u> %</u></b><u>${inRange} من ${gl.length}</u></div>
+    <div class="stat"><small>تراكمي تقديري</small><b class="num">${est? r1(est):'—'}<u> %</u></b><u>محسوب من قراءاتك</u></div>
+    <div class="stat"><small>آخر تحليل تراكمي</small><b class="num">${a1cLast? r1(a1cLast.value):'—'}<u> %</u></b><u>${a1cLast? fmtDate(a1cLast.ts):'مسجلتش تحليل'}</u></div>
+  </div></div>`;
+
+  /* توزيع القراءات */
+  const dist = gl.length ? `<div class="section">
+    <div class="sec-head"><h2>توزيع القراءات</h2></div>
+    <div class="card pad">
+      <div style="display:flex;height:34px;border-radius:11px;overflow:hidden;background:var(--paper)">
+        ${lows?`<div style="width:${lows/gl.length*100}%;background:var(--s-low)"></div>`:''}
+        ${inRange?`<div style="width:${inRange/gl.length*100}%;background:var(--s-good)"></div>`:''}
+        ${highs?`<div style="width:${highs/gl.length*100}%;background:var(--s-mid)"></div>`:''}
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--s-low)"></i>تحت النطاق ${Math.round(lows/gl.length*100)}%</span>
+        <span><i style="background:var(--s-good)"></i>في النطاق ${Math.round(inRange/gl.length*100)}%</span>
+        <span><i style="background:var(--s-mid)"></i>فوق النطاق ${Math.round(highs/gl.length*100)}%</span>
+      </div>
+    </div></div>` : '';
+
+  /* متوسط حسب وقت القياس */
+  let byTag = '';
+  if(gl.length){
+    const rows = Object.keys(TAGS).map(t=>{
+      const set = gl.filter(g=>g.tag===t);
+      if(!set.length) return '';
+      const m = avg(set.map(g=>g.mg));
+      const st = gStatus(m,t);
+      return `<div class="row"><div class="ic">${svg('glucose',1.9)}</div>
+        <div class="tx"><b>${TAGS[t].ar}</b><small>${set.length} قراءة</small></div>
+        <div class="vl"><b class="num" style="color:${st.col}">${fromMg(m)}</b><small>${gUnit()}</small></div></div>`;
+    }).join('');
+    if(rows) byTag = `<div class="section"><div class="sec-head"><h2>المتوسط حسب التوقيت</h2></div><div class="card">${rows}</div></div>`;
+  }
+
+  /* الرسوم */
+  const gChart = gl.length>1 ? chartCard('منحنى السكر', lineChart(gl.map(g=>({ts:g.ts,v:fromMg(g.mg)})), {
+      bands:[{from:fromMg(S.profile.targets.post[0]), to:fromMg(S.profile.targets.post[1]), col:'rgba(62,158,82,.13)'}],
+      col:'var(--teal)', unit:gUnit()
+    })) : '';
+  const wArr = inDays('weight', n);
+  const wChart = wArr.length>1 ? chartCard('منحنى الوزن', lineChart(wArr.map(w=>({ts:w.ts,v:w.value})), {col:'var(--ink)', unit:'كجم'})) : '';
+  const aArr = inDays('a1c', 730);
+  const aChart = aArr.length>1 ? chartCard('السكر التراكمي', lineChart(aArr.map(a=>({ts:a.ts,v:a.value})), {
+      bands:[{from:0,to:S.profile.targets.a1c,col:'rgba(62,158,82,.13)'}], col:'var(--s-mid)', unit:'%'})) : '';
+
+  /* السعرات آخر ٧ أيام */
+  const days = [];
+  for(let i=6;i>=0;i--){ const d = dayKey(Date.now()-i*864e5); days.push({d, cal:sum(ofDay('meals',d).map(m=>m.cal)), carb:sum(ofDay('meals',d).map(m=>m.carbs))}); }
+  const anyCal = days.some(x=>x.cal>0);
+  const calChart = anyCal ? `<div class="section"><div class="sec-head"><h2>السعرات — آخر ٧ أيام</h2></div>
+    <div class="card pad"><div class="chart">${barChart(days.map(x=>({label:AR_DAYS[new Date(x.d+'T12:00').getDay()].slice(0,3), v:x.cal})), S.profile.targets.calories)}</div>
+    <div class="legend"><span><i style="background:var(--s-mid)"></i>سعرات اليوم</span><span><i style="background:var(--line)"></i>هدفك ${S.profile.targets.calories}</span></div></div></div>` : '';
+
+  const nothing = (!gl.length && !wArr.length && !anyCal) ?
+    `<div class="section">${emptyBox('التقارير هتظهر هنا','سجّل قراءات لمدة كام يوم، والبرنامج هيحسب المتوسطات والمنحنيات والتراكمي التقديري لوحده.')}</div>` : '';
+
+  const foot = `<div class="section"><div class="note">
+    <b style="font-family:Zain;font-size:15px">قبل ما تعرض التقرير على دكتورك</b><br>
+    الأرقام دي متابعة شخصية مش تشخيص طبي. النطاقات المستهدفة بتختلف من شخص للتاني حسب حالتك وعلاجك — اظبطها من «حسابي ← الأهداف» بالاتفاق مع دكتورك.
+    </div>
+    <div style="margin-top:12px"><button class="btn ghost" onclick="exportPrint()">${svg('print',2)} اطبع تقرير للدكتور</button></div>
+  </div>`;
+
+  return topbar()+`<div class="section" style="padding-bottom:0"><div class="sec-head"><h2>التقارير</h2></div></div>`
+    + ranges + stats + dist + byTag + gChart + calChart + wChart + aChart + nothing + foot;
+}
+function setRange(v){ repRange=v; render(); }
+
+function chartCard(title, inner){
+  return `<div class="section"><div class="sec-head"><h2>${title}</h2></div>
+    <div class="card pad"><div class="chart">${inner}</div></div></div>`;
+}
+
+/* ---------- رسم بياني خطي ---------- */
+function lineChart(pts, o={}){
+  if(pts.length<2) return '';
+  const W=560,H=230,PL=44,PR=12,PT=16,PB=30;
+  const xs = pts.map(p=>p.ts), ys = pts.map(p=>p.v);
+  let minY=Math.min(...ys), maxY=Math.max(...ys);
+  (o.bands||[]).forEach(b=>{ minY=Math.min(minY,b.from); maxY=Math.max(maxY,b.to); });
+  const padY=(maxY-minY)*0.18 || Math.max(1,maxY*0.1);
+  minY=Math.max(0,minY-padY); maxY=maxY+padY;
+  const minX=Math.min(...xs), maxX=Math.max(...xs);
+  const X = t => PL + (maxX===minX?0.5:(t-minX)/(maxX-minX)) * (W-PL-PR);
+  const Y = v => PT + (1-(v-minY)/(maxY-minY||1)) * (H-PT-PB);
+
+  let g='';
+  (o.bands||[]).forEach(b=>{ g += `<rect x="${PL}" y="${Y(b.to)}" width="${W-PL-PR}" height="${Math.max(0,Y(b.from)-Y(b.to))}" fill="${b.col}" rx="4"/>`; });
+  for(let i=0;i<=3;i++){
+    const v = minY + (maxY-minY)*i/3;
+    g += `<line x1="${PL}" y1="${Y(v)}" x2="${W-PR}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/>
+          <text x="${PL-8}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="IBM Plex Sans Arabic">${Math.round(v*10)/10}</text>`;
+  }
+  const dPath = pts.map((p,i)=>`${i?'L':'M'}${X(p.ts).toFixed(1)},${Y(p.v).toFixed(1)}`).join(' ');
+  const area = dPath + ` L${X(pts[pts.length-1].ts).toFixed(1)},${H-PB} L${X(pts[0].ts).toFixed(1)},${H-PB} Z`;
+  g += `<path d="${area}" fill="${o.col||'var(--teal)'}" opacity=".08"/>`;
+  g += `<path d="${dPath}" fill="none" stroke="${o.col||'var(--teal)'}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  pts.forEach(p=>{ g += `<circle cx="${X(p.ts).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="3" fill="#fff" stroke="${o.col||'var(--teal)'}" stroke-width="2"/>`; });
+  [pts[0], pts[pts.length-1]].forEach((p,i)=>{
+    g += `<text x="${X(p.ts)}" y="${H-8}" text-anchor="${i?'end':'start'}" font-size="11" fill="var(--muted)" font-family="IBM Plex Sans Arabic">${fmtDate(p.ts)}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+}
+
+/* ---------- رسم أعمدة ---------- */
+function barChart(items, target){
+  const W=560,H=200,PL=10,PR=10,PT=14,PB=26;
+  const max = Math.max(target||0, ...items.map(i=>i.v), 1)*1.12;
+  const bw = (W-PL-PR)/items.length;
+  const Y = v => PT + (1-v/max)*(H-PT-PB);
+  let g = `<line x1="${PL}" y1="${Y(target)}" x2="${W-PR}" y2="${Y(target)}" stroke="var(--line)" stroke-width="2" stroke-dasharray="5 5"/>`;
+  items.forEach((it,i)=>{
+    const x = PL + i*bw + bw*0.22, w = bw*0.56;
+    const h = Math.max(2,(H-PT-PB) - (Y(it.v)-PT));
+    const col = it.v > target ? 'var(--s-mid)' : 'var(--teal)';
+    g += `<rect x="${x}" y="${Y(it.v)}" width="${w}" height="${h}" rx="6" fill="${it.v?col:'var(--line)'}"/>`;
+    g += `<text x="${x+w/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Sans Arabic">${it.label}</text>`;
+    if(it.v) g += `<text x="${x+w/2}" y="${Y(it.v)-5}" text-anchor="middle" font-size="10.5" fill="var(--ink)" font-family="IBM Plex Sans Arabic">${it.v}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+}
+</script>
+<script>
+/* ==========================================================
+   الأدوية والتذكيرات
+   ========================================================== */
+function medsDueToday(){
+  const d = today(), out=[];
+  (S.meds||[]).filter(m=>m.active!==false).forEach(m=>{
+    (m.times||[]).forEach(t=>{
+      const taken = (S.medLog||[]).some(l=>l.medId===m.id && l.slot===t && dayKey(l.ts)===d);
+      out.push({med:m, time:t, taken});
+    });
+  });
+  return out.sort((a,b)=>a.time.localeCompare(b.time));
+}
+
+function renderMeds(){
+  const due = medsDueToday();
+  const doneN = due.filter(d=>d.taken).length;
+
+  const head = `<div class="section" style="padding-bottom:0"><div class="sec-head"><h2>الأدوية</h2>
+    <button onclick="openMedForm()">+ ضيف دوا</button></div></div>`;
+
+  const prog = due.length ? `<div class="section" style="padding-top:12px">
+    <div class="card pad">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
+        <b style="font-family:Zain;font-size:18px">جرعات النهارده</b>
+        <span class="num" style="font-family:Zain;font-size:22px;font-weight:800">${doneN}<span style="font-size:14px;color:var(--muted)"> / ${due.length}</span></span>
+      </div>
+      <div style="height:9px;border-radius:99px;background:var(--paper);overflow:hidden">
+        <div style="height:100%;width:${due.length?doneN/due.length*100:0}%;background:var(--teal);border-radius:99px;transition:width .5s"></div>
+      </div>
+    </div></div>` : '';
+
+  const list = due.length ? `<div class="section"><div class="sec-head"><h2>مواعيد النهارده</h2></div>
+    <div class="card">${due.map(d=>`
+      <div class="row">
+        <div class="ic" style="background:${d.taken?'var(--teal-l)':'var(--paper)'};color:${d.taken?'var(--teal-d)':'var(--ink-2)'}">${svg('pill',1.9)}</div>
+        <div class="tx"><b>${esc(d.med.name)}</b><small>${esc(d.med.dose||'')} • الساعة ${d.time}</small></div>
+        <button class="btn sm ${d.taken?'ghost':''}" style="${d.taken?'color:var(--teal-d)':''}" onclick="toggleMed('${d.med.id}','${d.time}')">
+          ${d.taken?'اتاخد ✓':'خد الجرعة'}
+        </button>
+      </div>`).join('')}</div></div>` : '';
+
+  const all = (S.meds||[]).length ? `<div class="section"><div class="sec-head"><h2>كل الأدوية</h2></div>
+    <div class="card">${S.meds.map(m=>`
+      <div class="row">
+        <div class="ic">${svg('pill',1.9)}</div>
+        <div class="tx"><b>${esc(m.name)}</b><small>${esc(m.dose||'—')} • ${(m.times||[]).join(' , ')||'من غير مواعيد'}</small></div>
+        <button class="swipe-del" onclick="delMed('${m.id}')">${svg('trash',1.9)}</button>
+        <button class="swipe-del" style="color:var(--muted)" onclick="openMedForm('${m.id}')">${svg('edit',1.9)}</button>
+      </div>`).join('')}</div></div>`
+    : `<div class="section">${emptyBox('مفيش أدوية مسجلة','ضيف أدويتك ومواعيدها، والبرنامج هيفكرك بيها كل يوم ويحسب التزامك.',
+        '<button class="btn sm" onclick="openMedForm()">ضيف أول دوا</button>')}</div>`;
+
+  /* الالتزام آخر ٧ أيام */
+  let adh = '';
+  if((S.meds||[]).length){
+    const slots = S.meds.filter(m=>m.active!==false).reduce((n,m)=>n+(m.times||[]).length,0);
+    if(slots){
+      const days=[];
+      for(let i=6;i>=0;i--){
+        const d = dayKey(Date.now()-i*864e5);
+        const c = (S.medLog||[]).filter(l=>dayKey(l.ts)===d).length;
+        days.push({label:AR_DAYS[new Date(d+'T12:00').getDay()].slice(0,3), v:Math.min(c,slots)});
+      }
+      adh = `<div class="section"><div class="sec-head"><h2>الالتزام — آخر ٧ أيام</h2></div>
+        <div class="card pad"><div class="chart">${barChart(days, slots)}</div></div></div>`;
+    }
+  }
+  return topbar()+head+prog+list+adh+all;
+}
+
+function toggleMed(id, slot){
+  const d = today();
+  const ex = (S.medLog||[]).find(l=>l.medId===id && l.slot===slot && dayKey(l.ts)===d);
+  if(ex){ S.medLog = S.medLog.filter(l=>l!==ex); }
+  else { S.medLog.push({id:uid(), medId:id, slot, ts:Date.now()}); toast('تمام، اتسجلت'); }
+  save(); render();
+}
+function delMed(id){
+  if(!confirm('تمسح الدوا ده من القايمة؟')) return;
+  S.meds = S.meds.filter(m=>m.id!==id);
+  S.medLog = S.medLog.filter(l=>l.medId!==id);
+  save(); render();
+}
+
+/* ==========================================================
+   حسابي
+   ========================================================== */
+function renderProfile(){
+  const p = S.profile, T = p.targets;
+  const w = lastVal('weight'); const bmi = w? bmiInfo(w) : null;
+  const maint = maintenanceCals();
+  const total = S.glucose.length+S.a1c.length+S.weight.length+S.bp.length+S.meals.length+S.water.length+S.activity.length;
+
+  return topbar()+`
+  <div class="section" style="padding-bottom:0"><div class="sec-head"><h2>حسابي</h2></div></div>
+
+  <div class="section" style="padding-top:12px"><div class="card pad">
+    <div class="field"><label>الاسم</label><input class="input" id="pName" value="${esc(p.name)}" placeholder="اكتب اسمك"></div>
+    <div class="grid2">
+      <div class="field"><label>النوع</label>
+        <select class="input" id="pGender"><option value="male"${p.gender==='male'?' selected':''}>ذكر</option><option value="female"${p.gender==='female'?' selected':''}>أنثى</option></select></div>
+      <div class="field"><label>سنة الميلاد</label><input class="input num" id="pYear" type="number" value="${p.birthYear}"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>الطول (سم)</label><input class="input num" id="pH" type="number" value="${p.height}"></div>
+      <div class="field"><label>الوزن المستهدف (كجم)</label><input class="input num" id="pTW" type="number" step="0.1" value="${p.targetWeight||''}" placeholder="اختياري"></div>
+      <div class="field"><label>وزن البداية (كجم)</label><input class="input num" id="pSW" type="number" step="0.1" value="${p.startWeight||''}" placeholder="أول قياس"></div>
+    </div>
+    <div class="field"><label>وحدة قياس السكر</label>
+      <div class="chips">
+        <button class="chip ${p.unit==='mg'?'on':''}" onclick="setUnit('mg')">mg/dL</button>
+        <button class="chip ${p.unit==='mmol'?'on':''}" onclick="setUnit('mmol')">mmol/L</button>
+      </div></div>
+    <button class="btn" onclick="saveProfile()">احفظ البيانات</button>
+    ${bmi?`<p class="hint">مؤشر كتلة الجسم دلوقتي <b class="num">${bmi.v}</b> — ${bmi.ar}.${maint?` احتياجك التقريبي للحفاظ على وزنك حوالي <b class="num">${maint}</b> سعرة في اليوم.`:''}</p>`:''}
+  </div></div>
+
+  <div class="section"><div class="sec-head"><h2>المظهر</h2></div>
+    <div class="card pad">
+      <div class="field" style="margin-bottom:0"><label>وضع العرض</label>
+        <div class="chips">
+          <button class="chip ${(p.theme||'auto')==='auto'?'on':''}" onclick="setTheme('auto')">تلقائي</button>
+          <button class="chip ${p.theme==='light'?'on':''}" onclick="setTheme('light')">نهاري</button>
+          <button class="chip ${p.theme==='dark'?'on':''}" onclick="setTheme('dark')">ليلي 🌙</button>
+        </div>
+        <p class="hint">«تلقائي» بيمشي مع إعداد الموبايل نفسه.</p>
+      </div>
+    </div></div>
+
+  <div class="section"><div class="sec-head"><h2>الخصوصية والتذكيرات</h2></div>
+    <div class="card">
+      <div class="row" onclick="${p.pin?'removePin()':'setPin()'}">
+        <div class="ic">${svg(p.pin?'check':'info',1.9)}</div>
+        <div class="tx"><b>${p.pin?'قفل الكود شغّال':'اقفل البرنامج بكود'}</b><small>${p.pin?'اضغط لشيل القفل':'٤ أرقام تتطلب كل مرة تفتح البرنامج'}</small></div>
+      </div>
+      <div class="row" onclick="askNotify()">
+        <div class="ic">${svg('bell',1.9)}</div>
+        <div class="tx"><b>تذكيرات الأدوية</b><small>${p.notify?'مفعّلة — هتوصلك في مواعيد الجرعات':'اضغط للتفعيل'}</small></div>
+      </div>
+    </div></div>
+
+  <div class="section"><div class="sec-head"><h2>الأهداف</h2></div>
+    <div class="card pad">
+      <div class="grid2">
+        <div class="field"><label>سكر الصيام — من</label><input class="input num" id="tF0" type="number" value="${T.fasting[0]}"></div>
+        <div class="field"><label>سكر الصيام — إلى</label><input class="input num" id="tF1" type="number" value="${T.fasting[1]}"></div>
+        <div class="field"><label>بعد الأكل — من</label><input class="input num" id="tP0" type="number" value="${T.post[0]}"></div>
+        <div class="field"><label>بعد الأكل — إلى</label><input class="input num" id="tP1" type="number" value="${T.post[1]}"></div>
+        <div class="field"><label>هدف التراكمي %</label><input class="input num" id="tA" type="number" step="0.1" value="${T.a1c}"></div>
+        <div class="field"><label>سعرات اليوم</label><input class="input num" id="tC" type="number" value="${T.calories}"></div>
+        <div class="field"><label>كارب اليوم (جم)</label><input class="input num" id="tCB" type="number" value="${T.carbs}"></div>
+        <div class="field"><label>مياه اليوم (مل)</label><input class="input num" id="tW" type="number" value="${T.water}"></div>
+      </div>
+      <div class="field"><label>دقايق الحركة في اليوم</label><input class="input num" id="tS" type="number" value="${T.steps}"></div>
+      <button class="btn" onclick="saveTargets()">احفظ الأهداف</button>
+      <p class="hint">النطاقات دي بالـ mg/dL. اتفق عليها مع دكتورك — الأهداف بتفرق حسب السن والحالة ونوع العلاج.</p>
+    </div></div>
+
+  <div class="section"><div class="sec-head"><h2>بياناتك</h2></div>
+    <div class="card">
+      <div class="row"><div class="ic">${svg('list',1.9)}</div><div class="tx"><b>إجمالي التسجيلات</b><small>محفوظة على جهازك بس</small></div><div class="vl"><b class="num">${total}</b></div></div>
+      <div class="row" onclick="exportJSON()"><div class="ic">${svg('down',1.9)}</div><div class="tx"><b>نزّل نسخة احتياطية</b><small>ملف JSON فيه كل بياناتك</small></div></div>
+      <div class="row" onclick="importJSON()"><div class="ic">${svg('up',1.9)}</div><div class="tx"><b>ارجع من نسخة</b><small>استيراد ملف JSON</small></div></div>
+      <div class="row" onclick="exportCSV()"><div class="ic">${svg('list',1.9)}</div><div class="tx"><b>تصدير CSV</b><small>تفتحه في Excel أو Google Sheets</small></div></div>
+      <div class="row" onclick="exportPrint()"><div class="ic">${svg('print',1.9)}</div><div class="tx"><b>اطبع تقرير للدكتور</b><small>ملخص القراءات والمتوسطات</small></div></div>
+    </div>
+    <div style="margin-top:12px"><button class="btn danger" onclick="wipe()">امسح كل البيانات</button></div>
+    <p class="hint">بياناتك متسجلة على جهازك فقط ومش بتترفع لأي سيرفر. خد نسخة احتياطية كل فترة.</p>
+  </div>
+  <div style="height:10px"></div>`;
+}
+
+function setUnit(u){ S.profile.unit=u; save(); render(); }
+function saveProfile(){
+  S.profile.name = $('pName').value.trim();
+  S.profile.gender = $('pGender').value;
+  S.profile.birthYear = +$('pYear').value || 1990;
+  S.profile.height = +$('pH').value || 170;
+  S.profile.targetWeight = +$('pTW').value || 0;
+  S.profile.startWeight = +$('pSW').value || 0;
+  save(); render(); toast('اتحفظ');
+}
+function saveTargets(){
+  const T = S.profile.targets;
+  T.fasting = [+$('tF0').value||80, +$('tF1').value||130];
+  T.post    = [+$('tP0').value||80, +$('tP1').value||180];
+  T.a1c = +$('tA').value||7; T.calories=+$('tC').value||2000;
+  T.carbs = +$('tCB').value||200; T.water=+$('tW').value||2500; T.steps=+$('tS').value||30;
+  save(); render(); toast('الأهداف اتحفظت');
+}
+function wipe(){
+  if(!confirm('ده هيمسح كل التسجيلات والإعدادات نهائياً. متأكد؟')) return;
+  if(!confirm('تأكيد أخير — البيانات مش هترجع تاني.')) return;
+  S = blank(); save(); view='home'; render(); toast('اتمسح كل حاجة');
+}
+</script>
+<script>
+/* ==========================================================
+   الشيتات والفورمات
+   ========================================================== */
+let F = {};
+
+function openSheet(title, html){
+  $('sheetTitle').textContent = title;
+  $('sheetBody').innerHTML = html;
+  $('scrim').classList.add('on');
+  $('sheet').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeSheet(){
+  $('scrim').classList.remove('on');
+  $('sheet').classList.remove('on');
+  document.body.style.overflow='';
+}
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('on');
+  if(navigator.vibrate) try{navigator.vibrate(12)}catch(e){}
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),1900);
+}
+const nowInput = ()=>localInput(Date.now());
+
+/* ---------- قائمة التسجيل السريع ---------- */
+function openQuick(){
+  const items=[['glucose','سكر الدم','glucose'],['a1c','السكر التراكمي','a1c'],['meal','وجبة','meal'],
+    ['weight','الوزن','weight'],['bp','ضغط الدم','bp'],['water','مياه','water'],
+    ['activity','رياضة','run'],['med','دوا','pill']];
+  openSheet('تسجيل جديد', `<div class="quick" style="grid-template-columns:repeat(3,1fr);gap:10px">
+    ${items.map(([k,ar,ic])=>`<button class="q" style="padding:18px 6px 14px" onclick="openLog('${k}')"><i style="width:40px;height:40px">${svg(ic,2)}</i><span style="font-size:12.5px">${ar}</span></button>`).join('')}
+  </div>`);
+}
+
+/* ---------- موجّه الفورمات ---------- */
+function openLog(kind){
+  F = {};
+  if(kind==='glucose') return formGlucose();
+  if(kind==='a1c')     return formA1c();
+  if(kind==='weight')  return formWeight();
+  if(kind==='bp')      return formBP();
+  if(kind==='meal' || kind==='meals') return formMeal();
+  if(kind==='water')   return formWater();
+  if(kind==='activity')return formActivity();
+  if(kind==='med')     { closeSheet(); go('meds'); return openMedForm(); }
+}
+
+/* ---------- سكر الدم ---------- */
+function formGlucose(){
+  F.tag = 'fasting';
+  openSheet('قراءة سكر الدم', `
+    <input class="big-input num" id="gv" type="number" inputmode="decimal" placeholder="${S.profile.unit==='mmol'?'7.2':'110'}" autofocus>
+    <p class="hint" style="text-align:center;margin:8px 0 18px">القراءة بالـ ${gUnit()}</p>
+    <div class="field"><label>وقت القياس</label>
+      <div class="chips" id="gtags">${Object.keys(TAGS).map(t=>
+        `<button class="chip ${t==='fasting'?'on':''}" data-t="${t}" onclick="pickTag(this)">${TAGS[t].ar}</button>`).join('')}</div>
+    </div>
+    <div class="field"><label>التاريخ والوقت</label><input class="input" id="gts" type="datetime-local" value="${nowInput()}"></div>
+    <div class="field"><label>ملاحظة (اختياري)</label><textarea class="input" id="gn" placeholder="مثلاً: بعد المشي، أو حاسس بدوخة"></textarea></div>
+    <div id="gpreview"></div>
+    <button class="btn" onclick="saveGlucose()">احفظ القراءة</button>`);
+  $('gv').addEventListener('input', previewGlucose);
+}
+function pickTag(b){
+  [...$('gtags').children].forEach(c=>c.classList.remove('on'));
+  b.classList.add('on'); F.tag=b.dataset.t; previewGlucose();
+}
+function previewGlucose(){
+  const raw = parseFloat($('gv').value); const box=$('gpreview');
+  if(!raw){ box.innerHTML=''; return; }
+  const st = gStatus(toMg(raw), F.tag);
+  const [lo,hi] = tagRange(F.tag);
+  box.innerHTML = `<div class="note" style="background:${st.k==='good'?'var(--teal-l)':'#FBF4E6'};color:${st.col};margin-bottom:14px">
+    <b style="font-family:Zain;font-size:16px">${st.ar}</b><br>
+    نطاقك المستهدف لـ«${TAGS[F.tag].ar}» من ${fromMg(lo)} لـ ${fromMg(hi)} ${gUnit()}.</div>`;
+}
+function saveGlucose(){
+  const raw = parseFloat($('gv').value);
+  if(!raw){ toast('اكتب قيمة القراءة الأول'); return; }
+  S.glucose.push({id:uid(), ts:new Date($('gts').value).getTime()||Date.now(), mg:toMg(raw), tag:F.tag, note:$('gn').value.trim()});
+  save(); closeSheet(); render(); toast('اتسجلت القراءة');
+}
+
+/* ---------- التراكمي ---------- */
+function formA1c(){
+  openSheet('السكر التراكمي HbA1c', `
+    <input class="big-input num" id="av" type="number" step="0.1" inputmode="decimal" placeholder="6.8" autofocus>
+    <p class="hint" style="text-align:center;margin:8px 0 18px">النسبة %</p>
+    <div class="field"><label>تاريخ التحليل</label><input class="input" id="ats" type="datetime-local" value="${nowInput()}"></div>
+    <div class="field"><label>المعمل / ملاحظة</label><input class="input" id="an" placeholder="اختياري"></div>
+    <div id="apre"></div>
+    <button class="btn" onclick="saveA1c()">احفظ التحليل</button>
+    <p class="hint">التراكمي بيعبّر عن متوسط السكر في آخر ٢–٣ شهور، فمفيش داعي تعيده قبل ٣ شهور إلا لو دكتورك طلب.</p>`);
+  $('av').addEventListener('input',()=>{
+    const v=parseFloat($('av').value); const b=$('apre');
+    if(!v){b.innerHTML='';return}
+    const st=a1cStatus(v);
+    b.innerHTML=`<div class="note" style="margin-bottom:14px"><b style="font-family:Zain;font-size:16px">${st.ar}</b><br>
+      ده يعادل متوسط سكر تقريبي <b class="num">${fromMg(a1cToAvg(v))}</b> ${gUnit()}.</div>`;
+  });
+}
+function saveA1c(){
+  const v = parseFloat($('av').value);
+  if(!v){ toast('اكتب النسبة الأول'); return; }
+  S.a1c.push({id:uid(), ts:new Date($('ats').value).getTime()||Date.now(), value:v, note:$('an').value.trim()});
+  save(); closeSheet(); render(); toast('اتسجل التحليل');
+}
+
+/* ---------- الوزن ---------- */
+function formWeight(){
+  const last = lastVal('weight');
+  openSheet('الوزن', `
+    <input class="big-input num" id="wv" type="number" step="0.1" inputmode="decimal" placeholder="${last? r1(last):'80'}" autofocus>
+    <p class="hint" style="text-align:center;margin:8px 0 18px">بالكيلوجرام</p>
+    <div class="field"><label>التاريخ والوقت</label><input class="input" id="wts" type="datetime-local" value="${nowInput()}"></div>
+    <div id="wpre"></div>
+    <button class="btn" onclick="saveWeight()">احفظ الوزن</button>
+    <p class="hint">اتوزن في نفس الوقت تقريباً كل مرة — الصبح بعد الحمام وقبل الفطار — عشان الأرقام تبقى قابلة للمقارنة.</p>`);
+  $('wv').addEventListener('input',()=>{
+    const v=parseFloat($('wv').value); const b=$('wpre');
+    if(!v){b.innerHTML='';return}
+    const bmi=bmiInfo(v); const diff = last? r1(v-last):null;
+    b.innerHTML=`<div class="note" style="margin-bottom:14px">
+      ${bmi?`مؤشر كتلة الجسم <b class="num">${bmi.v}</b> — ${bmi.ar}.`:'اكتب طولك في «حسابي» عشان نحسب الـ BMI.'}
+      ${diff!==null?`<br>الفرق عن آخر مرة: <b class="num">${diff>0?'+':''}${diff}</b> كجم.`:''}</div>`;
+  });
+}
+function saveWeight(){
+  const v=parseFloat($('wv').value);
+  if(!v){ toast('اكتب الوزن الأول'); return; }
+  S.weight.push({id:uid(), ts:new Date($('wts').value).getTime()||Date.now(), value:v});
+  save(); closeSheet(); render(); toast('اتسجل الوزن');
+}
+
+/* ---------- الضغط ---------- */
+function formBP(){
+  openSheet('ضغط الدم', `
+    <div class="grid2">
+      <div class="field"><label>الانقباضي (العالي)</label><input class="input big-input num" style="font-size:34px;padding:14px" id="bs" type="number" inputmode="numeric" placeholder="120"></div>
+      <div class="field"><label>الانبساطي (الواطي)</label><input class="input big-input num" style="font-size:34px;padding:14px" id="bd" type="number" inputmode="numeric" placeholder="80"></div>
+    </div>
+    <div class="field"><label>النبض (اختياري)</label><input class="input num" id="bp_" type="number" inputmode="numeric" placeholder="75"></div>
+    <div class="field"><label>التاريخ والوقت</label><input class="input" id="bts" type="datetime-local" value="${nowInput()}"></div>
+    <div id="bpre"></div>
+    <button class="btn" onclick="saveBP()">احفظ القراءة</button>
+    <p class="hint">اقعد مرتاح ٥ دقايق قبل القياس، وحط ذراعك على مستوى القلب.</p>`);
+  ['bs','bd'].forEach(id=>$(id).addEventListener('input',()=>{
+    const s=+$('bs').value, d=+$('bd').value; const b=$('bpre');
+    if(!s||!d){b.innerHTML='';return}
+    const st=bpStatus(s,d);
+    b.innerHTML=`<div class="note" style="margin-bottom:14px"><b style="font-family:Zain;font-size:16px">${st.ar}</b></div>`;
+  }));
+}
+function saveBP(){
+  const s=+$('bs').value, d=+$('bd').value;
+  if(!s||!d){ toast('اكتب الرقمين'); return; }
+  S.bp.push({id:uid(), ts:new Date($('bts').value).getTime()||Date.now(), sys:s, dia:d, pulse:+$('bp_').value||null});
+  save(); closeSheet(); render(); toast('اتسجل الضغط');
+}
+
+/* ---------- الوجبات ---------- */
+function formMeal(){
+  const h=new Date().getHours();
+  F.type = h<11?'breakfast': h<16?'lunch': h<21?'dinner':'snack';
+  F.food=null; F.qty=1;
+  openSheet('وجبة', `
+    <div class="field"><label>نوع الوجبة</label>
+      <div class="chips" id="mtypes">${Object.keys(MEAL_TYPES).map(t=>
+        `<button class="chip ${t===F.type?'on':''}" data-t="${t}" onclick="pickMealType(this)">${MEAL_TYPES[t]}</button>`).join('')}</div></div>
+    <div class="field"><label>دوّر على الأكلة</label>
+      <input class="input" id="fq" placeholder="اكتب: فول، رز، فراخ مشوية..." autocomplete="off"></div>
+    <div id="fres"></div>
+    <div id="fsel"></div>
+    <div class="field"><label>التاريخ والوقت</label><input class="input" id="mts" type="datetime-local" value="${nowInput()}"></div>
+    <button class="btn" onclick="saveMeal()">ضيف للوجبات</button>
+    <p class="hint">مش لاقي الأكلة؟ اكتب اسمها وهتظهرلك خانة تدخل السعرات والكارب يدوي.</p>`);
+  $('fq').addEventListener('input', searchFood);
+  searchFood();
+}
+function pickMealType(b){
+  [...$('mtypes').children].forEach(c=>c.classList.remove('on'));
+  b.classList.add('on'); F.type=b.dataset.t;
+}
+function searchFood(){
+  const q = ($('fq').value||'').trim();
+  const box=$('fres');
+  const list = q ? FOODS.filter(f=>f[0].includes(q)).slice(0,7) : FOODS.slice(0,5);
+  box.innerHTML = `<div class="card" style="margin-bottom:14px">${
+    list.length ? list.map((f,i)=>`<div class="row" onclick="chooseFood('${encodeURIComponent(f[0])}')">
+      <div class="ic">${svg('meal',1.9)}</div>
+      <div class="tx"><b>${esc(f[0])}</b><small>${esc(f[1])}</small></div>
+      <div class="vl"><b class="num">${f[2]}</b><small>سعرة • ${f[3]} كارب</small></div></div>`).join('')
+    : `<div class="pad" style="text-align:center;color:var(--muted);font-size:13px">مفيش نتيجة — استخدم الإدخال اليدوي تحت</div>`}</div>
+    ${!list.length||q ? manualBox(q) : ''}`;
+}
+function manualBox(q){
+  return `<div class="card pad" style="margin-bottom:14px">
+    <div class="field" style="margin-bottom:10px"><label>إدخال يدوي</label><input class="input" id="mn" value="${esc(q||'')}" placeholder="اسم الأكلة"></div>
+    <div class="grid2">
+      <div class="field" style="margin-bottom:0"><label>سعرات</label><input class="input num" id="mc" type="number" inputmode="numeric" placeholder="0"></div>
+      <div class="field" style="margin-bottom:0"><label>كارب (جم)</label><input class="input num" id="mcb" type="number" inputmode="numeric" placeholder="0"></div>
+    </div></div>`;
+}
+function chooseFood(name){
+  const n = decodeURIComponent(name);
+  const f = FOODS.find(x=>x[0]===n); if(!f) return;
+  F.food=f; F.qty=1;
+  $('fres').innerHTML=''; $('fq').value='';
+  drawSel();
+}
+function drawSel(){
+  if(!F.food){ $('fsel').innerHTML=''; return; }
+  const f=F.food, q=F.qty;
+  $('fsel').innerHTML = `<div class="card pad" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div class="ic" style="width:38px;height:38px;border-radius:12px;background:var(--teal-l);color:var(--teal-d);display:grid;place-items:center">${svg('meal',1.9)}</div>
+      <div style="flex:1"><b style="font-size:15px">${esc(f[0])}</b><br><small style="color:var(--muted)">${esc(f[1])}</small></div>
+      <button class="swipe-del" onclick="F.food=null;drawSel();searchFood()">${svg('trash',1.9)}</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:12px">
+      <button class="chip" onclick="qty(-1)" style="width:44px">−</button>
+      <b class="num" style="font-family:Zain;font-size:26px;min-width:52px;text-align:center">${q}</b>
+      <button class="chip" onclick="qty(1)" style="width:44px">+</button>
+    </div>
+    <div class="stat-grid">
+      <div class="stat" style="box-shadow:none;background:var(--paper)"><small>سعرات</small><b class="num">${Math.round(f[2]*q)}</b></div>
+      <div class="stat" style="box-shadow:none;background:var(--paper)"><small>كربوهيدرات</small><b class="num">${Math.round(f[3]*q)}<u> جم</u></b></div>
+    </div></div>`;
+}
+function qty(d){ F.qty = Math.max(0.5, r1(F.qty + d*0.5)); drawSel(); }
+function saveMeal(){
+  const ts = new Date($('mts').value).getTime()||Date.now();
+  if(F.food){
+    const f=F.food, q=F.qty;
+    S.meals.push({id:uid(), ts, type:F.type, name:`${f[0]} — ${q} ${f[1]}`, cal:Math.round(f[2]*q), carbs:Math.round(f[3]*q), prot:Math.round((f[4]||0)*q)});
+  }else{
+    const n = $('mn') ? $('mn').value.trim() : '';
+    if(!n){ toast('اختار أكلة أو اكتبها يدوي'); return; }
+    S.meals.push({id:uid(), ts, type:F.type, name:n, cal:+$('mc').value||0, carbs:+$('mcb').value||0, prot:0});
+  }
+  save(); closeSheet(); render(); toast('اتضافت للوجبات');
+}
+
+/* ---------- المياه ---------- */
+function formWater(){
+  const d=today(); const done=sum(ofDay('water',d).map(w=>w.ml));
+  openSheet('مياه', `
+    <div style="text-align:center;margin-bottom:18px">
+      <b class="num" style="font-family:Zain;font-size:44px">${done}</b>
+      <span style="color:var(--muted)"> / ${S.profile.targets.water} مل النهارده</span></div>
+    <div class="field"><label>ضيف بسرعة</label>
+      <div class="chips">${[150,200,250,330,500,750].map(v=>`<button class="chip" onclick="addWater(${v})">${v} مل</button>`).join('')}</div></div>
+    <div class="field"><label>كمية تانية</label><input class="input num" id="wq" type="number" inputmode="numeric" placeholder="بالملّي"></div>
+    <button class="btn" onclick="addWater(+$('wq').value)">ضيف</button>`);
+}
+function addWater(ml){
+  if(!ml){ toast('اكتب الكمية'); return; }
+  S.water.push({id:uid(), ts:Date.now(), ml});
+  save(); closeSheet(); render(); toast(`+${ml} مل`);
+}
+
+/* ---------- الرياضة ---------- */
+const ACTS = [['مشي',3.5],['جري',8],['عجل',6],['جيم',5],['سباحة',7],['كورة',7],['تمارين بيتية',4]];
+function formActivity(){
+  F.act = ACTS[0];
+  openSheet('نشاط رياضي', `
+    <div class="field"><label>نوع النشاط</label>
+      <div class="chips" id="acts">${ACTS.map((a,i)=>`<button class="chip ${i===0?'on':''}" data-i="${i}" onclick="pickAct(this)">${a[0]}</button>`).join('')}</div></div>
+    <input class="big-input num" id="am" type="number" inputmode="numeric" placeholder="30">
+    <p class="hint" style="text-align:center;margin:8px 0 18px">المدة بالدقايق</p>
+    <div class="field"><label>التاريخ والوقت</label><input class="input" id="ats2" type="datetime-local" value="${nowInput()}"></div>
+    <div id="acal"></div>
+    <button class="btn" onclick="saveAct()">احفظ النشاط</button>
+    <p class="hint">لو معاك سكري ومحتاج تتمرن، اتأكد إن السكر مش واطي قبل ما تبدأ.</p>`);
+  $('am').addEventListener('input', calcAct);
+}
+function pickAct(b){
+  [...$('acts').children].forEach(c=>c.classList.remove('on'));
+  b.classList.add('on'); F.act=ACTS[+b.dataset.i]; calcAct();
+}
+function calcAct(){
+  const m=+$('am').value, w=lastVal('weight')||75, b=$('acal');
+  if(!m){b.innerHTML='';return}
+  const cal=Math.round(F.act[1]*3.5*w/200*m);
+  b.innerHTML=`<div class="note" style="margin-bottom:14px">تقديرياً هتحرق حوالي <b class="num">${cal}</b> سعرة.</div>`;
+}
+function saveAct(){
+  const m=+$('am').value;
+  if(!m){ toast('اكتب المدة'); return; }
+  const w=lastVal('weight')||75;
+  S.activity.push({id:uid(), ts:new Date($('ats2').value).getTime()||Date.now(), name:F.act[0], min:m, cal:Math.round(F.act[1]*3.5*w/200*m)});
+  save(); closeSheet(); render(); toast('اتسجل النشاط');
+}
+
+/* ---------- الأدوية ---------- */
+function openMedForm(id){
+  const m = id ? S.meds.find(x=>x.id===id) : null;
+  F.times = m ? [...(m.times||[])] : ['08:00'];
+  F.editId = id||null;
+  openSheet(m?'تعديل الدوا':'دوا جديد', `
+    <div class="field"><label>اسم الدوا</label><input class="input" id="mdn" value="${m?esc(m.name):''}" placeholder="مثلاً: ميتفورمين"></div>
+    <div class="field"><label>الجرعة</label><input class="input" id="mdd" value="${m?esc(m.dose||''):''}" placeholder="مثلاً: قرص ٥٠٠ مج"></div>
+    <div class="field"><label>مواعيد اليوم</label><div id="mtimes"></div>
+      <button class="chip" style="margin-top:8px" onclick="addTime()">+ ميعاد تاني</button></div>
+    <button class="btn" onclick="saveMed()">${m?'احفظ التعديل':'ضيف الدوا'}</button>`);
+  drawTimes();
+}
+function drawTimes(){
+  $('mtimes').innerHTML = F.times.map((t,i)=>`<div style="display:flex;gap:8px;margin-bottom:8px">
+    <input class="input" type="time" value="${t}" onchange="F.times[${i}]=this.value">
+    ${F.times.length>1?`<button class="chip" onclick="F.times.splice(${i},1);drawTimes()">حذف</button>`:''}</div>`).join('');
+}
+function addTime(){ F.times.push('20:00'); drawTimes(); }
+function saveMed(){
+  const n=$('mdn').value.trim();
+  if(!n){ toast('اكتب اسم الدوا'); return; }
+  const data={name:n, dose:$('mdd').value.trim(), times:F.times.filter(Boolean), active:true};
+  if(F.editId){ Object.assign(S.meds.find(m=>m.id===F.editId), data); }
+  else S.meds.push({id:uid(), ...data});
+  save(); closeSheet(); go('meds'); toast('اتحفظ');
+}
+</script>
+<script>
+/* ==========================================================
+   المظهر • السلسلة • الرؤى • التذكيرات • القفل • CSV
+   ========================================================== */
+
+/* ---------- الوضع الليلي ---------- */
+function sysDark(){ return window.matchMedia && matchMedia('(prefers-color-scheme:dark)').matches }
+function effTheme(){ const t=S.profile.theme||'auto'; return t==='auto' ? (sysDark()?'dark':'light') : t }
+function applyTheme(){
+  const t = effTheme();
+  document.documentElement.dataset.theme = t;
+  const m = document.querySelector('meta[name=theme-color]');
+  if(m) m.setAttribute('content', t==='dark' ? '#123339' : '#0E2A33');
+}
+function toggleTheme(){
+  S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
+  applyTheme(); save(); render();
+  toast(effTheme()==='dark' ? 'الوضع الليلي اشتغل 🌙' : 'الوضع النهاري اشتغل ☀️');
+}
+function setTheme(t){ S.profile.theme=t; applyTheme(); save(); render(); }
+if(window.matchMedia) try{ matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{ if((S.profile.theme||'auto')==='auto'){applyTheme();render();} }); }catch(e){}
+
+const ICON_SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>';
+const ICON_MOON='<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>';
+
+/* ---------- سلسلة الالتزام ---------- */
+function allDays(){
+  const set = new Set();
+  ['glucose','a1c','weight','bp','meals','water','activity'].forEach(k=>(S[k]||[]).forEach(r=>set.add(dayKey(r.ts))));
+  (S.medLog||[]).forEach(l=>set.add(dayKey(l.ts)));
+  return set;
+}
+function streakInfo(){
+  const set = allDays();
+  let n=0, cur=Date.now();
+  if(!set.has(dayKey(cur))) cur -= 864e5;
+  while(set.has(dayKey(cur))){ n++; cur -= 864e5; }
+  const week=[];
+  for(let i=6;i>=0;i--) week.push(set.has(dayKey(Date.now()-i*864e5)));
+  return {n, week, todayDone:set.has(today())};
+}
+function streakCard(){
+  const s = streakInfo();
+  if(!s.n && !allDays().size) return '';
+  const msg = s.n===0 ? 'ابدأ سلسلة جديدة النهارده'
+    : s.todayDone ? (s.n===1?'أول يوم — كمّل بكرة':'يوم متتابع من المتابعة')
+    : 'سجّل حاجة النهارده تحافظ على السلسلة';
+  return `<div class="streak fade">
+    <div class="fl">${svg('flame',2)}</div>
+    <div><b class="num">${s.n}</b><small>${msg}</small></div>
+    <div class="days">${s.week.map(h=>`<i class="${h?'hit':''}"></i>`).join('')}</div>
+  </div>`;
+}
+
+/* ---------- الرؤى الذكية ---------- */
+function insights(){
+  const out=[];
+  const T=S.profile.targets;
+
+  /* الوزن */
+  const w30 = inDays('weight',35);
+  if(w30.length>1){
+    const d = r1(w30[w30.length-1].value - w30[0].value);
+    if(Math.abs(d)>=0.3) out.push({ic:d<0?'down':'up', tx:`وزنك ${d<0?'نزل':'زاد'} <b>${Math.abs(d)} كجم</b> في آخر شهر.`});
+  }
+
+  /* السكر: الأسبوع ده مقابل اللي فات */
+  const g14 = inDays('glucose',14);
+  const wk1 = g14.filter(g=>g.ts >= Date.now()-7*864e5).map(g=>g.mg);
+  const wk0 = g14.filter(g=>g.ts <  Date.now()-7*864e5).map(g=>g.mg);
+  if(wk1.length>2 && wk0.length>2){
+    const d = Math.round(avg(wk1)-avg(wk0));
+    if(Math.abs(d)>=5) out.push({ic:d<0?'down':'up',
+      tx:`متوسط السكر الأسبوع ده <b>${d<0?'أقل':'أعلى'} بـ ${fromMg(Math.abs(d))} ${gUnit()}</b> من الأسبوع اللي فات.`});
+  }
+
+  /* أعلى توقيت */
+  const g30 = inDays('glucose',30);
+  if(g30.length>=6){
+    let worst=null;
+    Object.keys(TAGS).forEach(t=>{
+      const set=g30.filter(g=>g.tag===t); if(set.length<2) return;
+      const m=avg(set.map(g=>g.mg));
+      if(!worst || m>worst.m) worst={t,m,n:set.length};
+    });
+    if(worst && worst.m > tagRange(worst.t)[1])
+      out.push({ic:'glucose', tx:`أعلى قراءاتك بتكون في «<b>${TAGS[worst.t].ar}</b>» — متوسط ${fromMg(worst.m)} ${gUnit()}. تستاهل تتكلم فيها مع دكتورك.`});
+    const inR = g30.filter(g=>gStatus(g.mg,g.tag).k==='good').length;
+    out.push({ic:'check', tx:`<b>${Math.round(inR/g30.length*100)}%</b> من قراءاتك آخر شهر كانت في النطاق المستهدف (${inR} من ${g30.length}).`});
+  }
+
+  /* التراكمي */
+  const A=[...S.a1c].sort((a,b)=>a.ts-b.ts);
+  if(A.length>1){
+    const d=r1(A[A.length-1].value - A[A.length-2].value);
+    if(Math.abs(d)>=0.1) out.push({ic:d<0?'down':'up', tx:`التراكمي ${d<0?'نزل':'طلع'} <b>${Math.abs(d)}%</b> عن التحليل اللي قبله.`});
+  }
+
+  /* الأكل */
+  const days=[]; for(let i=0;i<7;i++) days.push(sum(ofDay('meals',dayKey(Date.now()-i*864e5)).map(m=>m.cal)));
+  const logged=days.filter(c=>c>0);
+  if(logged.length>=3){
+    const over=logged.filter(c=>c>T.calories).length;
+    out.push({ic:'meal', tx:`سجّلت أكل في <b>${logged.length}</b> من آخر ٧ أيام، متوسط <b>${Math.round(avg(logged))}</b> سعرة${over?` — و${over} يوم فوق هدفك.`:'.'}`});
+  }
+
+  /* الكارب */
+  const cToday = sum(ofDay('meals',today()).map(m=>m.carbs));
+  if(cToday) out.push({ic:'meal', tx:`كارب النهارده <b>${cToday} جم</b> من هدف ${T.carbs} جم.`});
+
+  /* الأدوية */
+  const slots = (S.meds||[]).filter(m=>m.active!==false).reduce((n,m)=>n+(m.times||[]).length,0);
+  if(slots){
+    let taken=0; for(let i=0;i<7;i++) taken += (S.medLog||[]).filter(l=>dayKey(l.ts)===dayKey(Date.now()-i*864e5)).length;
+    out.push({ic:'pill', tx:`التزامك بالأدوية آخر ٧ أيام <b>${Math.round(taken/(slots*7)*100)}%</b>.`});
+  }
+
+  /* المياه */
+  const wat=[]; for(let i=0;i<7;i++) wat.push(sum(ofDay('water',dayKey(Date.now()-i*864e5)).map(x=>x.ml)));
+  if(wat.some(x=>x>0)) out.push({ic:'water', tx:`متوسط شرب المياه <b>${Math.round(avg(wat))} مل</b> في اليوم من هدف ${T.water} مل.`});
+
+  /* ناقص قراءات صيام */
+  if(!inDays('glucose',7).some(g=>g.tag==='fasting'))
+    out.push({ic:'info', tx:'مسجّلتش قراءة صيام آخر أسبوع — قراءة الصبح بدري من أهم الأرقام لدكتورك.'});
+
+  return out.slice(0,5);
+}
+function insightsCard(){
+  const list = insights();
+  if(!list.length) return '';
+  return `<div class="section">
+    <div class="sec-head"><h2>ملاحظات من بياناتك</h2></div>
+    <div class="card">${list.map(i=>`<div class="insight"><div class="ib">${svg(i.ic,2)}</div><p>${i.tx}</p></div>`).join('')}</div>
+  </div>`;
+}
+
+/* ---------- تذكيرات الأدوية ---------- */
+async function askNotify(){
+  if(!('Notification' in window)){ toast('المتصفح ده مش بيدعم الإشعارات'); return; }
+  const p = await Notification.requestPermission();
+  S.profile.notify = (p==='granted'); save(); render();
+  toast(p==='granted' ? 'التذكيرات اشتغلت' : 'الإشعارات مرفوضة من المتصفح');
+}
+let notified = {};
+function checkReminders(){
+  if(!S.profile.notify || !('Notification' in window) || Notification.permission!=='granted') return;
+  const now=new Date(), hm=`${pad(now.getHours())}:${pad(now.getMinutes())}`, d=today();
+  medsDueToday().forEach(x=>{
+    const key=d+x.med.id+x.time;
+    if(x.time===hm && !x.taken && !notified[key]){
+      notified[key]=1;
+      try{ new Notification('My Life — موعد دوا', {body:`${x.med.name} ${x.med.dose||''} — الساعة ${x.time}`, tag:key}); }catch(e){}
+    }
+  });
+}
+setInterval(checkReminders, 30000);
+
+/* ---------- قفل الكود ---------- */
+let PIN='';
+function lockNeeded(){ return !!(S.profile.pin) }
+function showLock(mode){
+  PIN=''; drawPin();
+  $('lockMsg').textContent = mode==='set' ? 'اختار كود ٤ أرقام' : 'اكتب الكود بتاعك';
+  $('lock').dataset.mode = mode;
+  $('lock').classList.add('on');
+  $('lockKeys').innerHTML = [1,2,3,4,5,6,7,8,9].map(n=>`<button onclick="pinKey('${n}')">${n}</button>`).join('')
+    + `<button class="wide" onclick="pinKey('del')">حذف</button><button onclick="pinKey('0')">0</button>`
+    + (mode==='set' ? `<button class="wide" onclick="cancelPin()">إلغاء</button>` : `<button class="wide"></button>`);
+}
+function drawPin(){
+  $('lockDots').innerHTML = [0,1,2,3].map(i=>`<i class="${i<PIN.length?'f':''}"></i>`).join('');
+}
+function pinKey(k){
+  if(k==='del'){ PIN=PIN.slice(0,-1); drawPin(); return; }
+  if(PIN.length>=4) return;
+  PIN+=k; drawPin();
+  if(navigator.vibrate) try{navigator.vibrate(8)}catch(e){}
+  if(PIN.length===4) setTimeout(submitPin,140);
+}
+function submitPin(){
+  const mode=$('lock').dataset.mode;
+  if(mode==='set'){
+    S.profile.pin=PIN; save();
+    $('lock').classList.remove('on'); render(); toast('القفل اشتغل');
+  }else{
+    if(PIN===S.profile.pin){ $('lock').classList.remove('on'); render(); }
+    else{
+      $('lock').classList.add('shake');
+      setTimeout(()=>{ $('lock').classList.remove('shake'); PIN=''; drawPin(); },420);
+      $('lockMsg').textContent='الكود غلط، جرّب تاني';
+    }
+  }
+}
+function cancelPin(){ $('lock').classList.remove('on'); }
+function setPin(){ showLock('set'); }
+function removePin(){
+  if(!confirm('تشيل القفل؟')) return;
+  S.profile.pin=''; save(); render(); toast('القفل اتشال');
+}
+
+/* ---------- تصدير CSV ---------- */
+function exportCSV(){
+  const rows=[['النوع','التاريخ','الوقت','القيمة','الوحدة','تفاصيل']];
+  S.glucose.forEach(r=>rows.push(['سكر الدم',dayKey(r.ts),fmtTime(r.ts),fromMg(r.mg),gUnit(),TAGS[r.tag].ar]));
+  S.a1c.forEach(r=>rows.push(['تراكمي',dayKey(r.ts),fmtTime(r.ts),r.value,'%',r.note||'']));
+  S.weight.forEach(r=>rows.push(['وزن',dayKey(r.ts),fmtTime(r.ts),r.value,'كجم','']));
+  S.bp.forEach(r=>rows.push(['ضغط',dayKey(r.ts),fmtTime(r.ts),r.sys+'/'+r.dia,'mmHg',r.pulse?'نبض '+r.pulse:'']));
+  S.meals.forEach(r=>rows.push(['أكل',dayKey(r.ts),fmtTime(r.ts),r.cal,'سعرة',`${MEAL_TYPES[r.type]} • ${r.name} • كارب ${r.carbs}`]));
+  S.water.forEach(r=>rows.push(['مياه',dayKey(r.ts),fmtTime(r.ts),r.ml,'مل','']));
+  S.activity.forEach(r=>rows.push(['رياضة',dayKey(r.ts),fmtTime(r.ts),r.min,'دقيقة',`${r.name} • ${r.cal} سعرة`]));
+  (S.medLog||[]).forEach(r=>{ const m=(S.meds||[]).find(x=>x.id===r.medId);
+    rows.push(['دوا',dayKey(r.ts),fmtTime(r.ts),1,'جرعة',(m?m.name:'')+' '+r.slot]); });
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`mylife-${today()}.csv`; a.click(); URL.revokeObjectURL(a.href);
+  toast('اتنزّل ملف CSV');
+}
+</script>
+<script>
+/* ==========================================================
+   رحلة الوزن — متابعة يومية
+   ========================================================== */
+const byDayWeight = ()=>{
+  const map = {};
+  [...S.weight].sort((a,b)=>a.ts-b.ts).forEach(r=>{ map[dayKey(r.ts)] = r; });
+  return Object.keys(map).sort().map(k=>({day:k, ts:map[k].ts, v:map[k].value}));
+};
+
+function journeyStats(){
+  const d = byDayWeight();
+  if(!d.length) return null;
+  const start = S.profile.startWeight || d[0].v;
+  const cur   = d[d.length-1].v;
+  const goal  = S.profile.targetWeight || 0;
+  const lost  = r1(start - cur);
+  const left  = goal ? r1(cur - goal) : null;
+  const span  = goal ? Math.abs(start - goal) : 0;
+  const pct   = span ? Math.max(0, Math.min(100, Math.round((start-cur)/(start-goal)*100))) : null;
+
+  /* التغيّر اليومي */
+  const dayDelta = d.length>1 ? r1(cur - d[d.length-2].v) : null;
+  const dayGap   = d.length>1 ? Math.round((d[d.length-1].ts - d[d.length-2].ts)/864e5) : null;
+
+  /* المعدل الأسبوعي من آخر ٢١ يوم بانحدار خطي */
+  const win = d.filter(x=>x.ts >= Date.now()-21*864e5);
+  let rate = null;
+  if(win.length>=3){
+    const t0 = win[0].ts;
+    const xs = win.map(x=>(x.ts-t0)/864e5), ys = win.map(x=>x.v);
+    const mx = avg(xs), my = avg(ys);
+    let num=0, den=0;
+    xs.forEach((x,i)=>{ num += (x-mx)*(ys[i]-my); den += (x-mx)*(x-mx); });
+    if(den) rate = r1(num/den*7);
+  }
+  /* التوقّع */
+  let eta = null;
+  if(rate && goal && ((cur>goal && rate<0) || (cur<goal && rate>0))){
+    const weeks = Math.abs((cur-goal)/rate);
+    if(weeks < 260) eta = { weeks: Math.round(weeks), date: Date.now() + weeks*7*864e5 };
+  }
+
+  /* سلسلة الوزن اليومي */
+  const set = new Set(d.map(x=>x.day));
+  let n=0, c=Date.now();
+  if(!set.has(dayKey(c))) c -= 864e5;
+  while(set.has(dayKey(c))){ n++; c -= 864e5; }
+  const month=[];
+  for(let i=29;i>=0;i--){ const k=dayKey(Date.now()-i*864e5); month.push({k, hit:set.has(k), v:set.has(k)?d.find(x=>x.day===k).v:null}); }
+
+  return {d, start, cur, goal, lost, left, pct, dayDelta, dayGap, rate, eta, streak:n, month, loggedToday:set.has(today())};
+}
+
+function renderJourney(){
+  const J = journeyStats();
+  const head = `<div class="section" style="padding-bottom:0"><div class="sec-head">
+    <h2>رحلة الوزن</h2><button onclick="go('records')">السجل الكامل</button></div></div>`;
+
+  if(!J) return topbar()+head+`<div class="section">${emptyBox('لسه مفيش أوزان',
+    'سجّل وزنك النهارده وحدّد وزنك المستهدف من «حسابي»، والبرنامج هيحسبلك المعدل الأسبوعي والتاريخ المتوقع لوصولك.',
+    '<button class="btn sm" onclick="openLog(&quot;weight&quot;)">سجّل وزن النهارده</button>')}</div>`;
+
+  /* شريط التقدم */
+  const prog = J.goal ? `<div class="strip-card fade" style="margin-top:-14px">
+      <div class="strip-head">
+        <div><div class="strip-label">وصلت لـ</div>
+          <div class="strip-value"><b class="num" style="color:var(--teal)">${J.pct}</b><span>% من هدفك</span></div></div>
+        <div class="strip-tag">${J.lost>0?'نزلت':'زادت'} ${Math.abs(J.lost)} كجم</div>
+      </div>
+      <div style="height:14px;border-radius:99px;background:var(--paper);overflow:hidden;margin:10px 0 8px">
+        <div style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,var(--teal),var(--s-good));border-radius:99px;transition:width .9s cubic-bezier(.2,.9,.25,1)"></div>
+      </div>
+      <div class="strip-ticks"><span class="num">${r1(J.start)} كجم</span><span>باقي ${J.left>0?J.left:0} كجم</span><span class="num">${r1(J.goal)} كجم</span></div>
+    </div>`
+  : `<div class="strip-card fade" style="margin-top:-14px">
+      <div class="strip-label">وزنك الحالي</div>
+      <div class="strip-value"><b class="num">${r1(J.cur)}</b><span>كجم</span></div>
+      <div class="strip-meta">حدّد وزنك المستهدف عشان نحسبلك نسبة التقدم والتاريخ المتوقع.</div>
+      <button class="btn sm" onclick="go('profile')">حدّد الوزن المستهدف</button>
+    </div>`;
+
+  /* النهارده */
+  const todayCard = `<div class="section" style="padding-top:14px"><div class="card pad">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="ic" style="width:44px;height:44px;border-radius:14px;background:${J.loggedToday?'var(--teal-l)':'var(--paper)'};color:${J.loggedToday?'var(--teal-d)':'var(--muted)'};display:grid;place-items:center">${svg(J.loggedToday?'check':'weight',2)}</div>
+      <div style="flex:1">
+        <b style="font-family:Zain;font-size:18px">${J.loggedToday?'وزن النهارده مسجّل':'مسجّلتش وزنك النهارده'}</b>
+        <small style="display:block;color:var(--muted);font-size:12.5px">
+          ${J.dayDelta!==null ? `آخر تغيّر: ${J.dayDelta>0?'+':''}${J.dayDelta} كجم${J.dayGap>1?` على مدى ${J.dayGap} يوم`:' من امبارح'}` : 'أول قياس متسجّل'}</small>
+      </div>
+      ${J.loggedToday?'':`<button class="btn sm" onclick="openLog('weight')">سجّل</button>`}
+    </div></div></div>`;
+
+  /* أرقام */
+  const stats = `<div class="section"><div class="stat-grid">
+    <div class="stat"><small>المعدل الأسبوعي</small>
+      <b class="num" style="color:${J.rate===null?'var(--ink)':(J.rate<0?'var(--s-good)':'var(--s-mid)')}">${J.rate===null?'—':(J.rate>0?'+':'')+J.rate}<u> كجم/أسبوع</u></b>
+      <u>${J.rate===null?'محتاج ٣ قياسات في ٣ أسابيع':'محسوب من آخر ٢١ يوم'}</u></div>
+    <div class="stat"><small>سلسلة القياس اليومي</small><b class="num">${J.streak}<u> يوم</u></b><u>${J.loggedToday?'متتابعة لحد النهارده':'سجّل النهارده تكمّلها'}</u></div>
+    <div class="stat"><small>${J.lost>=0?'إجمالي النزول':'إجمالي الزيادة'}</small><b class="num">${Math.abs(J.lost)}<u> كجم</u></b><u>من ${r1(J.start)} كجم</u></div>
+    <div class="stat"><small>الوصول المتوقع</small><b class="num" style="font-size:${J.eta?'21px':'27px'}">${J.eta? fmtDate(J.eta.date) :'—'}</b>
+      <u>${J.eta? `بعد ${J.eta.weeks} أسبوع بالمعدل الحالي` : (J.goal?'محتاج معدل ثابت للحساب':'حدّد هدفك الأول')}</u></div>
+  </div></div>`;
+
+  /* تنبيه المعدل */
+  let paceNote = '';
+  if(J.rate !== null && J.rate < -1.2){
+    paceNote = `<div class="section"><div class="alert">
+      <b>المعدل ده سريع</b>
+      بتنزل أكتر من ١.٢ كجم في الأسبوع. المعدل المتعارف عليه من نص لـ كيلو في الأسبوع — النزول السريع بيخلي جزء منه عضل ومياه، وبيأثر على جرعات الدوا. اعرض الأرقام دي على دكتورك.</div></div>`;
+  }else if(J.rate !== null && J.rate > 0.6 && J.goal && J.cur > J.goal){
+    paceNote = `<div class="section"><div class="note">الوزن ماشي في الاتجاه العكسي آخر ٣ أسابيع. بص على سجل الأكل والحركة في نفس الفترة — الأرقام هتوريك السبب.</div></div>`;
+  }
+
+  /* منحنى مع خط الهدف */
+  const chart = J.d.length>1 ? `<div class="section"><div class="sec-head"><h2>المنحنى</h2></div>
+    <div class="card pad"><div class="chart">${lineChart(J.d.map(x=>({ts:x.ts,v:x.v})), {
+      col:'var(--teal)', unit:'كجم',
+      bands: J.goal ? [{from:J.goal-0.35, to:J.goal+0.35, col:'rgba(62,158,82,.35)'}] : []
+    })}</div>
+    ${J.goal?`<div class="legend"><span><i style="background:var(--teal)"></i>وزنك</span><span><i style="background:rgba(62,158,82,.6)"></i>وزنك المستهدف ${r1(J.goal)} كجم</span></div>`:''}
+    </div></div>` : '';
+
+  /* تقويم آخر ٣٠ يوم */
+  const cal = `<div class="section"><div class="sec-head"><h2>انتظام القياس — ٣٠ يوم</h2></div>
+    <div class="card pad">
+      <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:5px">
+        ${J.month.map(m=>`<div title="${m.k}${m.v?' — '+r1(m.v)+' كجم':''}" style="aspect-ratio:1;border-radius:6px;background:${m.hit?'var(--teal)':'var(--paper)'};opacity:${m.hit?1:.9}"></div>`).join('')}
+      </div>
+      <div class="legend"><span><i style="background:var(--teal)"></i>يوم فيه قياس (${J.month.filter(m=>m.hit).length} من ٣٠)</span><span><i style="background:var(--paper)"></i>يوم فاضي</span></div>
+    </div></div>`;
+
+  /* السجل اليومي بالفروق */
+  const rows = [...J.d].reverse().slice(0,20).map((x,i,arr)=>{
+    const prev = arr[i+1];
+    const dd = prev ? r1(x.v - prev.v) : null;
+    const col = dd===null?'var(--muted)':(dd<0?'var(--s-good)':dd>0?'var(--s-mid)':'var(--muted)');
+    return `<div class="row">
+      <div class="ic">${svg('weight',1.9)}</div>
+      <div class="tx"><b>${relDay(x.ts)}</b><small>${fmtTime(x.ts)}</small></div>
+      <div class="vl"><b class="num">${r1(x.v)}</b><small style="color:${col}">${dd===null?'أول قياس':(dd>0?'+':'')+dd+' كجم'}</small></div>
+    </div>`;
+  }).join('');
+  const log = `<div class="section"><div class="sec-head"><h2>القياسات اليومية</h2></div><div class="card">${rows}</div></div>`;
+
+  const tip = `<div class="section"><div class="note">
+    <b style="font-family:Zain;font-size:15px">عشان الأرقام تبقى صادقة</b><br>
+    اتوزن كل يوم في نفس الوقت — الصبح بعد الحمام وقبل الفطار وبنفس الهدوم. الوزن اليومي بيتقلب نص كيلو لكيلو بسبب المياه والأكل، فالمهم هو خط المعدل الأسبوعي مش رقم يوم واحد.
+  </div><div style="margin-top:12px"><button class="btn ghost" onclick="openLog('weight')">سجّل وزن دلوقتي</button></div></div>`;
+
+  return topbar()+head+prog+todayCard+stats+paceNote+chart+cal+log+tip+`<div style="height:8px"></div>`;
+}
+
+/* ---------- بانر الرئيسية ---------- */
+function journeyBanner(){
+  const J = journeyStats();
+  if(!J || !J.goal) return '';
+  const dir = J.rate===null ? '' : (J.rate<0 ? 'نازل' : J.rate>0 ? 'طالع' : 'ثابت');
+  return `<div class="section">
+    <div class="sec-head"><h2>رحلة الوزن</h2><button onclick="go('journey')">التفاصيل</button></div>
+    <div class="card pad" onclick="go('journey')" style="cursor:pointer">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+        <span style="font-size:13px;color:var(--muted);font-weight:600">${r1(J.cur)} كجم الآن • الهدف ${r1(J.goal)}</span>
+        <b class="num" style="font-family:Zain;font-size:22px;font-weight:800;color:var(--teal)">${J.pct}%</b>
+      </div>
+      <div style="height:11px;border-radius:99px;background:var(--paper);overflow:hidden">
+        <div style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,var(--teal),var(--s-good));border-radius:99px;transition:width .9s cubic-bezier(.2,.9,.25,1)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)">
+        <span>${J.left>0?`باقي ${J.left} كجم`:'وصلت لهدفك 🎉'}</span>
+        <span>${J.rate!==null?`${dir} ${Math.abs(J.rate)} كجم/أسبوع`:`${J.streak} يوم متتابع`}</span>
+      </div>
+    </div></div>`;
+}
+
+/* ---------- بانر الرئيسية ---------- */
+function journeyBanner(){
+  const J = journeyStats();
+  if(!J) return '';
+  if(!J.goal){
+    return `<div class="section"><div class="card pad" onclick="go('journey')" style="cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="ic" style="width:38px;height:38px;border-radius:12px;background:var(--teal-l);color:var(--teal-d);display:grid;place-items:center">${svg('weight',1.9)}</div>
+        <div style="flex:1"><b style="font-size:14.5px">رحلة الوزن</b>
+          <small style="display:block;color:var(--muted);font-size:12px">حدّد وزنك المستهدف وشوف معدلك الأسبوعي</small></div>
+        <span style="color:var(--teal);font-weight:700">←</span>
+      </div></div></div>`;
+  }
+  return `<div class="section"><div class="card pad" onclick="go('journey')" style="cursor:pointer">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
+      <div><b style="font-family:Zain;font-size:18px">رحلة الوزن</b>
+        <small style="display:block;color:var(--muted);font-size:12px">
+          ${J.rate===null ? 'سجّل يومياً عشان نحسب المعدل' : `${J.rate<0?'نازل':'زايد'} ${Math.abs(J.rate)} كجم/أسبوع`}</small></div>
+      <span class="num" style="font-family:Zain;font-size:24px;font-weight:800;color:var(--teal)">${J.pct}%</span>
+    </div>
+    <div style="height:11px;border-radius:99px;background:var(--paper);overflow:hidden">
+      <div style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,var(--teal),var(--s-good));border-radius:99px"></div>
+    </div>
+    <div class="strip-ticks" style="margin-top:7px">
+      <span class="num">${r1(J.cur)} كجم دلوقتي</span><span>باقي ${J.left>0?J.left:0} كجم</span></div>
+  </div></div>`;
+}
+</script>
+
+<script>
+/* ==========================================================
+   تصدير • استيراد • طباعة
+   ========================================================== */
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `mylife-backup-${today()}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('اتنزّلت النسخة');
+}
+function importJSON(){
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange = e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{
+      try{
+        const d = JSON.parse(rd.result);
+        if(!d.profile) throw 0;
+        if(!confirm('ده هيستبدل البيانات الحالية بالنسخة دي. تكمل؟')) return;
+        S = Object.assign(blank(), d);
+        save(); render(); toast('البيانات رجعت');
+      }catch(err){ toast('الملف مش مقروء'); }
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+
+function exportPrint(){
+  const n=90, gl=inDays('glucose',n);
+  const mgs=gl.map(g=>g.mg);
+  const inR=gl.filter(g=>gStatus(g.mg,g.tag).k==='good').length;
+  const est=mgs.length? r1(avgToA1c(avg(mgs))):'—';
+  const a=lastRec('a1c'), w=lastRec('weight'), b=lastRec('bp');
+  const bmi=w?bmiInfo(w.value):null;
+  const age=new Date().getFullYear()-(S.profile.birthYear||0);
+
+  const tagRows = Object.keys(TAGS).map(t=>{
+    const set=gl.filter(g=>g.tag===t); if(!set.length) return '';
+    return `<tr><td>${TAGS[t].ar}</td><td>${set.length}</td><td>${fromMg(avg(set.map(g=>g.mg)))}</td>
+      <td>${fromMg(Math.min(...set.map(g=>g.mg)))}</td><td>${fromMg(Math.max(...set.map(g=>g.mg)))}</td></tr>`;
+  }).join('');
+
+  const last20 = [...gl].sort((x,y)=>y.ts-x.ts).slice(0,25).map(g=>
+    `<tr><td>${fmtFull(g.ts)}</td><td>${fmtTime(g.ts)}</td><td>${TAGS[g.tag].ar}</td><td><b>${fromMg(g.mg)}</b></td></tr>`).join('');
+
+  const meds = (S.meds||[]).map(m=>`<tr><td>${esc(m.name)}</td><td>${esc(m.dose||'—')}</td><td>${(m.times||[]).join(' , ')}</td></tr>`).join('');
+
+  const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+  <title>تقرير My Life — ${esc(S.profile.name||'')}</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:"IBM Plex Sans Arabic",sans-serif;color:#12202B;margin:32px;font-size:13px;line-height:1.7}
+    h1{font-size:23px;margin:0 0 4px}h2{font-size:16px;margin:26px 0 8px;padding-bottom:5px;border-bottom:2px solid #0E7C7B}
+    .head{border-bottom:3px solid #0E2A33;padding-bottom:12px;margin-bottom:8px}
+    .meta{color:#6C8189;font-size:12px}
+    table{width:100%;border-collapse:collapse;margin-top:6px}
+    th,td{border:1px solid #DDE5E4;padding:7px 9px;text-align:right}
+    th{background:#EEF2F1;font-weight:600}
+    .kpis{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .k{border:1px solid #DDE5E4;border-radius:10px;padding:10px 14px;min-width:130px}
+    .k small{display:block;color:#6C8189;font-size:11px}.k b{font-size:20px}
+    .foot{margin-top:28px;font-size:11px;color:#6C8189;border-top:1px solid #DDE5E4;padding-top:10px}
+  </style></head><body>
+  <div class="head"><h1>تقرير متابعة صحية</h1>
+    <div class="meta">${esc(S.profile.name||'—')} • ${age>0&&age<120?age+' سنة • ':''}${S.profile.gender==='male'?'ذكر':'أنثى'} • تاريخ التقرير: ${fmtFull(Date.now())}</div></div>
+
+  <h2>ملخص آخر ٩٠ يوم</h2>
+  <div class="kpis">
+    <div class="k"><small>متوسط السكر</small><b>${mgs.length?fromMg(avg(mgs)):'—'}</b> ${gUnit()}</div>
+    <div class="k"><small>عدد القراءات</small><b>${gl.length}</b></div>
+    <div class="k"><small>الوقت في النطاق</small><b>${gl.length?Math.round(inR/gl.length*100):'—'}%</b></div>
+    <div class="k"><small>تراكمي تقديري</small><b>${est}</b> %</div>
+    <div class="k"><small>آخر تحليل تراكمي</small><b>${a?r1(a.value):'—'}</b> % ${a?'('+fmtDate(a.ts)+')':''}</div>
+    <div class="k"><small>الوزن</small><b>${w?r1(w.value):'—'}</b> كجم ${bmi?'(BMI '+bmi.v+')':''}</div>
+    <div class="k"><small>آخر ضغط</small><b>${b?b.sys+'/'+b.dia:'—'}</b></div>
+  </div>
+
+  <h2>المتوسط حسب توقيت القياس</h2>
+  <table><tr><th>التوقيت</th><th>عدد</th><th>المتوسط</th><th>الأقل</th><th>الأعلى</th></tr>${tagRows||'<tr><td colspan="5">مفيش قراءات</td></tr>'}</table>
+
+  <h2>الأدوية الحالية</h2>
+  <table><tr><th>الدوا</th><th>الجرعة</th><th>المواعيد</th></tr>${meds||'<tr><td colspan="3">مفيش</td></tr>'}</table>
+
+  <h2>آخر ٢٥ قراءة سكر</h2>
+  <table><tr><th>التاريخ</th><th>الوقت</th><th>التوقيت</th><th>القراءة (${gUnit()})</th></tr>${last20||'<tr><td colspan="4">مفيش قراءات</td></tr>'}</table>
+
+  <div class="foot">النطاقات المستهدفة المستخدمة في التقرير: صيام ${S.profile.targets.fasting.join('–')} • بعد الأكل ${S.profile.targets.post.join('–')} mg/dL.
+  التقرير ده متابعة ذاتية من تطبيق «My Life» وليس تشخيصاً طبياً.</div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),600)<\/script>
+  </body></html>`;
+
+  const wnd = window.open('', '_blank');
+  if(!wnd){ toast('اسمح بفتح النوافذ عشان الطباعة'); return; }
+  wnd.document.write(html); wnd.document.close();
+}
+
+/* ==========================================================
+   التشغيل
+   ========================================================== */
+$('fab').onclick = openQuick;
+$('scrim').onclick = closeSheet;
+
+/* سحب الشيت لتحت للإغلاق */
+(function(){
+  const sh=$('sheet'); let y0=null;
+  sh.addEventListener('touchstart',e=>{ if($('sheetBody').scrollTop<=0) y0=e.touches[0].clientY; },{passive:true});
+  sh.addEventListener('touchmove',e=>{
+    if(y0===null) return;
+    const dy=e.touches[0].clientY-y0;
+    if(dy>0) sh.style.transform=`translateY(${dy}px)`;
+  },{passive:true});
+  sh.addEventListener('touchend',e=>{
+    if(y0===null) return;
+    const dy=(e.changedTouches[0].clientY-y0);
+    sh.style.transform='';
+    if(dy>110) closeSheet();
+    y0=null;
+  });
+})();
+
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+(async function init(){
+  const d = await Store.load();
+  if(d){ S = Object.assign(blank(), d); S.profile = Object.assign(blank().profile, d.profile||{});
+         S.profile.targets = Object.assign(blank().profile.targets, (d.profile||{}).targets||{}); }
+  applyTheme();
+  render();
+  if(lockNeeded()) showLock('ask');
+  checkReminders();
+  if(!S.profile.name){
+    setTimeout(()=>openSheet('أهلاً بيك في My Life', `
+      <p style="margin:0 0 16px;font-size:14.5px;line-height:1.75">My Life بيتابع معاك سكر الدم والتراكمي والوزن والأكل والأدوية، وبيحوّلهم لتقرير تقدر تعرضه على دكتورك. كل بياناتك متسجلة على جهازك بس.</p>
+      <div class="field"><label>اسمك</label><input class="input" id="onName" placeholder="اكتب اسمك"></div>
+      <div class="grid2">
+        <div class="field"><label>الطول (سم)</label><input class="input num" id="onH" type="number" placeholder="170"></div>
+        <div class="field"><label>سنة الميلاد</label><input class="input num" id="onY" type="number" placeholder="1990"></div>
+      </div>
+      <button class="btn" onclick="finishOnboard()">يلا نبدأ</button>
+      <p class="hint">تقدر تغيّر أي حاجة بعدين من «حسابي».</p>`), 400);
+  }
+})();
+
+function finishOnboard(){
+  S.profile.name = $('onName').value.trim() || 'صاحب الحساب';
+  S.profile.height = +$('onH').value || 170;
+  S.profile.birthYear = +$('onY').value || 1990;
+  save(); closeSheet(); render(); toast('أهلاً بيك 👋');
+}
+</script>
+<script>
+/* تسجيل الـ service worker للعمل أوفلاين — يتخطى نفسه لو الملف مفتوح محلياً */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
