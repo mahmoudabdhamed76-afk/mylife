@@ -2,8 +2,8 @@
    HTML: الشبكة الأول (علشان التحديثات توصل فوراً) والكاش احتياطي
    الأصول الثابتة: الكاش الأول
    الـAPI: مايتكاشش خالص */
-const CACHE = 'mylife-v5';
-const ASSETS = ['mylife.html', 'manifest.webmanifest', 'icon.svg', 'logo.svg'];
+const CACHE = 'mylife-v8';
+const ASSETS = ['mylife.html', 'manifest.webmanifest', 'icon.svg', 'icon-dark.svg', 'icon-light.svg', 'logo.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()).catch(() => self.skipWaiting()));

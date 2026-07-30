@@ -3,43 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0B2F27">
+<meta name="theme-color" content="#0A4A38">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Life">
 <title>My Life — متابعة صحتك اليومية</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon-light.svg" media="(prefers-color-scheme: light)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zain:wght@400;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#10261F;
-  --deep:#0B2F27;
+  --ink:#0D2A21;
+  --deep:#0A4A38;
   --ink-2:#1D4437;
   --on-deep:#FFFFFF;
-  --paper:#E3ECE7;
-  --surface:#F4F9F6;
-  --line:#D2DFD8;
-  --muted:#658074;
-  --teal:#0E9E6B;
-  --teal-d:#07684A;
-  --teal-l:#DCF2E7;
+  --paper:#EAF5EF;
+  --surface:#FFFDFA;
+  --line:#D5E8DE;
+  --muted:#5C8073;
+  --teal:#00A86B;
+  --teal-d:#00734A;
+  --teal-l:#D3F5E4;
   /* ألوان الأقسام */
-  --c-glucose:#0D9488;  --c-glucose-l:#DAF0EE;
-  --c-a1c:#7A5AF8;      --c-a1c-l:#ECE8FE;
-  --c-weight:#2563EB;   --c-weight-l:#E2EAFD;
-  --c-meal:#E07B21;     --c-meal-l:#FCEDDD;
-  --c-water:#0EA5E9;    --c-water-l:#DFF1FC;
-  --c-run:#5CA808;      --c-run-l:#EAF4D9;
-  --c-bp:#E11D64;       --c-bp-l:#FCE2EB;
-  --c-pill:#C026A9;     --c-pill-l:#FBE3F6;
+  --c-glucose:#00A9A0;  --c-glucose-l:#CFF3F1;
+  --c-a1c:#7C3AED;      --c-a1c-l:#E9E1FE;
+  --c-weight:#1D6FF2;   --c-weight-l:#DBE8FE;
+  --c-meal:#F97316;     --c-meal-l:#FEE8D4;
+  --c-water:#0BA5E9;    --c-water-l:#D5EFFD;
+  --c-run:#65B80A;      --c-run-l:#E5F7D0;
+  --c-bp:#E8115B;       --c-bp-l:#FCDAE7;
+  --c-pill:#C81FB0;     --c-pill-l:#FBD9F5;
   /* مقياس شريط التحليل */
-  --s-low:#2B7FB8;
-  --s-good:#3E9E52;
-  --s-mid:#E4A11B;
-  --s-high:#C0392B;
+  --s-low:#1B8BD0;
+  --s-good:#2FAA57;
+  --s-mid:#F0A800;
+  --s-high:#DC2F26;
   --r-s:10px; --r-m:16px; --r-l:22px; --r-xl:28px;
   --sp:16px;
   --shadow:0 1px 2px rgba(19,38,48,.05), 0 8px 24px -12px rgba(19,38,48,.16);
@@ -69,21 +71,21 @@ a{color:var(--teal);text-decoration:none}
 
 #app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--paper);position:relative;padding-bottom:96px}
 @media(min-width:560px){
-  body{background:#CFDCD5}
+  body{background:#D6E8DE}
   #app{box-shadow:0 0 60px rgba(14,42,51,.12);min-height:100dvh}
 }
 
 /* ============ الهيدر ============ */
 .topbar{
   position:sticky;top:0;z-index:40;
-  background:linear-gradient(148deg,#13503F 0%,var(--deep) 50%,#0E5C44 100%);color:var(--on-deep);
+  background:linear-gradient(148deg,#0E6A4E 0%,var(--deep) 52%,#0B7355 100%);color:var(--on-deep);
   padding:calc(env(safe-area-inset-top) + 14px) 18px 16px;
   border-radius:0 0 var(--r-xl) var(--r-xl);
 }
 .topbar-row{display:flex;align-items:center;gap:12px}
 .avatar{
   width:44px;height:44px;border-radius:14px;flex:none;
-  background:linear-gradient(145deg,var(--teal),#2ACB8C);
+  background:linear-gradient(145deg,var(--teal),#2EDD9B);
   display:grid;place-items:center;font-family:"Zain";font-size:20px;font-weight:800;color:#fff;
 }
 .hello{flex:1;min-width:0}
@@ -127,6 +129,23 @@ a{color:var(--teal);text-decoration:none}
 }
 
 
+
+/* ============ الأسئلة السريعة ============ */
+.qa-ans{display:flex;gap:12px;align-items:flex-start;background:var(--surface);
+  border-radius:var(--r-m);padding:15px 16px;box-shadow:var(--shadow);font-size:14.2px;line-height:1.7}
+.qa-ans .ib{width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center}
+.qa-ans .ib svg{width:17px;height:17px}
+.qa-ans b{font-weight:800}
+/* ============ شارة الإشعار ============ */
+.nav button .bdg{
+  position:absolute;top:-2px;left:calc(50% - 22px);min-width:17px;height:17px;padding:0 5px;
+  border-radius:99px;background:var(--c-bp);color:#fff;font-size:10.5px;font-weight:800;
+  display:grid;place-items:center;line-height:1;box-shadow:0 0 0 2px var(--surface);
+  animation:bdgIn .4s var(--spring) both;
+}
+.nav button .bdg.warn{background:var(--c-meal)}
+@keyframes bdgIn{from{transform:scale(0)}to{transform:scale(1)}}
+
 /* ============ ديك الكروت المتداخلة ============ */
 .deck{
   position:relative;margin:-14px 14px 0;z-index:41;height:198px;
@@ -141,7 +160,7 @@ a{color:var(--teal);text-decoration:none}
 }
 .dcard.dragging{transition:none;cursor:grabbing}
 .dcard-in{
-  height:100%;background:var(--surface);border-radius:20px;
+  height:100%;background:var(--ct,var(--surface));border-radius:20px;
   padding:15px 17px 13px;display:flex;flex-direction:column;overflow:hidden;
 }
 .dc-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -265,7 +284,7 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 /* ============ النافيجيشن ============ */
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:60;max-width:520px;margin:0 auto;
-  background:rgba(244,249,246,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  background:rgba(255,253,250,.95);backdrop-filter:blur(14px);border-top:1px solid var(--line);
   display:grid;grid-template-columns:repeat(5,1fr);
   padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);
 }
@@ -323,32 +342,32 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 
 /* ============ الوضع الليلي ============ */
 :root[data-theme="dark"]{
-  --ink:#E9F4F7;
-  --deep:#17333B;
+  --ink:#EFF9FC;
+  --deep:#1C424D;
   --on-deep:#FFFFFF;
   --ink-2:#BCD2CF;
-  --paper:#0A2027;
-  --surface:#152C33;
-  --line:#26424B;
-  --muted:#8CA5AD;
-  --teal:#5CC8F2;
-  --teal-d:#9EDEF9;
-  --teal-l:#12333D;
-  --s-low:#4FC3F7;
-  --s-good:#4ED88A;
-  --s-mid:#FFB144;
-  --s-high:#FF6B6B;
+  --paper:#0D2A33;
+  --surface:#18363F;
+  --line:#2D5260;
+  --muted:#9BB8C2;
+  --teal:#4FD0FF;
+  --teal-d:#A9E6FF;
+  --teal-l:#153E4B;
+  --s-low:#5CCCFF;
+  --s-good:#5CE89A;
+  --s-mid:#FFBD5C;
+  --s-high:#FF7D7D;
   --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px -14px rgba(0,0,0,.7);
 }
 :root[data-theme="dark"]{
-  --c-glucose:#4FD8E4;  --c-glucose-l:#103A42;
-  --c-a1c:#A78BFA;      --c-a1c-l:#251F46;
-  --c-weight:#6BB6FF;   --c-weight-l:#15304C;
-  --c-meal:#FF9F45;     --c-meal-l:#3A2814;
-  --c-water:#4FC3F7;    --c-water-l:#123444;
-  --c-run:#7BD88F;      --c-run-l:#14351F;
-  --c-bp:#FF6B8A;       --c-bp-l:#3C1B26;
-  --c-pill:#C77DFF;    --c-pill-l:#2E1B45;
+  --c-glucose:#3EE0E8;  --c-glucose-l:#13424B;
+  --c-a1c:#B79BFF;      --c-a1c-l:#2C2554;
+  --c-weight:#6FBEFF;   --c-weight-l:#17395A;
+  --c-meal:#FFAC55;     --c-meal-l:#42301A;
+  --c-water:#5CCCFF;    --c-water-l:#153E52;
+  --c-run:#86E89C;      --c-run-l:#173E26;
+  --c-bp:#FF7C99;       --c-bp-l:#46212E;
+  --c-pill:#D28FFF;    --c-pill-l:#372153;
   --shadow-lift:0 2px 8px rgba(0,0,0,.4), 0 20px 46px -18px rgba(0,0,0,.75);
 }
 :root[data-theme="dark"] body{background:var(--paper)}
@@ -356,23 +375,24 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 :root[data-theme="dark"] .p-good{background:#123326;color:#6FE2A2}
 :root[data-theme="dark"] .p-mid{background:#332614;color:#FFC66B}
 :root[data-theme="dark"] .p-high{background:#3A1D20;color:#FF8C8C}
-:root[data-theme="dark"] .nav{background:rgba(18,40,47,.95)}
+:root[data-theme="dark"] .nav{background:rgba(24,54,63,.95)}
 :root[data-theme="dark"] .alert{background:#3A1D20;color:#FFA9A9}
-:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#1B3A44,#1B3A44 6px,#20424D 6px,#20424D 12px)}
+:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#20454F,#20454F 6px,#264E5A 6px,#264E5A 12px)}
 :root[data-theme="dark"] select.input{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238AA3A8' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>")}
 :root[data-theme="dark"] .icon-btn{background:rgba(255,255,255,.1)}
 @media(min-width:560px){:root[data-theme="dark"] body{background:#061418}}
 
 
 /* ---- الوضع الليلي: تدرّجات ---- */
-:root[data-theme="dark"] .topbar{background:linear-gradient(150deg,#1D414B 0%,#17333B 52%,#123039 100%)}
-:root[data-theme="dark"] .avatar{background:linear-gradient(145deg,#4FB8E8,#7FD6F7)}
+:root[data-theme="dark"] .topbar{background:linear-gradient(150deg,#26545F 0%,#1C424D 52%,#1A4B58 100%)}
+:root[data-theme="dark"] .avatar{background:linear-gradient(145deg,#3FC2F5,#8ADEFF)}
 :root[data-theme="dark"] #app{
   background:
-    radial-gradient(120% 55% at 50% 0%, #123840 0%, rgba(18,56,64,0) 62%),
+    radial-gradient(120% 55% at 50% 0%, #17495A 0%, rgba(23,73,90,0) 64%),
     var(--paper);
 }
 :root[data-theme="dark"] .dcard{box-shadow:0 8px 26px -12px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.35)}
+:root[data-theme="dark"] .dcard-in{background:var(--surface)}
 :root[data-theme="dark"] .scrim{background:rgba(4,16,20,.62)}
 
 /* ============ نظام الحركة ============ */
@@ -839,8 +859,11 @@ function renderNav(){
     ['reports','التقارير','chart'], ['profile','حسابي','user']
   ];
   const act = view==='journey' ? 'records' : (view==='meds' ? 'assistant' : view);
-  $('nav').innerHTML = items.map(([k,ar,ic])=>
-    `<button class="${act===k?'on':''}" onclick="go('${k}')">${svg(ic,1.9)}<span>${ar}</span></button>`).join('');
+  $('nav').innerHTML = items.map(([k,ar,ic])=>{
+    const b = badgeFor(k);
+    return `<button class="${act===k?'on':''}" onclick="go('${k}')">${svg(ic,1.9)}<span>${ar}</span>` +
+      (b ? `<i class="bdg ${b.hot?'':'warn'}">${b.n}</i>` : '') + `</button>`;
+  }).join('');
 }
 /* عدّاد تصاعدي للأرقام الكبيرة — تجميلي بحت، النص النهائي بيرجع زي ما هو */
 const REDUCE = ()=> window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -870,6 +893,7 @@ function countUp(){
 
 function go(v){
   if(v===view) return;
+  if(v!=='assistant') qaOpen = null;
   const dir = ORDER.indexOf(v) > ORDER.indexOf(view) ? 'next' : 'prev';
   view = v; closeSheet(); render(dir);
 }
@@ -1062,8 +1086,10 @@ function renderRecords(){
     + (recTab==='weight' ? `<div class="section" style="padding-top:12px;padding-bottom:0">
         <button class="btn ghost" onclick="go('journey')">افتح رحلة الوزن — التقدم والمعدل الأسبوعي</button></div>` : '');
 
-  const arr = [...(S[recTab]||[])].sort((a,b)=>b.ts-a.ts);
-  if(!arr.length){
+  const all = [...(S[recTab]||[])].sort((a,b)=>b.ts-a.ts);
+  const arr = applyRecFilter(all);
+  const fbar = all.length ? filterBar(all.length, arr.length) : '';
+  if(!arr.length && !all.length){
     return topbar()+tabs+`<div class="section">${emptyBox('السجل فاضي','أول ما تسجّل حاجة هنا هتلاقيها مرتبة بالتاريخ مع إمكانية التعديل والحذف.',
       `<button class="btn sm" onclick="openLog('${recTab==='meals'?'meal':recTab}')">سجّل دلوقتي</button>`)}</div>`;
   }
@@ -1071,6 +1097,11 @@ function renderRecords(){
   /* تجميع حسب اليوم */
   const groups = {};
   arr.forEach(r=>{ const k=dayKey(r.ts); (groups[k]=groups[k]||[]).push(r); });
+
+  if(!arr.length){
+    return topbar()+tabs+fbar+`<div class="section">${emptyBox('مفيش نتايج في المدة دي','غيّر التاريخ أو امسح الفلتر عشان تشوف باقي التسجيلات.',
+      '<button class="btn sm" onclick="recPreset(0)">امسح الفلتر</button>')}</div>`;
+  }
 
   let body = '';
   for(const k in groups){
@@ -1091,7 +1122,7 @@ function renderRecords(){
       <div class="card">${list.map(r=>recRow(recTab,r)).join('')}</div>
     </div>`;
   }
-  return topbar()+tabs+body+`<div style="height:8px"></div>`;
+  return topbar()+tabs+fbar+body+`<div style="height:8px"></div>`;
 }
 function setTab(k){ recTab=k; render(); }
 
@@ -1801,7 +1832,7 @@ function applyTheme(){
   const t = effTheme();
   document.documentElement.dataset.theme = t;
   const m = document.querySelector('meta[name=theme-color]');
-  if(m) m.setAttribute('content', t==='dark' ? '#17333B' : '#0B2F27');
+  if(m) m.setAttribute('content', t==='dark' ? '#1C424D' : '#0A4A38');
 }
 function toggleTheme(){
   S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
@@ -2216,6 +2247,177 @@ function journeyBanner(){
 
 <script>
 /* ==========================================================
+   أسئلة سريعة • فلترة بالتاريخ • شارات الإشعارات
+   ========================================================== */
+
+/* ---------------- أسئلة المساعد ---------------- */
+let qaOpen = null;
+
+const QA = [
+  { q:'نزلت كام الشهر ده؟', ic:'weight', fn(){
+      const a = inDays('weight',31);
+      if(a.length < 2) return 'محتاج على الأقل قياسين في آخر شهر عشان أقارن. سجّل وزنك النهارده.';
+      const d = r1(a[a.length-1].value - a[0].value);
+      const J = journeyStats();
+      return `${d<0?'نزلت':'زادت'} <b>${Math.abs(d)} كجم</b> في آخر شهر (من ${r1(a[0].value)} لـ ${r1(a[a.length-1].value)}).`
+        + (J && J.rate!==null ? ` معدلك الحالي <b>${Math.abs(J.rate)} كجم/أسبوع</b>.` : '')
+        + (J && J.goal ? ` باقي <b>${J.left>0?J.left:0} كجم</b> على هدفك.` : '');
+    }},
+  { q:'متوسط السكر كام؟', ic:'glucose', fn(){
+      const g = inDays('glucose',30);
+      if(!g.length) return 'مفيش قراءات في آخر ٣٠ يوم.';
+      const inR = g.filter(x=>gStatus(x.mg,x.tag).k==='good').length;
+      return `متوسط سكرك آخر ٣٠ يوم <b>${fromMg(avg(g.map(x=>x.mg)))} ${gUnit()}</b> من ${g.length} قراءة، `
+        + `و<b>${Math.round(inR/g.length*100)}%</b> منها كانت في النطاق المستهدف. `
+        + `التراكمي التقديري من الأرقام دي <b>${r1(avgToA1c(avg(g.map(x=>x.mg))))}%</b>.`;
+    }},
+  { q:'جرعة المونجارو الجاية إمتى؟', ic:'pill', fn(){
+      const m = mjInfo();
+      if(!m) return 'مسجّلتش أي جرعة لسه. سجّل آخر جرعة وهحسبلك الموعد الجاي.';
+      if(m.late) return `الجرعة <b>متأخرة ${Math.abs(m.daysLeft)} يوم</b>. آخر واحدة كانت ${relDay(m.last.ts)} بجرعة ${m.last.dose} مج. كلّم دكتورك قبل ما تاخدها.`;
+      if(m.due || m.today) return `النهارده موعد الجرعة — <b>${m.last.dose} مج</b>. آخر واحدة كانت ${relDay(m.last.ts)}.`;
+      return `باقي <b>${m.daysLeft} يوم</b> على الجرعة الجاية (${fmtFull(m.next)}). آخر جرعة ${m.last.dose} مج يوم ${fmtDate(m.last.ts)}.`;
+    }},
+  { q:'التحاليل بتاعتي عاملة إيه؟', ic:'chart', fn(){
+      const ks = Object.keys(LABS).filter(k=>lastLab(k));
+      if(!ks.length) return 'مفيش تحاليل مسجّلة. سجّل الكوليسترول والدهون الثلاثية من زرار التحاليل.';
+      return ks.map(k=>{
+        const l = lastLab(k), st = labStatus(k,l.value), tr = labTrend(k);
+        const better = LABS[k].higher ? (tr>0) : (tr<0);
+        return `<b>${LABS[k].ar}</b>: ${r1(l.value)} ${LABS[k].unit} — ${st.ar}`
+          + (tr ? ` (${better?'اتحسّن':'زاد'} ${Math.abs(tr)} عن السابق)` : '');
+      }).join('<br>') + '<br><span style="color:var(--muted)">النطاقات عامة وبتختلف حسب المعمل وحالتك.</span>';
+    }},
+  { q:'التزامي بالأدوية كام؟', ic:'pill', fn(){
+      const slots = (S.meds||[]).filter(x=>x.active!==false).reduce((n,x)=>n+(x.times||[]).length,0);
+      if(!slots) return 'مسجّلتش أدوية بمواعيد. ضيفها من قسم الأدوية عشان أتابع التزامك.';
+      let taken = 0;
+      for(let i=0;i<7;i++) taken += (S.medLog||[]).filter(l=>dayKey(l.ts)===dayKey(Date.now()-i*864e5)).length;
+      const pct = Math.round(taken/(slots*7)*100);
+      return `أخدت <b>${taken}</b> جرعة من <b>${slots*7}</b> متوقعة في آخر ٧ أيام — <b>${pct}%</b>.`
+        + (pct<70 ? ' فعّل التذكيرات من «حسابي» لو بتنسى.' : '');
+    }},
+  { q:'أعلى وأقل قراءة سكر؟', ic:'glucose', fn(){
+      const g = inDays('glucose',30);
+      if(!g.length) return 'مفيش قراءات في آخر ٣٠ يوم.';
+      const hi = g.reduce((a,b)=>b.mg>a.mg?b:a), lo = g.reduce((a,b)=>b.mg<a.mg?b:a);
+      return `أعلى قراءة <b>${fromMg(hi.mg)} ${gUnit()}</b> يوم ${fmtDate(hi.ts)} (${TAGS[hi.tag].ar})<br>`
+           + `وأقل قراءة <b>${fromMg(lo.mg)} ${gUnit()}</b> يوم ${fmtDate(lo.ts)} (${TAGS[lo.tag].ar})`;
+    }},
+  { q:'بآكل كام سعرة في اليوم؟', ic:'meal', fn(){
+      const d=[]; for(let i=0;i<14;i++){ const c=sum(ofDay('meals',dayKey(Date.now()-i*864e5)).map(x=>x.cal)); if(c>0) d.push(c); }
+      if(d.length<2) return 'سجّل أكلك كام يوم وهحسبلك المتوسط.';
+      const cb=[]; for(let i=0;i<14;i++){ const c=sum(ofDay('meals',dayKey(Date.now()-i*864e5)).map(x=>x.carbs)); if(c>0) cb.push(c); }
+      return `متوسط <b>${Math.round(avg(d))} سعرة</b> في اليوم من ${d.length} يوم مسجّل`
+        + (cb.length?`، ومتوسط الكارب <b>${Math.round(avg(cb))} جم</b>` : '') + `. هدفك ${S.profile.targets.calories} سعرة.`;
+    }},
+  { q:'الضغط بتاعي عامل إيه؟', ic:'bp', fn(){
+      const b = inDays('bp',60);
+      if(!b.length) return 'مفيش قراءات ضغط في آخر شهرين.';
+      const s = Math.round(avg(b.map(x=>x.sys))), d = Math.round(avg(b.map(x=>x.dia)));
+      const st = bpStatus(s,d);
+      return `متوسط ضغطك آخر شهرين <b>${s}/${d}</b> من ${b.length} قراءة — ${st.ar}.`;
+    }},
+  { q:'التراكمي بتاعي إيه؟', ic:'a1c', fn(){
+      const a = lastRec('a1c');
+      if(!a) return 'مسجّلتش تحليل تراكمي. لما تعمله سجّله وهقارنه باللي قبله.';
+      const st = a1cStatus(a.value);
+      const all = [...S.a1c].sort((x,y)=>x.ts-y.ts);
+      const prev = all.length>1 ? all[all.length-2] : null;
+      const days = Math.round((Date.now()-a.ts)/864e5);
+      return `آخر تراكمي <b>${r1(a.value)}%</b> يوم ${fmtDate(a.ts)} — ${st.ar}.`
+        + (prev?` قبله كان ${r1(prev.value)}% (${a.value<prev.value?'نزل':'طلع'} ${r1(Math.abs(a.value-prev.value))}).`:'')
+        + (days>100?` بقاله <b>${days} يوم</b> — المعتاد كل ٣ شهور.`:'');
+    }},
+  { q:'سجّلت كام يوم الأسبوع ده؟', ic:'check', fn(){
+      const st = streakInfo();
+      const n = st.week.filter(Boolean).length;
+      return `سجّلت حاجة في <b>${n}</b> من آخر ٧ أيام، وسلسلتك الحالية <b>${st.n}</b> يوم متتابع.`
+        + (st.todayDone?' والنهارده متسجّل ✓':' والنهارده لسه.');
+    }}
+];
+
+function qaAsk(i){
+  qaOpen = (qaOpen === i) ? null : i;
+  const box = $('qaBox'); if(!box) return;
+  if(qaOpen === null){ box.innerHTML=''; paintQAChips(); return; }
+  let ans = '';
+  try{ ans = QA[i].fn(); }catch(e){ ans = 'مقدرتش أحسب دي دلوقتي.'; }
+  box.innerHTML = `<div class="qa-ans fade"><div class="ib" style="background:var(--teal-l);color:var(--teal-d)">${svg(QA[i].ic,2)}</div>
+    <div><b style="display:block;margin-bottom:4px">${QA[i].q}</b><span>${ans}</span></div></div>`;
+  paintQAChips();
+  if(navigator.vibrate) try{ navigator.vibrate(8) }catch(e){}
+}
+function paintQAChips(){
+  const w = $('qaChips'); if(!w) return;
+  [...w.children].forEach((c,i)=>c.classList.toggle('on', i===qaOpen));
+}
+function qaSection(){
+  return `<div class="section"><div class="sec-head"><h2>اسألني</h2></div>
+    <div class="chips" id="qaChips" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px">
+      ${QA.map((x,i)=>`<button class="chip" style="flex:none" onclick="qaAsk(${i})">${x.q}</button>`).join('')}
+    </div>
+    <div id="qaBox" style="margin-top:12px"></div></div>`;
+}
+
+/* ---------------- فلترة السجلات بالتاريخ ---------------- */
+let recFrom = '', recTo = '';
+function dInput(ts){ const d=new Date(ts); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function recRange(){
+  const from = recFrom ? new Date(recFrom+'T00:00:00').getTime() : null;
+  const to   = recTo   ? new Date(recTo  +'T23:59:59').getTime() : null;
+  return {from, to};
+}
+function applyRecFilter(arr){
+  const {from,to} = recRange();
+  if(from===null && to===null) return arr;
+  return arr.filter(r => (from===null || r.ts>=from) && (to===null || r.ts<=to));
+}
+function setRecFrom(v){ recFrom=v; render(); }
+function setRecTo(v){ recTo=v; render(); }
+function recPreset(days){
+  if(days===0){ recFrom=''; recTo=''; }
+  else { recFrom = dInput(Date.now()-(days-1)*864e5); recTo = ''; }
+  render();
+}
+function filterBar(total, shown){
+  const active = !!(recFrom || recTo);
+  return `<div class="section" style="padding-top:12px;padding-bottom:0">
+    <div class="card pad">
+      <div class="chips" style="margin-bottom:${active?'12px':'0'}">
+        <button class="chip ${!active?'on':''}" onclick="recPreset(0)">الكل</button>
+        <button class="chip" onclick="recPreset(7)">آخر ٧ أيام</button>
+        <button class="chip" onclick="recPreset(30)">آخر ٣٠ يوم</button>
+        <button class="chip" onclick="recPreset(90)">آخر ٣ شهور</button>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="field" style="margin-bottom:0"><label>من</label>
+          <input class="input" type="date" value="${recFrom}" onchange="setRecFrom(this.value)"></div>
+        <div class="field" style="margin-bottom:0"><label>إلى (اختياري)</label>
+          <input class="input" type="date" value="${recTo}" onchange="setRecTo(this.value)"></div>
+      </div>
+      ${active ? `<div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <span style="font-size:12.8px;color:var(--muted);font-weight:600">ظاهر ${shown} من ${total}</span>
+        <button class="btn sm ghost" style="margin-right:auto" onclick="recPreset(0)">امسح الفلتر</button></div>` : ''}
+    </div></div>`;
+}
+
+/* ---------------- شارات الإشعارات ---------------- */
+function badgeFor(v){
+  if(v === 'assistant'){
+    const a = alerts().filter(x=>x.lvl==='high'||x.lvl==='mid');
+    return a.length ? { n:a.length, hot:a.some(x=>x.lvl==='high') } : null;
+  }
+  if(v === 'home'){
+    const due = medsDueToday().filter(d=>!d.taken).length;
+    return due ? { n:due, hot:false } : null;
+  }
+  return null;
+}
+</script>
+
+<script>
+/* ==========================================================
    ديك الكروت المتداخلة — سحب باللمس بحركة spring
    ========================================================== */
 let deckIdx = 0, deckN = 0;
@@ -2308,7 +2510,7 @@ function deckHTML(){
   deckN = cards.length;
   if(deckIdx >= deckN) deckIdx = 0;
   return `<div class="deck" id="deck">
-    ${cards.map((c,i)=>`<div class="dcard" style="--cc:${c.cc}" data-i="${i}" onclick="deckTap(${i},&quot;${c.go.replace(/"/g,'&quot;')}&quot;)">
+    ${cards.map((c,i)=>`<div class="dcard" style="--cc:${c.cc};--ct:${c.cc.slice(0,-1)}-l)" data-i="${i}" onclick="deckTap(${i},&quot;${c.go.replace(/"/g,'&quot;')}&quot;)">
       <div class="dcard-in">${c.body}</div></div>`).join('')}
   </div>
   <div class="deck-dots" id="deckDots">${cards.map((c,i)=>`<i data-i="${i}" style="--dc:${c.cc}"></i>`).join('')}</div>`;
@@ -2630,7 +2832,7 @@ function renderAssistant(){
   /* الملاحظات */
   const ins = (typeof insights==='function') ? insightsCard() : '';
 
-  return topbar()+head+alertsBox+weightBox+mjBox+labsBox+sugarBox+ins+`<div style="height:8px"></div>`;
+  return topbar()+head+qaSection()+alertsBox+weightBox+mjBox+labsBox+sugarBox+ins+`<div style="height:8px"></div>`;
 }
 
 /* ---------- فورم جرعة المونجارو ---------- */
