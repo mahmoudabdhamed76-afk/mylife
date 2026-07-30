@@ -42,6 +42,7 @@
   --s-good:#2FAA57;
   --s-mid:#F0A800;
   --s-high:#DC2F26;
+  --red:#E01B0F;
   --r-s:10px; --r-m:16px; --r-l:22px; --r-xl:28px;
   --sp:16px;
   --shadow:0 1px 2px rgba(19,38,48,.05), 0 8px 24px -12px rgba(19,38,48,.16);
@@ -133,16 +134,16 @@ a{color:var(--teal);text-decoration:none}
 
 /* ---- الليلي: الأزرار البيضا خطها أسود ---- */
 :root[data-theme="dark"] .btn{color:#000}
-:root[data-theme="dark"] .btn.ghost{background:#1E1E1E;color:#fff}
-:root[data-theme="dark"] .btn.dark{background:#1E1E1E;color:#fff}
+:root[data-theme="dark"] .btn.ghost{background:#333;color:#fff}
+:root[data-theme="dark"] .btn.dark{background:#333;color:#fff}
 :root[data-theme="dark"] .btn.danger{background:#3A1517;color:#FF8080}
-:root[data-theme="dark"] .marker{background:#fff;border-color:#000}
+:root[data-theme="dark"] .marker{background:#fff;border-color:#252525}
 :root[data-theme="dark"] .p-low{background:#16232B;color:#8FCBEA}
 :root[data-theme="dark"] .p-good{background:#132417;color:#7FDF9C}
 :root[data-theme="dark"] .p-mid{background:#2A2110;color:#F2C471}
 :root[data-theme="dark"] .p-high{background:#2C1517;color:#FF8F8F}
 :root[data-theme="dark"] .alert{background:#2C1517;color:#FFA3A3}
-:root[data-theme="dark"] .note{background:#1A1A1A;color:#D6D6D6}
+:root[data-theme="dark"] .note{background:#303030;color:#DEDEDE}
 
 /* ============ الأسئلة السريعة ============ */
 .qa-ans{display:flex;gap:12px;align-items:flex-start;background:var(--surface);
@@ -357,16 +358,17 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 /* ============ الوضع الليلي ============ */
 :root[data-theme="dark"]{
   --ink:#FFFFFF;
-  --deep:#161616;
+  --deep:#2B2B2B;
   --on-deep:#FFFFFF;
   --ink-2:#D6D6D6;
-  --paper:#000000;
-  --surface:#121212;
-  --line:#2B2B2B;
-  --muted:#9E9E9E;
+  --paper:#1A1A1A;
+  --surface:#252525;
+  --line:#3D3D3D;
+  --muted:#A8A8A8;
   --teal:#FFFFFF;
   --teal-d:#FFFFFF;
-  --teal-l:#1E1E1E;
+  --teal-l:#333333;
+  --red:#FF3B2E;
   --s-low:#5CCCFF;
   --s-good:#5CE89A;
   --s-mid:#FFBD5C;
@@ -389,12 +391,12 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 :root[data-theme="dark"] .p-good{background:#123326;color:#6FE2A2}
 :root[data-theme="dark"] .p-mid{background:#332614;color:#FFC66B}
 :root[data-theme="dark"] .p-high{background:#3A1D20;color:#FF8C8C}
-:root[data-theme="dark"] .nav{background:rgba(0,0,0,.94)}
+:root[data-theme="dark"] .nav{background:rgba(37,37,37,.95)}
 :root[data-theme="dark"] .alert{background:#3A1D20;color:#FFA9A9}
-:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#1A1A1A,#1A1A1A 6px,#222 6px,#222 12px)}
+:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#2E2E2E,#2E2E2E 6px,#363636 6px,#363636 12px)}
 :root[data-theme="dark"] select.input{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238AA3A8' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>")}
 :root[data-theme="dark"] .icon-btn{background:rgba(255,255,255,.1)}
-@media(min-width:560px){:root[data-theme="dark"] body{background:#000000}}
+@media(min-width:560px){:root[data-theme="dark"] body{background:#0F0F0F}}
 
 
 /* ---- الوضع الليلي: تدرّجات ---- */
@@ -916,7 +918,12 @@ function topbar(){
   return `<div class="topbar">
     <div class="topbar-row">
       <div class="avatar">${esc(initial)}</div>
-      <div class="hello"><small>${greet()}</small><strong>${esc(n)}</strong></div>
+      <div class="hello">
+        <small style="display:flex;align-items:center;gap:5px">
+          <span style="width:14px;height:14px;display:inline-block;flex:none">${LOGO_MARK}</span>
+          <span>My Life</span><span style="opacity:.45">•</span><span>${greet()}</span>
+        </small>
+        <strong>${esc(n)}</strong></div>
       <button class="icon-btn" onclick="syncNow(true)" title="حالة التزامن" style="position:relative">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 5v3.5h3.5"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.5"/><path d="M20 19v-3.5h-3.5"/></svg>
         <i class="sync-dot ${SYNC_STATE}" style="position:absolute;bottom:5px;left:5px"></i>
@@ -961,7 +968,7 @@ function renderHome(){
       ${qBtn('shot','مونجارو','pill')}
       ${qBtn('lab','تحاليل','chart')}
       ${qBtn('activity','رياضة','run')}
-      ${qBtn('water','مياه','water')}
+      ${qBtn('med','دوا','pill')}
     </div>
   </div>`;
 
@@ -1842,7 +1849,7 @@ function applyTheme(){
   const t = effTheme();
   document.documentElement.dataset.theme = t;
   const m = document.querySelector('meta[name=theme-color]');
-  if(m) m.setAttribute('content', t==='dark' ? '#000000' : '#000000');
+  if(m) m.setAttribute('content', t==='dark' ? '#2B2B2B' : '#000000');
 }
 function toggleTheme(){
   S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
@@ -2106,8 +2113,10 @@ function journeyStats(){
 
 function renderJourney(){
   const J = journeyStats();
+  const _J0 = journeyStats();
   const head = `<div class="section" style="padding-bottom:0"><div class="sec-head">
-    <h2>رحلة الوزن</h2><button onclick="go('records')">السجل الكامل</button></div></div>`;
+    <h2 style="color:${_J0 && _J0.goal ? progColor(_J0.pct) : 'var(--red)'};transition:color .8s var(--out)">رحلة الوزن</h2>
+    <button onclick="go('records')">السجل الكامل</button></div></div>`;
 
   if(!J) return topbar()+head+`<div class="section">${emptyBox('لسه مفيش أوزان',
     'سجّل وزنك النهارده وحدّد وزنك المستهدف من «حسابي»، والبرنامج هيحسبلك المعدل الأسبوعي والتاريخ المتوقع لوصولك.',
@@ -2117,11 +2126,11 @@ function renderJourney(){
   const prog = J.goal ? `<div class="strip-card fade" style="margin-top:-14px">
       <div class="strip-head">
         <div><div class="strip-label">وصلت لـ</div>
-          <div class="strip-value"><b class="num" style="color:var(--teal)">${J.pct}</b><span>% من هدفك</span></div></div>
+          <div class="strip-value"><b class="num" style="color:${progColor(J.pct)};transition:color .8s var(--out)">${J.pct}</b><span>% من هدفك</span></div></div>
         <div class="strip-tag">${J.lost>0?'نزلت':'زادت'} ${Math.abs(J.lost)} كجم</div>
       </div>
       <div style="height:14px;border-radius:99px;background:var(--paper);overflow:hidden;margin:10px 0 8px">
-        <div class="bar-fill" style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,var(--c-weight),var(--teal),var(--c-run));border-radius:99px"></div>
+        <div class="bar-fill" style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,${progColor(0)},${progColor(J.pct/2)},${progColor(J.pct)});border-radius:99px"></div>
       </div>
       <div class="strip-ticks"><span class="num">${r1(J.start)} كجم</span><span>باقي ${J.left>0?J.left:0} كجم</span><span class="num">${r1(J.goal)} كجم</span></div>
     </div>`
@@ -2234,20 +2243,20 @@ function journeyBanner(){
     return `<div class="section"><div class="card pad" onclick="go('journey')" style="cursor:pointer">
       <div style="display:flex;align-items:center;gap:12px">
         <div class="ic" style="width:38px;height:38px;border-radius:12px;background:var(--teal-l);color:var(--teal-d);display:grid;place-items:center">${svg('weight',1.9)}</div>
-        <div style="flex:1"><b style="font-size:14.5px">رحلة الوزن</b>
+        <div style="flex:1"><b style="font-size:14.5px;color:var(--red)">رحلة الوزن</b>
           <small style="display:block;color:var(--muted);font-size:12px">حدّد وزنك المستهدف وشوف معدلك الأسبوعي</small></div>
         <span style="color:var(--teal);font-weight:700">←</span>
       </div></div></div>`;
   }
   return `<div class="section"><div class="card pad" onclick="go('journey')" style="cursor:pointer">
     <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-      <div><b style="font-family:Zain;font-size:18px">رحلة الوزن</b>
+      <div><b style="font-family:Zain;font-size:18px;color:${progColor(J.pct)};transition:color .8s var(--out)">رحلة الوزن</b>
         <small style="display:block;color:var(--muted);font-size:12px">
           ${J.rate===null ? 'سجّل يومياً عشان نحسب المعدل' : `${J.rate<0?'نازل':'زايد'} ${Math.abs(J.rate)} كجم/أسبوع`}</small></div>
-      <span class="num" style="font-family:Zain;font-size:24px;font-weight:800;color:var(--teal)">${J.pct}%</span>
+      <span class="num" style="font-family:Zain;font-size:24px;font-weight:800;color:${progColor(J.pct)};transition:color .8s var(--out)">${J.pct}%</span>
     </div>
     <div style="height:11px;border-radius:99px;background:var(--paper);overflow:hidden">
-      <div class="bar-fill" style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,var(--c-weight),var(--teal),var(--c-run));border-radius:99px"></div>
+      <div class="bar-fill" style="height:100%;width:${J.pct}%;background:linear-gradient(90deg,${progColor(0)},${progColor(J.pct/2)},${progColor(J.pct)});border-radius:99px"></div>
     </div>
     <div class="strip-ticks" style="margin-top:7px">
       <span class="num">${r1(J.cur)} كجم دلوقتي</span><span>باقي ${J.left>0?J.left:0} كجم</span></div>
@@ -2259,6 +2268,14 @@ function journeyBanner(){
 /* ==========================================================
    أسئلة سريعة • فلترة بالتاريخ • شارات الإشعارات
    ========================================================== */
+
+/* لون بيتدرّج من الأحمر للأخضر حسب التقدم */
+function progColor(pct){
+  const p = Math.max(0, Math.min(100, pct||0));
+  const h = Math.round(p * 1.32);
+  const dark = (typeof effTheme === 'function') && effTheme() === 'dark';
+  return `hsl(${h} ${dark?78:72}% ${dark?58:41}%)`;
+}
 
 /* ---------------- أسئلة المساعد ---------------- */
 let qaOpen = null;
@@ -2753,7 +2770,7 @@ function alertsCard(max){
   const bg = {high:'var(--c-bp-l)', mid:'var(--c-meal-l)', low:'var(--paper)'};
   const fg = {high:'var(--c-bp)', mid:'var(--c-meal)', low:'var(--muted)'};
   return `<div class="section">
-    <div class="sec-head"><h2>تنبيهات</h2><button onclick="go('assistant')">المساعد ←</button></div>
+    <div class="sec-head"><h2 style="color:var(--red)">تنبيهات</h2><button onclick="go('assistant')">المساعد ←</button></div>
     <div class="card">${list.map(a=>`
       <div class="insight" style="--tint:${bg[a.lvl]};--tone:${fg[a.lvl]}">
         <div class="ib" style="background:${bg[a.lvl]};color:${fg[a.lvl]}">${svg(a.ic,2)}</div>
@@ -2779,7 +2796,7 @@ function renderAssistant(){
   const bg={high:'var(--c-bp-l)',mid:'var(--c-meal-l)',low:'var(--paper)'};
   const fg={high:'var(--c-bp)',mid:'var(--c-meal)',low:'var(--muted)'};
   const alertsBox = al.length ? `<div class="section" style="padding-top:14px">
-    <div class="sec-head"><h2>محتاج انتباهك</h2></div>
+    <div class="sec-head"><h2 style="color:var(--red)">محتاج انتباهك</h2></div>
     <div class="card">${al.map(a=>`<div class="insight">
       <div class="ib" style="background:${bg[a.lvl]};color:${fg[a.lvl]}">${svg(a.ic,2)}</div>
       <p><b>${a.title}</b><br><span style="color:var(--muted)">${a.body}</span></p></div>`).join('')}</div></div>`
