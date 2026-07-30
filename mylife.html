@@ -126,6 +126,37 @@ a{color:var(--teal);text-decoration:none}
   height:14px;border-radius:99px;background:repeating-linear-gradient(45deg,#E7EDEC,#E7EDEC 6px,#F2F6F5 6px,#F2F6F5 12px);
 }
 
+
+/* ============ ديك الكروت المتداخلة ============ */
+.deck{
+  position:relative;margin:-14px 14px 0;z-index:41;height:198px;
+  touch-action:pan-y;user-select:none;-webkit-user-select:none;
+}
+.dcard{
+  position:absolute;inset:0;border-radius:24px;background:var(--cc,var(--teal));
+  padding-bottom:9px;cursor:grab;
+  box-shadow:0 6px 22px -12px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.06);
+  will-change:transform,opacity;
+  transition:transform .55s var(--spring-soft), opacity .35s var(--out);
+}
+.dcard.dragging{transition:none;cursor:grabbing}
+.dcard-in{
+  height:100%;background:var(--surface);border-radius:20px;
+  padding:15px 17px 13px;display:flex;flex-direction:column;overflow:hidden;
+}
+.dc-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dc-lbl{font-size:13.2px;color:var(--muted);font-weight:700}
+.dc-go{color:var(--muted);font-size:20px;line-height:1;opacity:.55}
+.dc-val{display:flex;align-items:baseline;gap:8px;margin:1px 0 2px}
+.dc-val b{font-family:"Zain";font-size:52px;font-weight:900;line-height:1;letter-spacing:-1px}
+.dc-val span{font-size:13px;color:var(--muted);font-weight:700}
+.dc-sub{font-size:13.5px;font-weight:700}
+.dc-foot{margin-top:auto;font-size:12.5px;color:var(--muted);font-weight:500}
+.deck-dots{display:flex;gap:6px;justify-content:center;margin-top:11px}
+.deck-dots i{width:6px;height:6px;border-radius:99px;background:var(--line);transition:width .35s var(--spring),background .3s}
+.deck-dots i.on{width:20px}
+@media (prefers-reduced-motion:reduce){ .dcard{transition:none} }
+
 /* ============ الحلقات ============ */
 .rings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 14px 0}
 .ring-card{background:var(--surface);border-radius:var(--r-m);padding:12px 8px;text-align:center;box-shadow:var(--shadow)}
@@ -786,7 +817,7 @@ function render(dir){
     el.classList.add(dir==='prev' ? 'anim-prev' : 'anim-next');
   }
   try{ window.scrollTo({top:0}); }catch(e){}
-  if(view==='home') requestAnimationFrame(placeMarker);
+  if(view==='home') requestAnimationFrame(()=>{ initDeck(); placeMarker(); });
   requestAnimationFrame(countUp);
 }
 
@@ -858,32 +889,8 @@ function topbar(){
 /* ---------------- الرئيسية ---------------- */
 function renderHome(){
   const g = lastRec('glucose');
-  let strip;
-  if(g){
-    const st = gStatus(g.mg, g.tag);
-    const [lo,hi] = tagRange(g.tag);
-    strip = `<div class="strip-card fade">
-      <div class="strip-head">
-        <div>
-          <div class="strip-label">آخر قراءة سكر — ${TAGS[g.tag].ar}</div>
-          <div class="strip-value"><b class="num" style="color:${st.col}">${fromMg(g.mg)}</b><span>${gUnit()}</span></div>
-        </div>
-        <div class="strip-tag ${st.cls}" style="background:none">${st.ar}</div>
-      </div>
-      <div class="strip-meta">${relDay(g.ts)} • ${fmtTime(g.ts)}</div>
-      <div class="strip" id="strip"><div class="marker" id="marker" style="right:50%"></div></div>
-      <div class="strip-ticks"><span class="num">${fromMg(lo-60)}</span><span>نطاقك ${fromMg(lo)}–${fromMg(hi)}</span><span class="num">${fromMg(hi+70)}</span></div>
-      <input type="hidden" id="markerPos" value="${st.pos}">
-    </div>`;
-  }else{
-    strip = `<div class="strip-card fade">
-      <div class="strip-label">سكر الدم</div>
-      <div class="strip-value"><b class="num" style="color:var(--muted)">—</b><span>${gUnit()}</span></div>
-      <div class="strip-meta">مفيش قراءات لسه. سجّل أول قراءة وهتشوف مكانها على الشريط.</div>
-      <div class="strip-empty"></div>
-      <div style="margin-top:12px"><button class="btn sm" onclick="openLog('glucose')">سجّل قراءة سكر</button></div>
-    </div>`;
-  }
+  /* ديك الكروت */
+  const strip = deckHTML();
 
   /* حلقات النهارده */
   const d = today();
@@ -2192,6 +2199,197 @@ function journeyBanner(){
     <div class="strip-ticks" style="margin-top:7px">
       <span class="num">${r1(J.cur)} كجم دلوقتي</span><span>باقي ${J.left>0?J.left:0} كجم</span></div>
   </div></div>`;
+}
+</script>
+
+<script>
+/* ==========================================================
+   ديك الكروت المتداخلة — سحب باللمس بحركة spring
+   ========================================================== */
+let deckIdx = 0, deckN = 0;
+
+function deckCards(){
+  const out = [];
+  const g = lastRec('glucose');
+  const w = lastRec('weight');
+  const m = (typeof mjInfo === 'function') ? mjInfo() : null;
+  const a = lastRec('a1c');
+  const bp = lastRec('bp');
+  const labKeys = Object.keys(LABS).filter(k=>lastLab(k));
+
+  /* ١ — سكر الدم */
+  if(g){
+    const st = gStatus(g.mg, g.tag);
+    const [lo,hi] = tagRange(g.tag);
+    out.push({ cc:'var(--c-glucose)', go:"go('reports')", body:`
+      <div class="dc-top"><span class="dc-lbl">آخر قراءة سكر — ${TAGS[g.tag].ar}</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:${st.col}">${fromMg(g.mg)}</b><span>${gUnit()}</span></div>
+      <div class="dc-sub" style="color:${st.col}">${st.ar}</div>
+      <div class="strip" style="margin:auto 0 6px"><div class="marker" id="marker" style="right:50%"></div></div>
+      <div class="strip-ticks"><span class="num">${fromMg(lo-60)}</span><span>${relDay(g.ts)} • ${fmtTime(g.ts)}</span><span class="num">${fromMg(hi+70)}</span></div>
+      <input type="hidden" id="markerPos" value="${st.pos}">` });
+  }else{
+    out.push({ cc:'var(--c-glucose)', go:"openLog('glucose')", body:`
+      <div class="dc-top"><span class="dc-lbl">سكر الدم</span></div>
+      <div class="dc-val"><b class="num" style="color:var(--muted)">—</b><span>${gUnit()}</span></div>
+      <div class="dc-sub">مفيش قراءات لسه</div>
+      <div style="margin-top:auto"><button class="btn sm" onclick="event.stopPropagation();openLog('glucose')">سجّل أول قراءة</button></div>` });
+  }
+
+  /* ٢ — المونجارو */
+  if(m){
+    const L = mjLabel();
+    out.push({ cc:'var(--c-pill)', go:"go('assistant')", body:`
+      <div class="dc-top"><span class="dc-lbl">المونجارو</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:${L.col};font-size:${L.big.length>3?'34px':'52px'}">${L.big}</b>
+        <span>${L.big.length>3?'':'يوم'}</span></div>
+      <div class="dc-sub">${m.late?`فاتت ${Math.abs(m.daysLeft)} يوم — كلّم دكتورك`:(m.due||m.today?'موعد الجرعة النهارده':`للجرعة الجاية • ${m.last.dose} مج`)}</div>
+      <div class="dc-foot">آخر جرعة ${m.last.dose} مج — ${relDay(m.last.ts)}</div>` });
+  }
+
+  /* ٣ — الوزن */
+  if(w){
+    const J = (typeof journeyStats==='function') ? journeyStats() : null;
+    const bmi = bmiInfo(w.value);
+    out.push({ cc:'var(--c-weight)', go:"go('journey')", body:`
+      <div class="dc-top"><span class="dc-lbl">الوزن</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:var(--c-weight)">${r1(w.value)}</b><span>كجم</span></div>
+      <div class="dc-sub">${J && J.rate!==null ? `${J.rate<0?'نازل':'زايد'} ${Math.abs(J.rate)} كجم/أسبوع` : (bmi?bmi.ar:'')}</div>
+      <div class="dc-foot">${J && J.goal ? `وصلت ${J.pct}% لهدفك — باقي ${J.left>0?J.left:0} كجم` : (bmi?`BMI ${bmi.v}`:relDay(w.ts))}</div>` });
+  }
+
+  /* ٤ — التراكمي */
+  if(a){
+    const st = a1cStatus(a.value);
+    out.push({ cc:'var(--c-a1c)', go:"go('reports')", body:`
+      <div class="dc-top"><span class="dc-lbl">السكر التراكمي</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:var(--c-a1c)">${r1(a.value)}</b><span>%</span></div>
+      <div class="dc-sub">${st.ar}</div>
+      <div class="dc-foot">متوسط تقديري ${fromMg(a1cToAvg(a.value))} ${gUnit()} • ${fmtDate(a.ts)}</div>` });
+  }
+
+  /* ٥ — التحاليل */
+  if(labKeys.length){
+    const k = labKeys[0], l = lastLab(k), st = labStatus(k, l.value);
+    out.push({ cc:'var(--c-run)', go:"go('assistant')", body:`
+      <div class="dc-top"><span class="dc-lbl">${LABS[k].ar}</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:var(--c-run)">${r1(l.value)}</b><span>${LABS[k].unit}</span></div>
+      <div class="dc-sub">${st.ar}</div>
+      <div class="dc-foot">${labKeys.length} تحليل مسجّل • آخرها ${fmtDate(l.ts)}</div>` });
+  }
+
+  /* ٦ — الضغط */
+  if(bp){
+    const st = bpStatus(bp.sys, bp.dia);
+    out.push({ cc:'var(--c-bp)', go:"setTab('bp');go('records')", body:`
+      <div class="dc-top"><span class="dc-lbl">ضغط الدم</span><span class="dc-go">›</span></div>
+      <div class="dc-val"><b class="num" style="color:var(--c-bp);font-size:46px">${bp.sys}/${bp.dia}</b><span>mmHg</span></div>
+      <div class="dc-sub">${st.ar}</div>
+      <div class="dc-foot">${bp.pulse?`النبض ${bp.pulse} • `:''}${relDay(bp.ts)} ${fmtTime(bp.ts)}</div>` });
+  }
+
+  return out;
+}
+
+function deckHTML(){
+  const cards = deckCards();
+  deckN = cards.length;
+  if(deckIdx >= deckN) deckIdx = 0;
+  return `<div class="deck" id="deck">
+    ${cards.map((c,i)=>`<div class="dcard" style="--cc:${c.cc}" data-i="${i}" onclick="deckTap(${i},&quot;${c.go.replace(/"/g,'&quot;')}&quot;)">
+      <div class="dcard-in">${c.body}</div></div>`).join('')}
+  </div>
+  <div class="deck-dots" id="deckDots">${cards.map((c,i)=>`<i data-i="${i}" style="--dc:${c.cc}"></i>`).join('')}</div>`;
+}
+
+function layoutDeck(dx){
+  const el = $('deck'); if(!el) return;
+  const cards = [...el.querySelectorAll('.dcard')];
+  const n = cards.length || 1;
+  const prog = dx ? Math.min(1, Math.abs(dx)/130) : 0;
+  cards.forEach(c=>{
+    const i = +c.dataset.i;
+    const d = (i - deckIdx + n) % n;
+    if(d === 0){
+      c.style.transform = `translate3d(${dx||0}px,0,0) rotate(${(dx||0)/34}deg)`;
+      c.style.opacity = dx ? String(Math.max(.55, 1 - Math.abs(dx)/420)) : '1';
+      c.style.zIndex = 30;
+    }else if(d <= 3){
+      const dd = Math.max(0, d - prog);
+      c.style.transform = `translate3d(${-13*dd}px,${11*dd}px,0) scale(${(1 - .045*dd).toFixed(4)})`;
+      c.style.opacity = '1';
+      c.style.zIndex = String(30 - d);
+    }else{
+      c.style.transform = 'translate3d(-39px,33px,0) scale(.865)';
+      c.style.opacity = '0';
+      c.style.zIndex = '26';
+    }
+  });
+  const dots = $('deckDots');
+  if(dots) [...dots.children].forEach(x=>{
+    const on = +x.dataset.i === deckIdx;
+    x.classList.toggle('on', on);
+    x.style.background = on ? x.style.getPropertyValue('--dc') : '';
+  });
+}
+
+function deckGo(step){
+  if(deckN < 2) return;
+  deckIdx = (deckIdx + step + deckN) % deckN;
+  layoutDeck(0);
+  if(navigator.vibrate) try{ navigator.vibrate(9) }catch(e){}
+  if(deckIdx === 0 && typeof placeMarker === 'function') requestAnimationFrame(placeMarker);
+}
+
+let _dk = null;
+function deckTap(i, go){
+  if(_dk && _dk.moved) return;                 /* كان بيسحب مش بيضغط */
+  const n = deckN || 1;
+  const d = (i - deckIdx + n) % n;
+  if(d !== 0){ deckIdx = i; layoutDeck(0); return; }
+  try{ eval(go); }catch(e){}
+}
+
+function initDeck(){
+  const el = $('deck'); if(!el) return;
+  layoutDeck(0);
+  if(el._wired) return;
+  el._wired = true;
+
+  const start = x => { _dk = { x0:x, dx:0, moved:false };
+    el.querySelectorAll('.dcard').forEach(c=>c.classList.add('dragging')); };
+  const move = x => {
+    if(!_dk) return;
+    _dk.dx = x - _dk.x0;
+    if(Math.abs(_dk.dx) > 6) _dk.moved = true;
+    layoutDeck(_dk.dx);
+  };
+  const end = () => {
+    if(!_dk) return;
+    const dx = _dk.dx;
+    el.querySelectorAll('.dcard').forEach(c=>c.classList.remove('dragging'));
+    if(dx < -58) deckGo(1);
+    else if(dx > 58) deckGo(-1);
+    else layoutDeck(0);
+    setTimeout(()=>{ _dk = null; }, 60);
+  };
+
+  if(window.PointerEvent){
+    el.addEventListener('pointerdown', e=>{ if(e.button===0||e.pointerType!=='mouse'){ start(e.clientX); } });
+    el.addEventListener('pointermove', e=>{ if(_dk){ move(e.clientX); } });
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('pointerleave', ()=>{ if(_dk) end(); });
+  }else{
+    el.addEventListener('touchstart', e=>start(e.touches[0].clientX), {passive:true});
+    el.addEventListener('touchmove',  e=>move(e.touches[0].clientX),  {passive:true});
+    el.addEventListener('touchend',   end);
+  }
+  document.addEventListener('keydown', e=>{
+    if(view !== 'home') return;
+    if(e.key === 'ArrowLeft')  deckGo(1);
+    if(e.key === 'ArrowRight') deckGo(-1);
+  });
 }
 </script>
 
