@@ -1,6 +1,6 @@
 {
   "name": "my-life",
-  "version": "5.0.0",
+  "version": "9.0.0",
   "private": true,
   "description": "My Life — تطبيق متابعة صحية عربي مع تزامن بين الأجهزة (سكر الدم، التراكمي، الوزن، الأكل، الأدوية)",
   "type": "module",
