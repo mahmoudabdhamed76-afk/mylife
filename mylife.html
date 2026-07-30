@@ -19,9 +19,9 @@
   --deep:#0B2F27;
   --ink-2:#1D4437;
   --on-deep:#FFFFFF;
-  --paper:#EFF3F0;
-  --surface:#FFFFFF;
-  --line:#DDE7E1;
+  --paper:#E3ECE7;
+  --surface:#F4F9F6;
+  --line:#D2DFD8;
   --muted:#658074;
   --teal:#0E9E6B;
   --teal-d:#07684A;
@@ -69,7 +69,7 @@ a{color:var(--teal);text-decoration:none}
 
 #app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--paper);position:relative;padding-bottom:96px}
 @media(min-width:560px){
-  body{background:#DCE4E3}
+  body{background:#CFDCD5}
   #app{box-shadow:0 0 60px rgba(14,42,51,.12);min-height:100dvh}
 }
 
@@ -265,7 +265,7 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 /* ============ النافيجيشن ============ */
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:60;max-width:520px;margin:0 auto;
-  background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  background:rgba(244,249,246,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);
   display:grid;grid-template-columns:repeat(5,1fr);
   padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);
 }
@@ -323,45 +323,57 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 
 /* ============ الوضع الليلي ============ */
 :root[data-theme="dark"]{
-  --ink:#EAF5EF;
-  --deep:#1A4033;
+  --ink:#E9F4F7;
+  --deep:#17333B;
   --on-deep:#FFFFFF;
   --ink-2:#BCD2CF;
-  --paper:#0E2820;
-  --surface:#153428;
-  --line:#2A4C3E;
-  --muted:#9DBBAC;
-  --teal:#2CC088;
-  --teal-d:#7FE0B6;
-  --teal-l:#17402F;
-  --s-low:#5AB0E0;
-  --s-good:#4CBD65;
-  --s-mid:#EEB13C;
-  --s-high:#F0655B;
+  --paper:#0A2027;
+  --surface:#152C33;
+  --line:#26424B;
+  --muted:#8CA5AD;
+  --teal:#5CC8F2;
+  --teal-d:#9EDEF9;
+  --teal-l:#12333D;
+  --s-low:#4FC3F7;
+  --s-good:#4ED88A;
+  --s-mid:#FFB144;
+  --s-high:#FF6B6B;
   --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px -14px rgba(0,0,0,.7);
 }
 :root[data-theme="dark"]{
-  --c-glucose:#3ED9C6;  --c-glucose-l:#14403A;
-  --c-a1c:#B49CFF;      --c-a1c-l:#2C2A55;
-  --c-weight:#7FA9FF;   --c-weight-l:#1D3153;
-  --c-meal:#F5B172;     --c-meal-l:#3D2E17;
-  --c-water:#5FCBF8;    --c-water-l:#15374A;
-  --c-run:#A3D956;      --c-run-l:#26361A;
-  --c-bp:#FF7CA1;       --c-bp-l:#421E2A;
-  --c-pill:#F088DE;    --c-pill-l:#3E1B41;
+  --c-glucose:#4FD8E4;  --c-glucose-l:#103A42;
+  --c-a1c:#A78BFA;      --c-a1c-l:#251F46;
+  --c-weight:#6BB6FF;   --c-weight-l:#15304C;
+  --c-meal:#FF9F45;     --c-meal-l:#3A2814;
+  --c-water:#4FC3F7;    --c-water-l:#123444;
+  --c-run:#7BD88F;      --c-run-l:#14351F;
+  --c-bp:#FF6B8A;       --c-bp-l:#3C1B26;
+  --c-pill:#C77DFF;    --c-pill-l:#2E1B45;
   --shadow-lift:0 2px 8px rgba(0,0,0,.4), 0 20px 46px -18px rgba(0,0,0,.75);
 }
 :root[data-theme="dark"] body{background:var(--paper)}
-:root[data-theme="dark"] .p-low{background:#12313F;color:#7CC6EC}
-:root[data-theme="dark"] .p-good{background:#12321D;color:#74D188}
-:root[data-theme="dark"] .p-mid{background:#332711;color:#F2C061}
-:root[data-theme="dark"] .p-high{background:#3A1A17;color:#F5837A}
-:root[data-theme="dark"] .nav{background:rgba(21,52,40,.94)}
-:root[data-theme="dark"] .alert{background:#3A1A17;color:#F5A79F}
-:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#1B3E31,#1B3E31 6px,#204739 6px,#204739 12px)}
+:root[data-theme="dark"] .p-low{background:#123644;color:#79CDF5}
+:root[data-theme="dark"] .p-good{background:#123326;color:#6FE2A2}
+:root[data-theme="dark"] .p-mid{background:#332614;color:#FFC66B}
+:root[data-theme="dark"] .p-high{background:#3A1D20;color:#FF8C8C}
+:root[data-theme="dark"] .nav{background:rgba(18,40,47,.95)}
+:root[data-theme="dark"] .alert{background:#3A1D20;color:#FFA9A9}
+:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#1B3A44,#1B3A44 6px,#20424D 6px,#20424D 12px)}
 :root[data-theme="dark"] select.input{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238AA3A8' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>")}
 :root[data-theme="dark"] .icon-btn{background:rgba(255,255,255,.1)}
-@media(min-width:560px){:root[data-theme="dark"] body{background:#081A14}}
+@media(min-width:560px){:root[data-theme="dark"] body{background:#061418}}
+
+
+/* ---- الوضع الليلي: تدرّجات ---- */
+:root[data-theme="dark"] .topbar{background:linear-gradient(150deg,#1D414B 0%,#17333B 52%,#123039 100%)}
+:root[data-theme="dark"] .avatar{background:linear-gradient(145deg,#4FB8E8,#7FD6F7)}
+:root[data-theme="dark"] #app{
+  background:
+    radial-gradient(120% 55% at 50% 0%, #123840 0%, rgba(18,56,64,0) 62%),
+    var(--paper);
+}
+:root[data-theme="dark"] .dcard{box-shadow:0 8px 26px -12px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.35)}
+:root[data-theme="dark"] .scrim{background:rgba(4,16,20,.62)}
 
 /* ============ نظام الحركة ============ */
 @keyframes screenIn{
@@ -1789,7 +1801,7 @@ function applyTheme(){
   const t = effTheme();
   document.documentElement.dataset.theme = t;
   const m = document.querySelector('meta[name=theme-color]');
-  if(m) m.setAttribute('content', t==='dark' ? '#11332B' : '#0B2F27');
+  if(m) m.setAttribute('content', t==='dark' ? '#17333B' : '#0B2F27');
 }
 function toggleTheme(){
   S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
