@@ -1,15 +1,17 @@
 {
   "name": "my-life",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
-  "description": "My Life — تطبيق متابعة صحية عربي (سكر الدم، التراكمي، الوزن، الأكل، الأدوية)",
+  "description": "My Life — تطبيق متابعة صحية عربي مع تزامن بين الأجهزة (سكر الدم، التراكمي، الوزن، الأكل، الأدوية)",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {},
   "license": "MIT"
 }

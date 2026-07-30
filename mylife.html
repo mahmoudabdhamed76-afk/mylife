@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0E3B45">
+<meta name="theme-color" content="#0B2F27">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="My Life">
@@ -15,19 +15,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Zain:wght@400;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#132630;
-  --deep:#122A35;
-  --ink-2:#1B3F49;
+  --ink:#10261F;
+  --deep:#0B2F27;
+  --ink-2:#1D4437;
   --on-deep:#FFFFFF;
-  --paper:#EFF2F4;
+  --paper:#EFF3F0;
   --surface:#FFFFFF;
-  --line:#DFE5E9;
-  --muted:#6B818C;
-  --teal:#0E7C7B;
-  --teal-d:#0A5C5B;
-  --teal-l:#E1F1F0;
+  --line:#DDE7E1;
+  --muted:#658074;
+  --teal:#0E9E6B;
+  --teal-d:#07684A;
+  --teal-l:#DCF2E7;
   /* ألوان الأقسام */
-  --c-glucose:#0E9E9B;  --c-glucose-l:#DFF3F2;
+  --c-glucose:#0D9488;  --c-glucose-l:#DAF0EE;
   --c-a1c:#7A5AF8;      --c-a1c-l:#ECE8FE;
   --c-weight:#2563EB;   --c-weight-l:#E2EAFD;
   --c-meal:#E07B21;     --c-meal-l:#FCEDDD;
@@ -76,14 +76,14 @@ a{color:var(--teal);text-decoration:none}
 /* ============ الهيدر ============ */
 .topbar{
   position:sticky;top:0;z-index:40;
-  background:linear-gradient(150deg,#17313D 0%,var(--deep) 46%,#0E3A3C 100%);color:var(--on-deep);
+  background:linear-gradient(148deg,#13503F 0%,var(--deep) 50%,#0E5C44 100%);color:var(--on-deep);
   padding:calc(env(safe-area-inset-top) + 14px) 18px 16px;
   border-radius:0 0 var(--r-xl) var(--r-xl);
 }
 .topbar-row{display:flex;align-items:center;gap:12px}
 .avatar{
   width:44px;height:44px;border-radius:14px;flex:none;
-  background:linear-gradient(145deg,var(--teal),#12A19F);
+  background:linear-gradient(145deg,var(--teal),#2ACB8C);
   display:grid;place-items:center;font-family:"Zain";font-size:20px;font-weight:800;color:#fff;
 }
 .hello{flex:1;min-width:0}
@@ -216,7 +216,7 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 .hint{font-size:12px;color:var(--muted);line-height:1.55;margin:8px 0 0}
 
 /* ============ الشيت ============ */
-.scrim{position:fixed;inset:0;background:rgba(12,26,33,.52);opacity:0;pointer-events:none;transition:opacity var(--t-slow) var(--out),backdrop-filter var(--t-slow) var(--out);z-index:90;backdrop-filter:blur(0)}
+.scrim{position:fixed;inset:0;background:rgba(9,28,22,.54);opacity:0;pointer-events:none;transition:opacity var(--t-slow) var(--out),backdrop-filter var(--t-slow) var(--out);z-index:90;backdrop-filter:blur(0)}
 .scrim.on{backdrop-filter:blur(6px)}
 .scrim.on{opacity:1;pointer-events:auto}
 .sheet{
@@ -292,17 +292,17 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 
 /* ============ الوضع الليلي ============ */
 :root[data-theme="dark"]{
-  --ink:#E4EDEB;
-  --deep:#123339;
+  --ink:#E2EDE7;
+  --deep:#11332B;
   --on-deep:#FFFFFF;
   --ink-2:#BCD2CF;
-  --paper:#091519;
-  --surface:#101F24;
-  --line:#22383E;
-  --muted:#8AA3A8;
-  --teal:#25A9A4;
-  --teal-d:#7FD9D3;
-  --teal-l:#123338;
+  --paper:#071512;
+  --surface:#0E1F1A;
+  --line:#1F372F;
+  --muted:#87A398;
+  --teal:#2CC088;
+  --teal-d:#7FE0B6;
+  --teal-l:#0E3228;
   --s-low:#5AB0E0;
   --s-good:#4CBD65;
   --s-mid:#EEB13C;
@@ -310,7 +310,7 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
   --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px -14px rgba(0,0,0,.7);
 }
 :root[data-theme="dark"]{
-  --c-glucose:#2ABFBB;  --c-glucose-l:#0E3234;
+  --c-glucose:#2ABFAE;  --c-glucose-l:#0D302C;
   --c-a1c:#A18AFF;      --c-a1c-l:#231F42;
   --c-weight:#6E9BFF;   --c-weight-l:#152441;
   --c-meal:#F0A055;     --c-meal-l:#33230F;
@@ -428,6 +428,23 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 .insight p{margin:0;font-size:13.5px;line-height:1.6}
 .insight p b{font-weight:700}
 
+/* ============ شاشة الحساب ============ */
+.auth{position:fixed;inset:0;z-index:190;background:var(--paper);display:none;
+  flex-direction:column;justify-content:center;padding:28px 24px;overflow-y:auto}
+.auth.on{display:flex}
+.auth-box{max-width:400px;margin:0 auto;width:100%}
+.auth h2{font-size:25px;margin:22px 0 4px;text-align:center}
+.auth .sub{color:var(--muted);font-size:13.5px;text-align:center;margin:0 0 24px;line-height:1.6}
+.auth-err{background:#F9E3E1;color:#8B2A20;border-radius:12px;padding:11px 14px;font-size:13px;margin-bottom:14px}
+:root[data-theme="dark"] .auth-err{background:#3A1A17;color:#F5A79F}
+.auth-switch{text-align:center;margin-top:18px;font-size:13.5px;color:var(--muted)}
+.auth-switch button{color:var(--teal);font-weight:700}
+.sync-dot{width:8px;height:8px;border-radius:99px;background:#8FB0B6;display:inline-block;transition:background .3s}
+.sync-dot.ok{background:#3ED07E}
+.sync-dot.sync{background:#E4A11B;animation:pulseDot 1s infinite}
+.sync-dot.off{background:#E0655B}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.35}}
+
 /* ============ قفل الكود ============ */
 .lock{
   position:fixed;inset:0;z-index:200;background:var(--paper);
@@ -486,7 +503,27 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
   <div class="sheet-body" id="sheetBody"></div>
 </div>
 
+<div class="auth" id="auth">
+  <div class="auth-box">
+    <div id="authLogo"></div>
+    <h2 id="authTitle">تسجيل الدخول</h2>
+    <p class="sub" id="authSub">دخول بحسابك علشان بياناتك تتزامن على كل أجهزتك</p>
+    <div id="authErr"></div>
+    <div class="field"><label>اسم المستخدم</label>
+      <input class="input" id="auUser" autocapitalize="none" autocomplete="username" spellcheck="false" placeholder="حروف إنجليزية وأرقام"></div>
+    <div class="field"><label>كلمة السر</label>
+      <input class="input" id="auPass" type="password" autocomplete="current-password" placeholder="٨ حروف على الأقل"></div>
+    <button class="btn" id="auGo" onclick="doAuth()">دخول</button>
+    <div class="auth-switch">
+      <span id="auSwitchTx">معندكش حساب؟</span>
+      <button onclick="toggleAuthMode()" id="auSwitchBtn">اعمل حساب جديد</button>
+    </div>
+    <p class="hint" style="text-align:center;margin-top:18px">بياناتك بتتخزن على السيرفر بتاعك اللي انت رافعه، ومحدش تاني بيشوفها.</p>
+  </div>
+</div>
+
 <div class="lock" id="lock">
+  <div id="lockLogo" style="width:78px;height:78px;margin-bottom:14px"></div>
   <h2 id="lockTitle">My Life</h2>
   <p id="lockMsg">اكتب الكود بتاعك</p>
   <div class="dots" id="lockDots"></div>
@@ -524,6 +561,19 @@ const I = {
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
   flame:'<path d="M12 3c3 4 6 5.5 6 9a6 6 0 0 1-12 0c0-2 1-3.4 2-4.5.4 1.5 1.2 2 2 2 .6-2.5.8-4.5 2-6.5z"/>'
 };
+/* ---------- اللوجو ---------- */
+const LOGO_MARK = `<svg viewBox="0 0 512 512" fill="none" aria-hidden="true">
+  <defs><linearGradient id="mlg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#12B37A"/><stop offset="1" stop-color="#067A52"/></linearGradient></defs>
+  <rect width="512" height="512" rx="116" fill="url(#mlg)"/>
+  <path d="M256 356s-92-58-92-120a50 50 0 0 1 92-26 50 50 0 0 1 92 26c0 62-92 120-92 120z" stroke="#fff" stroke-width="24" stroke-linejoin="round"/>
+  <path d="M172 252h44l24-44 32 84 22-40h46" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+const logoLockup = (size=48)=>`<div style="display:flex;align-items:center;gap:12px;justify-content:center">
+  <span style="width:${size}px;height:${size}px;display:block;flex:none">${LOGO_MARK}</span>
+  <span style="line-height:1.2;text-align:right"><b style="font-family:Zain;font-size:${Math.round(size*0.56)}px;font-weight:800;display:block">My Life</b>
+  <small style="font-size:${Math.round(size*0.27)}px;color:var(--muted)">متابعة صحتك اليومية</small></span></div>`;
+
 /* ---------- ألوان الأقسام ---------- */
 const TINT = {
   glucose:['--c-glucose-l','--c-glucose'], a1c:['--c-a1c-l','--c-a1c'],
@@ -562,6 +612,7 @@ const blank = ()=>({
     theme:'auto', notify:false, pin:'',
     targets:{ fasting:[80,130], post:[80,180], a1c:7, calories:2000, carbs:200, water:2500, steps:30 } },
   glucose:[], a1c:[], weight:[], bp:[], meals:[], water:[], activity:[], meds:[], medLog:[],
+  tombs:[], profU:0,
   created: Date.now()
 });
 let S = blank();
@@ -569,7 +620,7 @@ let view = 'home';
 let recTab = 'glucose';
 let repRange = 30;
 
-const save = ()=>Store.save(S);
+function save(){ stampChanges(); Store.save(S); scheduleSync(); }
 const uid  = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
 /* ---------- أدوات ---------- */
@@ -786,6 +837,10 @@ function topbar(){
     <div class="topbar-row">
       <div class="avatar">${esc(initial)}</div>
       <div class="hello"><small>${greet()}</small><strong>${esc(n)}</strong></div>
+      <button class="icon-btn" onclick="syncNow(true)" title="حالة التزامن" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 5v3.5h3.5"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.5"/><path d="M20 19v-3.5h-3.5"/></svg>
+        <i class="sync-dot ${SYNC_STATE}" style="position:absolute;bottom:5px;left:5px"></i>
+      </button>
       <button class="icon-btn" onclick="toggleTheme()" title="الوضع الليلي">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${effTheme()==='dark'?ICON_SUN:ICON_MOON}</svg>
       </button>
@@ -1272,6 +1327,19 @@ function renderProfile(){
     ${bmi?`<p class="hint">مؤشر كتلة الجسم دلوقتي <b class="num">${bmi.v}</b> — ${bmi.ar}.${maint?` احتياجك التقريبي للحفاظ على وزنك حوالي <b class="num">${maint}</b> سعرة في اليوم.`:''}</p>`:''}
   </div></div>
 
+  <div class="section"><div class="sec-head"><h2>الحساب والتزامن</h2></div>
+    <div class="card">
+      <div class="row"><div class="ic" style="--tint:var(--c-run-l);--tone:var(--c-run)">${svg('user',1.9)}</div>
+        <div class="tx"><b>${esc(UNAME||'—')}</b><small>${TOKEN?'مسجّل دخول — البيانات بتتزامن':'مش مسجّل دخول'}</small></div>
+        <i class="sync-dot ${SYNC_STATE}"></i></div>
+      <div class="row" onclick="syncNow(true)"><div class="ic">${svg('down',1.9)}</div>
+        <div class="tx"><b>زامن دلوقتي</b><small>${SINCE?'آخر تزامن: '+fmtTime(SINCE+15000):'لسه مفيش تزامن'}</small></div></div>
+      <div class="row" onclick="doLogout()"><div class="ic" style="--tint:var(--c-bp-l);--tone:var(--c-bp)">${svg('up',1.9)}</div>
+        <div class="tx"><b>تسجيل خروج</b><small>هيشيل بيانات الجهاز ده بس</small></div></div>
+    </div>
+    <p class="hint">التزامن بيشتغل لوحده كل ١٥ ثانية ومع كل تعديل. الأحدث دايماً هو اللي يفوز لو عدّلت من جهازين في نفس الوقت.</p>
+  </div>
+
   <div class="section"><div class="sec-head"><h2>المظهر</h2></div>
     <div class="card pad">
       <div class="field" style="margin-bottom:0"><label>وضع العرض</label>
@@ -1335,6 +1403,7 @@ function saveProfile(){
   S.profile.height = +$('pH').value || 170;
   S.profile.targetWeight = +$('pTW').value || 0;
   S.profile.startWeight = +$('pSW').value || 0;
+  S.profU = Date.now();
   save(); render(); toast('اتحفظ');
 }
 function saveTargets(){
@@ -1343,6 +1412,7 @@ function saveTargets(){
   T.post    = [+$('tP0').value||80, +$('tP1').value||180];
   T.a1c = +$('tA').value||7; T.calories=+$('tC').value||2000;
   T.carbs = +$('tCB').value||200; T.water=+$('tW').value||2500; T.steps=+$('tS').value||30;
+  S.profU = Date.now();
   save(); render(); toast('الأهداف اتحفظت');
 }
 function wipe(){
@@ -1669,7 +1739,7 @@ function saveMed(){
   const n=$('mdn').value.trim();
   if(!n){ toast('اكتب اسم الدوا'); return; }
   const data={name:n, dose:$('mdd').value.trim(), times:F.times.filter(Boolean), active:true};
-  if(F.editId){ Object.assign(S.meds.find(m=>m.id===F.editId), data); }
+  if(F.editId){ Object.assign(S.meds.find(m=>m.id===F.editId), data); touch('meds', F.editId); }
   else S.meds.push({id:uid(), ...data});
   save(); closeSheet(); go('meds'); toast('اتحفظ');
 }
@@ -1686,7 +1756,7 @@ function applyTheme(){
   const t = effTheme();
   document.documentElement.dataset.theme = t;
   const m = document.querySelector('meta[name=theme-color]');
-  if(m) m.setAttribute('content', t==='dark' ? '#123339' : '#0E2A33');
+  if(m) m.setAttribute('content', t==='dark' ? '#11332B' : '#0B2F27');
 }
 function toggleTheme(){
   S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
@@ -1836,6 +1906,7 @@ let PIN='';
 function lockNeeded(){ return !!(S.profile.pin) }
 function showLock(mode){
   PIN=''; drawPin();
+  const ll=$('lockLogo'); if(ll && !ll.innerHTML) ll.innerHTML = LOGO_MARK;
   $('lockMsg').textContent = mode==='set' ? 'اختار كود ٤ أرقام' : 'اكتب الكود بتاعك';
   $('lock').dataset.mode = mode;
   $('lock').classList.add('on');
@@ -2100,6 +2171,210 @@ function journeyBanner(){
 
 <script>
 /* ==========================================================
+   طبقة التزامن — حساب واحد، كل الأجهزة
+   ========================================================== */
+const SYNC_KINDS = ['glucose','a1c','weight','bp','meals','water','activity','meds','medLog'];
+const K_TOKEN='mylife.token', K_USER='mylife.uname', K_SINCE='mylife.since', K_PUSHED='mylife.pushed';
+const OVERLAP = 15000;          /* هامش أمان لفروق ساعة الأجهزة */
+
+let TOKEN='', UNAME='', SINCE=0, PUSHED=0;
+let SYNC_STATE='', syncing=false, syncTimer=null, authMode='login';
+let shadow={};
+
+const ls = { get:k=>{ try{return localStorage.getItem(k)||''}catch(e){return ''} },
+             set:(k,v)=>{ try{localStorage.setItem(k,v)}catch(e){} },
+             del:k=>{ try{localStorage.removeItem(k)}catch(e){} } };
+
+function loadMeta(){
+  TOKEN = ls.get(K_TOKEN); UNAME = ls.get(K_USER);
+  SINCE = +ls.get(K_SINCE) || 0; PUSHED = +ls.get(K_PUSHED) || 0;
+}
+function saveMeta(){ ls.set(K_SINCE, String(SINCE)); ls.set(K_PUSHED, String(PUSHED)); }
+
+/* ---------- ختم التغييرات (يمسك الإضافة والحذف تلقائياً) ---------- */
+function snapshotShadow(){
+  shadow = {};
+  SYNC_KINDS.forEach(k=>{ shadow[k] = new Set((S[k]||[]).map(r=>r.id)); });
+}
+function stampChanges(){
+  const now = Date.now();
+  if(!S.tombs) S.tombs = [];
+  SYNC_KINDS.forEach(k=>{
+    const arr = S[k] = S[k] || [];
+    const cur = new Set();
+    arr.forEach(r=>{
+      if(!r.id) r.id = uid();
+      cur.add(r.id);
+      if(!r.u) r.u = now;                                  /* جديد أو قديم من غير ختم */
+      else if(shadow[k] && !shadow[k].has(r.id)) r.u = r.u; /* موجود بختمه */
+    });
+    if(shadow[k]) shadow[k].forEach(id=>{
+      if(!cur.has(id)) S.tombs.push({ kind:k, rid:id, u:now }); /* اتحذف */
+    });
+  });
+  snapshotShadow();
+}
+/* لتعديل ريكورد قايم — يخليه يتزامن */
+function touch(kind, id){
+  const r = (S[kind]||[]).find(x=>x.id===id);
+  if(r) r.u = Date.now();
+}
+
+/* ---------- الاتصال ---------- */
+async function api(path, body, method){
+  const r = await fetch(path, {
+    method: method || 'POST',
+    headers: Object.assign({'content-type':'application/json'}, TOKEN?{authorization:'Bearer '+TOKEN}:{}),
+    body: JSON.stringify(body||{})
+  });
+  let d = {}; try{ d = await r.json(); }catch(e){}
+  if(!r.ok){ const e = new Error(d.error || 'فيه مشكلة في الاتصال'); e.status = r.status; throw e; }
+  return d;
+}
+
+/* ---------- المؤشر ---------- */
+function setSync(st){
+  SYNC_STATE = st;
+  document.querySelectorAll('.sync-dot').forEach(d=>{ d.className = 'sync-dot ' + st; });
+}
+const sheetBusy = ()=> ['sheet','lock','auth'].some(id=>{ const e=$(id); return e && e.classList.contains('on'); });
+
+/* ---------- تجميع المعلّق ---------- */
+function profForSync(){
+  const p = Object.assign({}, S.profile);
+  delete p.pin; delete p.notify; delete p.theme;   /* دي إعدادات جهاز، مش بيانات حساب */
+  return p;
+}
+function collectPending(){
+  const recs = [];
+  SYNC_KINDS.forEach(k=>(S[k]||[]).forEach(r=>{
+    if((r.u||0) > PUSHED) recs.push({ kind:k, rid:r.id, u:r.u, data:r });
+  }));
+  (S.tombs||[]).forEach(t=>recs.push({ kind:t.kind, rid:t.rid, u:t.u, del:true, data:null }));
+  const prof = (S.profU||0) > PUSHED ? { u:S.profU, data:profForSync() } : null;
+  return { recs, prof };
+}
+
+/* ---------- الدمج (الأحدث يفوز) ---------- */
+function mergeIn(resp){
+  let changed = false;
+  (resp.recs||[]).forEach(r=>{
+    if(SYNC_KINDS.indexOf(r.kind) < 0) return;
+    const arr = S[r.kind] = S[r.kind] || [];
+    const i = arr.findIndex(x=>x.id === r.rid);
+    if(r.del){
+      if(i >= 0 && (arr[i].u||0) <= r.u){ arr.splice(i,1); changed = true; }
+      return;
+    }
+    if(!r.data) return;
+    const inc = Object.assign({}, r.data, { id:r.rid, u:r.u });
+    if(i < 0){ arr.push(inc); changed = true; }
+    else if((arr[i].u||0) < r.u){ arr[i] = inc; changed = true; }
+  });
+  if(resp.prof && resp.prof.u > (S.profU||0) && resp.prof.data){
+    const keep = { pin:S.profile.pin, notify:S.profile.notify, theme:S.profile.theme };
+    S.profile = Object.assign(blank().profile, resp.prof.data, keep);
+    S.profile.targets = Object.assign(blank().profile.targets, resp.prof.data.targets||{});
+    S.profU = resp.prof.u;
+    changed = true;
+  }
+  return changed;
+}
+
+/* ---------- التزامن ---------- */
+function scheduleSync(){
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=>syncNow(), 900);
+}
+async function syncNow(manual){
+  if(!TOKEN){ if(manual) toast('سجّل دخول الأول'); return; }
+  if(syncing) return;
+  if(!navigator.onLine){ setSync('off'); if(manual) toast('مفيش نت — التغييرات محفوظة وهتترفع لوحدها'); return; }
+  syncing = true; setSync('sync');
+  try{
+    const p = collectPending();
+    const r = await api('/api/sync', { since:SINCE, recs:p.recs, prof:p.prof });
+    let maxU = PUSHED;
+    p.recs.forEach(x=>{ if(x.u > maxU) maxU = x.u; });
+    if(p.prof && p.prof.u > maxU) maxU = p.prof.u;
+    PUSHED = maxU;
+    S.tombs = [];
+    const changed = mergeIn(r);
+    SINCE = Math.max(0, (r.now || Date.now()) - OVERLAP);
+    saveMeta(); snapshotShadow(); Store.save(S);
+    setSync('ok');
+    if(manual) toast('اتزامن ✓');
+    if(changed && !sheetBusy()) render();
+  }catch(e){
+    if(e.status === 401){ setSync('off'); doLogout(true); toast('الجلسة انتهت — سجّل دخول تاني'); }
+    else { setSync('off'); if(manual) toast(e.message); }
+  }
+  syncing = false;
+}
+
+/* ---------- شاشة الحساب ---------- */
+function showAuth(){
+  const al = $('authLogo'); if(al && !al.innerHTML) al.innerHTML = logoLockup(52);
+  $('auth').classList.add('on');
+  authMode = 'login'; paintAuth();
+}
+function paintAuth(){
+  const reg = authMode === 'register';
+  $('authTitle').textContent = reg ? 'حساب جديد' : 'تسجيل الدخول';
+  $('authSub').textContent = reg
+    ? 'اختار اسم وكلمة سر — دي اللي هتدخل بيها من أي جهاز'
+    : 'دخول بحسابك علشان بياناتك تتزامن على كل أجهزتك';
+  $('auGo').textContent = reg ? 'اعمل الحساب' : 'دخول';
+  $('auSwitchTx').textContent = reg ? 'عندك حساب بالفعل؟' : 'معندكش حساب؟';
+  $('auSwitchBtn').textContent = reg ? 'سجّل دخول' : 'اعمل حساب جديد';
+  $('auPass').setAttribute('autocomplete', reg ? 'new-password' : 'current-password');
+  $('authErr').innerHTML = '';
+}
+function toggleAuthMode(){ authMode = authMode === 'login' ? 'register' : 'login'; paintAuth(); }
+function authErr(m){ $('authErr').innerHTML = `<div class="auth-err">${esc(m)}</div>`; }
+
+async function doAuth(){
+  const uname = ($('auUser').value||'').trim().toLowerCase();
+  const pass  = $('auPass').value||'';
+  if(!uname || !pass){ authErr('اكتب اسم المستخدم وكلمة السر'); return; }
+  const btn = $('auGo'); btn.disabled = true; btn.textContent = 'لحظة...';
+  try{
+    const d = await api(authMode === 'register' ? '/api/register' : '/api/login', { uname, pass });
+    TOKEN = d.token; UNAME = d.uname;
+    ls.set(K_TOKEN, TOKEN); ls.set(K_USER, UNAME);
+    SINCE = 0; PUSHED = 0; saveMeta();
+    $('auth').classList.remove('on');
+    $('auUser').value = ''; $('auPass').value = '';
+    stampChanges();               /* أي بيانات لوكال موجودة تترفع */
+    render();
+    await syncNow();
+    startSyncLoop();
+    toast('أهلاً ' + UNAME);
+  }catch(e){ authErr(e.message); }
+  btn.disabled = false; paintAuth();
+}
+function doLogout(silent){
+  if(!silent && !confirm('تسجّل خروج؟ البيانات المحفوظة على الجهاز ده هتتشال، وهترجع تاني أول ما تدخل.')) return;
+  if(TOKEN && !silent) api('/api/logout', {}).catch(()=>{});
+  TOKEN=''; UNAME=''; SINCE=0; PUSHED=0;
+  ls.del(K_TOKEN); ls.del(K_USER); ls.del(K_SINCE); ls.del(K_PUSHED);
+  S = blank(); Store.save(S); snapshotShadow();
+  clearInterval(window.__syncLoop);
+  view='home'; render(); showAuth();
+}
+function startSyncLoop(){
+  clearInterval(window.__syncLoop);
+  window.__syncLoop = setInterval(()=>syncNow(), 15000);
+}
+
+/* أحداث تستدعي تزامن */
+addEventListener('online', ()=>{ setSync('sync'); syncNow(); });
+addEventListener('offline', ()=>setSync('off'));
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) syncNow(); });
+</script>
+
+<script>
+/* ==========================================================
    تصدير • استيراد • طباعة
    ========================================================== */
 function exportJSON(){
@@ -2229,11 +2504,17 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
   const d = await Store.load();
   if(d){ S = Object.assign(blank(), d); S.profile = Object.assign(blank().profile, d.profile||{});
          S.profile.targets = Object.assign(blank().profile.targets, (d.profile||{}).targets||{}); }
+  loadMeta();
   applyTheme();
+  snapshotShadow();
+  if(!TOKEN){ render(); showAuth(); return; }
+  setSync('');
   render();
   if(lockNeeded()) showLock('ask');
   checkReminders();
-  if(!S.profile.name){
+  syncNow();
+  startSyncLoop();
+  if(TOKEN && !S.profile.name){
     setTimeout(()=>openSheet('أهلاً بيك في My Life', `
       <p style="margin:0 0 16px;font-size:14.5px;line-height:1.75">My Life بيتابع معاك سكر الدم والتراكمي والوزن والأكل والأدوية، وبيحوّلهم لتقرير تقدر تعرضه على دكتورك. كل بياناتك متسجلة على جهازك بس.</p>
       <div class="field"><label>اسمك</label><input class="input" id="onName" placeholder="اكتب اسمك"></div>
