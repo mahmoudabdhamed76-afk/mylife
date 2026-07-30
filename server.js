@@ -18,6 +18,9 @@ const DATA_DIR = process.env.DATA_DIR
               || process.env.RAILWAY_VOLUME_MOUNT_PATH
               || join(ROOT, 'data');
 const SESSION_DAYS = 90;
+/* لو ظبطت REGISTER_CODE، مش هيقدر حد يعمل حساب جديد غير لما يكتب الكود.
+   سيبه فاضي = التسجيل مفتوح لأي حد يعرف اللينك. */
+const REGISTER_CODE = process.env.REGISTER_CODE || '';
 const MAX_BODY = 4 * 1024 * 1024;
 
 await mkdir(DATA_DIR, { recursive: true });
@@ -109,11 +112,13 @@ function auth(req){
   if (!s || s.exp < Date.now()) return null;
   return { uid: s.uid, token: t };
 }
-const KINDS = new Set(['glucose','a1c','weight','bp','meals','water','activity','meds','medLog']);
+const KINDS = new Set(['glucose','a1c','weight','bp','meals','water','activity','meds','medLog','shots','labs']);
 
 /* ---------- المسارات ---------- */
 async function api(req, res, path){
   const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+
+  if (path === '/api/config') return json(res, 200, { needCode: !!REGISTER_CODE });
 
   if (path === '/api/register' || path === '/api/login') {
     if (req.method !== 'POST') return json(res, 405, { error: 'method' });
@@ -126,6 +131,8 @@ async function api(req, res, path){
     if (pass.length < 8) return json(res, 400, { error: 'كلمة السر ٨ حروف على الأقل' });
 
     if (path === '/api/register') {
+      if (REGISTER_CODE && String(b.code || '') !== REGISTER_CODE)
+        return json(res, 403, { error: 'كود التسجيل غلط' });
       if (Q.userByName.get(uname)) return json(res, 409, { error: 'الاسم مستخدم بالفعل' });
       const salt = randomBytes(16).toString('hex');
       Q.addUser.run(uname, hashPass(pass, salt), salt, Date.now());
