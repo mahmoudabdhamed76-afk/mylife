@@ -12,7 +12,11 @@ import { randomBytes, scryptSync, timingSafeEqual, createHash } from 'node:crypt
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
-const DATA_DIR = process.env.DATA_DIR || join(ROOT, 'data');
+/* مسار البيانات: Railway بيحدد RAILWAY_VOLUME_MOUNT_PATH تلقائياً لما تركّب Volume،
+   فمش محتاج تظبط أي متغير بنفسك. DATA_DIR للتحكم اليدوي، و./data للتشغيل المحلي. */
+const DATA_DIR = process.env.DATA_DIR
+              || process.env.RAILWAY_VOLUME_MOUNT_PATH
+              || join(ROOT, 'data');
 const SESSION_DAYS = 90;
 const MAX_BODY = 4 * 1024 * 1024;
 
