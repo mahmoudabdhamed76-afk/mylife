@@ -1,5 +1,5 @@
 /* My Life — كاش أوفلاين بسيط */
-const CACHE = 'mylife-v3';
+const CACHE = 'mylife-v4';
 const ASSETS = ['.', 'mylife.html', 'manifest.webmanifest', 'icon.svg'];
 
 self.addEventListener('install', e => {
