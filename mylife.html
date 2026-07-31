@@ -132,18 +132,32 @@ a{color:var(--teal);text-decoration:none}
 
 
 
+
+/* ---- ليلي فاتح (درجة أعلى من الأسود) ---- */
+:root[data-theme="dark"][data-dim="1"]{
+  --paper:#1A1A1A; --surface:#252525; --deep:#2B2B2B;
+  --line:#3D3D3D; --muted:#A8A8A8; --teal-l:#333333;
+}
+:root[data-theme="dark"][data-dim="1"] .nav{background:rgba(37,37,37,.95)}
+:root[data-theme="dark"][data-dim="1"] .btn.ghost,
+:root[data-theme="dark"][data-dim="1"] .btn.dark{background:#3A3A3A;color:#fff}
+:root[data-theme="dark"][data-dim="1"] .note{background:#303030;color:#DEDEDE}
+:root[data-theme="dark"][data-dim="1"] .marker{border-color:#252525}
+:root[data-theme="dark"][data-dim="1"] .strip-empty{background:repeating-linear-gradient(45deg,#2E2E2E,#2E2E2E 6px,#363636 6px,#363636 12px)}
+@media(min-width:560px){:root[data-theme="dark"][data-dim="1"] body{background:#0F0F0F}}
+
 /* ---- الليلي: الأزرار البيضا خطها أسود ---- */
 :root[data-theme="dark"] .btn{color:#000}
-:root[data-theme="dark"] .btn.ghost{background:#333;color:#fff}
-:root[data-theme="dark"] .btn.dark{background:#333;color:#fff}
+:root[data-theme="dark"] .btn.ghost{background:#1E1E1E;color:#fff}
+:root[data-theme="dark"] .btn.dark{background:#1E1E1E;color:#fff}
 :root[data-theme="dark"] .btn.danger{background:#3A1517;color:#FF8080}
-:root[data-theme="dark"] .marker{background:#fff;border-color:#252525}
+:root[data-theme="dark"] .marker{background:#fff;border-color:#000}
 :root[data-theme="dark"] .p-low{background:#16232B;color:#8FCBEA}
 :root[data-theme="dark"] .p-good{background:#132417;color:#7FDF9C}
 :root[data-theme="dark"] .p-mid{background:#2A2110;color:#F2C471}
 :root[data-theme="dark"] .p-high{background:#2C1517;color:#FF8F8F}
 :root[data-theme="dark"] .alert{background:#2C1517;color:#FFA3A3}
-:root[data-theme="dark"] .note{background:#303030;color:#DEDEDE}
+:root[data-theme="dark"] .note{background:#1A1A1A;color:#D6D6D6}
 
 /* ============ الأسئلة السريعة ============ */
 .qa-ans{display:flex;gap:12px;align-items:flex-start;background:var(--surface);
@@ -358,16 +372,16 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 /* ============ الوضع الليلي ============ */
 :root[data-theme="dark"]{
   --ink:#FFFFFF;
-  --deep:#2B2B2B;
+  --deep:#161616;
   --on-deep:#FFFFFF;
   --ink-2:#D6D6D6;
-  --paper:#1A1A1A;
-  --surface:#252525;
-  --line:#3D3D3D;
-  --muted:#A8A8A8;
+  --paper:#000000;
+  --surface:#121212;
+  --line:#2B2B2B;
+  --muted:#9E9E9E;
   --teal:#FFFFFF;
   --teal-d:#FFFFFF;
-  --teal-l:#333333;
+  --teal-l:#1E1E1E;
   --red:#FF3B2E;
   --s-low:#5CCCFF;
   --s-good:#5CE89A;
@@ -391,12 +405,12 @@ select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg 
 :root[data-theme="dark"] .p-good{background:#123326;color:#6FE2A2}
 :root[data-theme="dark"] .p-mid{background:#332614;color:#FFC66B}
 :root[data-theme="dark"] .p-high{background:#3A1D20;color:#FF8C8C}
-:root[data-theme="dark"] .nav{background:rgba(37,37,37,.95)}
+:root[data-theme="dark"] .nav{background:rgba(0,0,0,.94)}
 :root[data-theme="dark"] .alert{background:#3A1D20;color:#FFA9A9}
-:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#2E2E2E,#2E2E2E 6px,#363636 6px,#363636 12px)}
+:root[data-theme="dark"] .strip-empty{background:repeating-linear-gradient(45deg,#1A1A1A,#1A1A1A 6px,#222 6px,#222 12px)}
 :root[data-theme="dark"] select.input{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238AA3A8' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>")}
 :root[data-theme="dark"] .icon-btn{background:rgba(255,255,255,.1)}
-@media(min-width:560px){:root[data-theme="dark"] body{background:#0F0F0F}}
+@media(min-width:560px){:root[data-theme="dark"] body{background:#000000}}
 
 
 /* ---- الوضع الليلي: تدرّجات ---- */
@@ -689,7 +703,7 @@ const blank = ()=>({
     theme:'auto', notify:false, pin:'',
     targets:{ fasting:[80,130], post:[80,180], a1c:7, calories:2000, carbs:200, water:2500, steps:30 } },
   glucose:[], a1c:[], weight:[], bp:[], meals:[], water:[], activity:[], meds:[], medLog:[],
-  shots:[], labs:[],
+  shots:[], labs:[], fasts:[],
   tombs:[], profU:0,
   created: Date.now()
 });
@@ -1003,7 +1017,7 @@ function renderHome(){
     </div>
   </div>`;
 
-  return topbar() + strip + streakCard() + rings + warn + alertsCard(3) + quick + glance + journeyBanner() + recent;
+  return topbar() + strip + streakCard() + rings + warn + fastBar() + alertsCard(3) + quick + glance + journeyBanner() + recent;
 }
 
 function mjRing(){
@@ -1055,6 +1069,7 @@ function latestFeed(n){
   push('glucose',S.glucose); push('a1c',S.a1c); push('weight',S.weight);
   push('bp',S.bp); push('meals',S.meals); push('water',S.water); push('activity',S.activity);
   push('shots',S.shots||[]); push('labs',S.labs||[]);
+  (S.fasts||[]).forEach(r=>out.push({k:'fasts', r:Object.assign({}, r, {ts:r.end||r.start})}));
   return out.sort((a,b)=>b.r.ts-a.r.ts).slice(0,n);
 }
 
@@ -1072,6 +1087,9 @@ function rowOf(item){
     val=r.cal; unit=`سعرة • ${r.carbs} كارب`; }
   else if(k==='water'){ icon='water'; title='مياه'; val=r.ml; unit='مل'; }
   else if(k==='activity'){ icon='run'; title=r.name||'نشاط'; val=r.min; unit='دقيقة'; }
+  else if(k==='fasts'){ icon='water'; title=r.end?'صيام':'صيام شغال';
+    sub=`${relDay(r.start)} ${fmtTime(r.start)}${r.end?` ← ${fmtTime(r.end)}`:''}`;
+    const _d=hm(fastMs(r)); val=_d.h; unit=`س ${pad(_d.m)} د`; }
   else if(k==='shots'){ icon='pill'; title='جرعة المونجارو'; sub=`${r.site||''} • ${relDay(r.ts)} ${fmtTime(r.ts)}`;
     val=r.dose; unit='مج'; }
   else if(k==='labs'){ const L=LABS[r.type]||{ar:r.type,unit:''}; const st=labStatus(r.type,r.value);
@@ -1092,7 +1110,7 @@ function emptyBox(t,p,btn){
    السجلات
    ========================================================== */
 const REC_TABS = [
-  ['glucose','سكر الدم'],['a1c','التراكمي'],['shots','المونجارو'],['labs','التحاليل'],
+  ['glucose','سكر الدم'],['a1c','التراكمي'],['shots','المونجارو'],['labs','التحاليل'],['fasts','الصيام'],
   ['meals','الأكل'],['weight','الوزن'],['bp','الضغط'],['water','المياه'],['activity','الرياضة']
 ];
 
@@ -1103,7 +1121,7 @@ function renderRecords(){
     + (recTab==='weight' ? `<div class="section" style="padding-top:12px;padding-bottom:0">
         <button class="btn ghost" onclick="go('journey')">افتح رحلة الوزن — التقدم والمعدل الأسبوعي</button></div>` : '');
 
-  const all = [...(S[recTab]||[])].sort((a,b)=>b.ts-a.ts);
+  const all = [...(S[recTab]||[])].map(r=> r.ts ? r : Object.assign({}, r, {ts: r.start || r.end || 0})).sort((a,b)=>b.ts-a.ts);
   const arr = applyRecFilter(all);
   const fbar = all.length ? filterBar(all.length, arr.length) : '';
   if(!arr.length && !all.length){
@@ -1436,8 +1454,9 @@ function renderProfile(){
       <div class="field" style="margin-bottom:0"><label>وضع العرض</label>
         <div class="chips">
           <button class="chip ${(p.theme||'auto')==='auto'?'on':''}" onclick="setTheme('auto')">تلقائي</button>
-          <button class="chip ${p.theme==='light'?'on':''}" onclick="setTheme('light')">نهاري</button>
-          <button class="chip ${p.theme==='dark'?'on':''}" onclick="setTheme('dark')">ليلي 🌙</button>
+          <button class="chip ${p.theme==='light'?'on':''}" onclick="setTheme('light')">نهاري ☀️</button>
+          <button class="chip ${p.theme==='dark'?'on':''}" onclick="setTheme('dark')">ليلي أسود 🌑</button>
+          <button class="chip ${p.theme==='dim'?'on':''}" onclick="setTheme('dim')">ليلي فاتح 🌙</button>
         </div>
         <p class="hint">«تلقائي» بيمشي مع إعداد الموبايل نفسه.</p>
       </div>
@@ -1847,16 +1866,20 @@ function sysDark(){ return window.matchMedia && matchMedia('(prefers-color-schem
 function effTheme(){ const t=S.profile.theme||'auto'; return t==='auto' ? (sysDark()?'dark':'light') : t }
 function applyTheme(){
   const t = effTheme();
-  document.documentElement.dataset.theme = t;
+  const root = document.documentElement;
+  root.dataset.theme = (t === 'light') ? 'light' : 'dark';
+  if(t === 'dim') root.dataset.dim = '1'; else root.removeAttribute('data-dim');
   const m = document.querySelector('meta[name=theme-color]');
-  if(m) m.setAttribute('content', t==='dark' ? '#2B2B2B' : '#000000');
+  if(m) m.setAttribute('content', t==='dim' ? '#2B2B2B' : (t==='dark' ? '#161616' : '#000000'));
 }
 function toggleTheme(){
-  S.profile.theme = effTheme()==='dark' ? 'light' : 'dark';
+  const cur = effTheme();
+  S.profile.theme = (cur === 'light') ? (S.profile.lastDark || 'dark') : 'light';
+  if(cur !== 'light') S.profile.lastDark = cur;
   applyTheme(); save(); render();
-  toast(effTheme()==='dark' ? 'الوضع الليلي اشتغل 🌙' : 'الوضع النهاري اشتغل ☀️');
+  toast(effTheme()==='light' ? 'الوضع النهاري اشتغل ☀️' : 'الوضع الليلي اشتغل 🌙');
 }
-function setTheme(t){ S.profile.theme=t; applyTheme(); save(); render(); }
+function setTheme(t){ S.profile.theme=t; if(t==='dark'||t==='dim') S.profile.lastDark=t; applyTheme(); save(); render(); }
 if(window.matchMedia) try{ matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{ if((S.profile.theme||'auto')==='auto'){applyTheme();render();} }); }catch(e){}
 
 const ICON_SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>';
@@ -2445,6 +2468,134 @@ function badgeFor(v){
 
 <script>
 /* ==========================================================
+   تتبّع الصيام
+   ========================================================== */
+const FAST_GOAL = ()=> S.profile.fastGoal || 16;   /* بالساعات */
+
+function activeFast(){ return (S.fasts||[]).find(f=>!f.end) || null; }
+function lastDoneFast(){
+  const a = (S.fasts||[]).filter(f=>f.end).sort((x,y)=>y.end-x.end);
+  return a.length ? a[0] : null;
+}
+function fastMs(f){ return (f.end || Date.now()) - f.start; }
+function hm(ms){
+  const t = Math.max(0, ms);
+  const h = Math.floor(t/3600000), m = Math.floor((t%3600000)/60000);
+  return { h, m, txt: `${h} س ${pad(m)} د` };
+}
+function fastColor(hours){
+  const g = FAST_GOAL();
+  const p = Math.max(0, Math.min(1, hours/g));
+  const hue = Math.round(200 - p*60);        /* أزرق 200 → أخضر 140 */
+  const dark = effTheme() !== 'light';
+  return `hsl(${hue} ${dark?70:66}% ${dark?55:42}%)`;
+}
+
+function startFast(){
+  S.fasts = S.fasts || [];
+  if(activeFast()){ toast('فيه صيام شغال بالفعل'); return; }
+  const _t = Date.now();
+  S.fasts.push({ id:uid(), ts:_t, start:_t, end:null });
+  save(); render(); toast('الصيام بدأ — بالتوفيق');
+}
+function breakFast(){
+  const f = activeFast();
+  if(!f) return;
+  f.end = Date.now();
+  touch('fasts', f.id);
+  const d = hm(fastMs(f));
+  save(); render();
+  toast(`قطعت الصيام ${fmtTime(f.end)} بعد ${d.txt}`);
+}
+function editFastStart(){
+  const f = activeFast(); if(!f) return;
+  openSheet('وقت بداية الصيام', `
+    <div class="field"><label>بدأت الصيام إمتى؟</label>
+      <input class="input" id="fstart" type="datetime-local" value="${localInput(f.start)}"></div>
+    <div class="field"><label>هدف الصيام (ساعة)</label>
+      <div class="chips" id="fgoal">${[12,14,16,18,20,24].map(g=>
+        `<button class="chip ${g===FAST_GOAL()?'on':''}" data-g="${g}" onclick="pickGoal(this)">${g}</button>`).join('')}</div></div>
+    <button class="btn" onclick="saveFastStart()">احفظ</button>
+    <p class="hint">لو نسيت تدوس «ابدأ» في وقته، عدّل البداية من هنا والعداد هيتظبط.</p>`);
+}
+function pickGoal(b){ [...$('fgoal').children].forEach(c=>c.classList.remove('on')); b.classList.add('on'); F.goal=+b.dataset.g; }
+function saveFastStart(){
+  const f = activeFast(); if(!f) return;
+  const t = new Date($('fstart').value).getTime();
+  if(t && t <= Date.now()){ f.start = t; f.ts = t; touch('fasts', f.id); }
+  if(F.goal){ S.profile.fastGoal = F.goal; S.profU = Date.now(); }
+  save(); closeSheet(); render(); toast('اتحفظ');
+}
+
+/* ---------- الشريط ---------- */
+function fastBar(){
+  const f = activeFast();
+  const goal = FAST_GOAL();
+
+  if(!f){
+    const last = lastDoneFast();
+    return `<div class="section" style="padding-top:16px">
+      <div class="card pad">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="ic" style="width:40px;height:40px;border-radius:13px;background:var(--teal-l);color:var(--teal-d);display:grid;place-items:center">${svg('water',1.9)}</div>
+          <div style="flex:1">
+            <b style="font-family:Zain;font-size:18px">الصيام</b>
+            <small style="display:block;color:var(--muted);font-size:12.8px">
+              ${last ? `آخر صيام ${hm(fastMs(last)).txt} — قطعته ${relDay(last.end)} ${fmtTime(last.end)}` : `هدفك ${goal} ساعة`}</small>
+          </div>
+          <button class="btn sm" onclick="startFast()">ابدأ الصيام</button>
+        </div>
+      </div></div>`;
+  }
+
+  const ms = fastMs(f), d = hm(ms);
+  const hours = ms/3600000;
+  const pct = Math.min(100, hours/goal*100);
+  const col = fastColor(hours);
+  const longWarn = hours >= 20;
+
+  return `<div class="section" style="padding-top:16px">
+    <div class="card pad">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px">
+        <div><b style="font-family:Zain;font-size:18px">صايم من</b>
+          <small style="display:block;color:var(--muted);font-size:12.8px" onclick="editFastStart()">
+            ${relDay(f.start)} ${fmtTime(f.start)} — اضغط للتعديل</small></div>
+        <span class="num" id="fastTime" style="font-family:Zain;font-size:30px;font-weight:800;color:${col};line-height:1">${d.txt}</span>
+      </div>
+      <div style="height:13px;border-radius:99px;background:var(--paper);overflow:hidden;margin:12px 0 8px">
+        <div id="fastFill" style="height:100%;width:${pct}%;border-radius:99px;
+          background:linear-gradient(90deg,${fastColor(0)},${col});
+          transition:width 1s linear, background .8s var(--out)"></div>
+      </div>
+      <div class="strip-ticks" style="margin-bottom:12px">
+        <span class="num">٠</span>
+        <span id="fastPct">${Math.round(pct)}% من ${goal} ساعة</span>
+        <span class="num">${goal}</span>
+      </div>
+      <button class="btn" style="background:${col}" onclick="breakFast()">قطعت الصيام</button>
+      ${longWarn ? `<p class="hint" style="color:var(--red)">عدّيت ${Math.floor(hours)} ساعة. لو بتاخد أدوية بتنزّل السكر، الصيام الطويل ممكن ينزّله أكتر من اللازم — راجع دكتورك.</p>` : ''}
+    </div></div>`;
+}
+
+/* ---------- تحديث حيّ كل ثانية ---------- */
+function tickFast(){
+  const f = activeFast();
+  const t = $('fastTime'), fill = $('fastFill'), pc = $('fastPct');
+  if(!f || !t || !fill) return;
+  const ms = fastMs(f), hours = ms/3600000, goal = FAST_GOAL();
+  const pct = Math.min(100, hours/goal*100);
+  const col = fastColor(hours);
+  t.textContent = hm(ms).txt;
+  t.style.color = col;
+  fill.style.width = pct + '%';
+  fill.style.background = `linear-gradient(90deg,${fastColor(0)},${col})`;
+  if(pc) pc.textContent = `${Math.round(pct)}% من ${goal} ساعة`;
+}
+setInterval(()=>{ if(view === 'home') tickFast(); }, 1000);
+</script>
+
+<script>
+/* ==========================================================
    ديك الكروت المتداخلة — سحب باللمس بحركة spring
    ========================================================== */
 let deckIdx = 0, deckN = 0;
@@ -2931,7 +3082,7 @@ function saveLab(){
 /* ==========================================================
    طبقة التزامن — حساب واحد، كل الأجهزة
    ========================================================== */
-const SYNC_KINDS = ['glucose','a1c','weight','bp','meals','water','activity','meds','medLog','shots','labs'];
+const SYNC_KINDS = ['glucose','a1c','weight','bp','meals','water','activity','meds','medLog','shots','labs','fasts'];
 const K_TOKEN='mylife.token', K_USER='mylife.uname', K_SINCE='mylife.since', K_PUSHED='mylife.pushed';
 const OVERLAP = 15000;          /* هامش أمان لفروق ساعة الأجهزة */
 

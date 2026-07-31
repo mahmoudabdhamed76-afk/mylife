@@ -112,7 +112,7 @@ function auth(req){
   if (!s || s.exp < Date.now()) return null;
   return { uid: s.uid, token: t };
 }
-const KINDS = new Set(['glucose','a1c','weight','bp','meals','water','activity','meds','medLog','shots','labs']);
+const KINDS = new Set(['glucose','a1c','weight','bp','meals','water','activity','meds','medLog','shots','labs','fasts']);
 
 /* ---------- المسارات ---------- */
 async function api(req, res, path){
